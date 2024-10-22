@@ -16,6 +16,7 @@ public class AsteroidManager {
 
     public AsteroidManager() {
         asteroidTexture = new Texture("asteroid.png");
+        asteroids = new SnapshotArray<>();
 //        asteroidSprites = new Array<>();
         asteroids = new SnapshotArray<>();
     }
@@ -25,10 +26,10 @@ public class AsteroidManager {
 
         for (int i = asteroids.size - 1; i >= 0; i--) {
             Sprite asteroidSprite = asteroids.get(i).getSprite();
-            asteroidSprite.translateY(-2f * delta); // asteroid flow speed
+            asteroids.get(i).update(delta); // asteroid flow speed
 
             // remove asteroid once it goes past the bottom of screen
-            if (asteroidSprite.getY() < -asteroidSprite.getHeight()) {
+            if (asteroidSprite.getY() < -asteroidSprite.getHeight() || asteroids.get(i).getHarvestWaitTime() <=0) {
                 asteroids.removeIndex(i);
             }
         }
@@ -45,9 +46,12 @@ public class AsteroidManager {
         for (Asteroid asteroid : asteroids) {
             Sprite asteroidSprite = asteroid.getSprite();
             asteroidSprite.draw(batch);
-            System.out.println(asteroidSprite.getY() + "!!!!!!!!!!!!!!!!!!!");
+
         }
-        //System.out.println("Asteroids Drawn !!!!!!!!!!!!!");
+        if(asteroids.size > 0) {
+            System.out.println(asteroids.get(0).getSprite().getX());
+            //System.out.println("Asteroids Drawn !!!!!!!!!!!!!");
+        }
     }
 
     public void createAsteroid(float worldWidth, float worldHeight) {

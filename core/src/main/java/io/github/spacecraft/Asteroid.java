@@ -13,15 +13,31 @@ public class Asteroid {
     private float x, y;
     private Array<Sprite> asteroidSprites;
     private float asteroidSpawnTimer = 0;
+    private float speed;
+    private boolean harvesting;
+
+
+    private float harvestWaitTime;
 
     public Asteroid(float x, float y) {
         texture = new Texture("asteroid.png");
         sprite = new Sprite(texture);
+        sprite.setX(x);
+        sprite.setY(y);
+        sprite.setSize(0.7f, 0.7f);
         asteroidSprites = new Array<>();
+        speed = MathUtils.random(-2.5f,-0.9f);
+        harvesting = false;
+        harvestWaitTime = 500f;
     }
 
     public void update(float delta) {
-        sprite.translateY(-2f * delta);
+        if(!harvesting) {
+            sprite.translateY(speed * delta);
+        } else {
+            harvestWaitTime =- delta;
+        }
+        System.out.println(harvestWaitTime);
     }
 
     public void draw(SpriteBatch batch) {
@@ -75,4 +91,11 @@ public class Asteroid {
 //    }
 
 
+    public float getHarvestWaitTime() {
+        return harvestWaitTime;
+    }
+
+    public void setHarvestWaitTime(float harvestWaitTime) {
+        this.harvestWaitTime = harvestWaitTime;
+    }
 }

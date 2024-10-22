@@ -30,7 +30,7 @@ public class Main extends ApplicationAdapter {
     public void create() {
         // backgroundTexture = new Texture("texture png") // create a background texture
         spriteBatch = new SpriteBatch();
-        viewport = new FitViewport(5, 9);
+        viewport = new FitViewport(5, 11);
 
         worldWidth = viewport.getWorldWidth();
         worldHeight = viewport.getWorldHeight();

@@ -18,15 +18,19 @@ public class AsteroidManager {
         asteroids = new SnapshotArray<>();
     }
 
-    public void updateAsteroids(float worldWidth, float worldHeight) {
+    public void updateAsteroids(float worldWidth, float worldHeight, Spaceship spaceship) {
         float delta = Gdx.graphics.getDeltaTime();
 
         for (int i = asteroids.size - 1; i >= 0; i--) {
             Sprite asteroidSprite = asteroids.get(i).getSprite();
             asteroids.get(i).update(delta); // asteroid flow speed
-
+            if(asteroids.get(i).getHarvestWaitTime() <=0) {
+                asteroids.removeIndex(i);
+                spaceship.incrementHarvestCount();
+                continue;
+            }
             // remove asteroid once it goes past the bottom of screen
-            if (asteroidSprite.getY() < -asteroidSprite.getHeight() || asteroids.get(i).getHarvestWaitTime() <=0) {
+            if (asteroidSprite.getY() < -asteroidSprite.getHeight()) {
                 asteroids.removeIndex(i);
             }
         }
@@ -45,7 +49,7 @@ public class AsteroidManager {
             asteroidSprite.draw(batch);
         }
         if(asteroids.size > 0) {
-            System.out.println(asteroids.get(0).getSprite().getX());
+            //System.out.println(asteroids.get(0).getSprite().getX());
         }
     }
 
@@ -59,5 +63,12 @@ public class AsteroidManager {
         Asteroid newAsteroid = new Asteroid(x, y);
 
         asteroids.add(newAsteroid);
+    }
+
+    public void pauseAsteroid() {
+        System.out.println("click");
+        if(asteroids.size>0) {
+            asteroids.get(MathUtils.random(0, asteroids.size - 1)).setHarvesting(true);
+        }
     }
 }

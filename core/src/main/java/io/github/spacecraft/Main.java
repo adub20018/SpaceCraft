@@ -1,6 +1,7 @@
 package io.github.spacecraft;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,6 +20,7 @@ public class Main extends ApplicationAdapter {
 
     private float worldWidth;
     private float worldHeight;
+    float deltatest;
 
     @Override
     public void resize(int width, int height) {
@@ -36,6 +38,7 @@ public class Main extends ApplicationAdapter {
 
         spaceship = new Spaceship();
         asteroidManager = new AsteroidManager();
+        deltatest = 0;
     }
 
     @Override
@@ -52,11 +55,15 @@ public class Main extends ApplicationAdapter {
 
     private void input() {
         // put on touch logic here
+        if(Gdx.input.justTouched()) {
+            spaceship.harvestAsteroid(asteroidManager);
+        }
     }
 
     private void logic() {
         //asteroid.updateAsteroidPosition(worldWidth, worldHeight);
-        asteroidManager.updateAsteroids(worldWidth, worldHeight);
+        asteroidManager.updateAsteroids(worldWidth, worldHeight, spaceship);
+
     }
 
     private void draw() {

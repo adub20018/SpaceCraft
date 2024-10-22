@@ -14,7 +14,8 @@ public class Main extends ApplicationAdapter {
     private FitViewport viewport;
 
     private Spaceship spaceship;
-    private Asteroid asteroid;
+
+    private AsteroidManager asteroidManager;
 
     private float worldWidth;
     private float worldHeight;
@@ -28,13 +29,13 @@ public class Main extends ApplicationAdapter {
     public void create() {
         // backgroundTexture = new Texture("texture png") // create a background texture
         spriteBatch = new SpriteBatch();
-        viewport = new FitViewport(5, 9);
+        viewport = new FitViewport(5, 11);
 
         worldWidth = viewport.getWorldWidth();
         worldHeight = viewport.getWorldHeight();
 
         spaceship = new Spaceship();
-        asteroid = new Asteroid();
+        asteroidManager = new AsteroidManager();
     }
 
     @Override
@@ -54,7 +55,8 @@ public class Main extends ApplicationAdapter {
     }
 
     private void logic() {
-        asteroid.updateAsteroidPosition(worldWidth, worldHeight);
+        //asteroid.updateAsteroidPosition(worldWidth, worldHeight);
+        asteroidManager.updateAsteroids(worldWidth, worldHeight);
     }
 
     private void draw() {
@@ -66,7 +68,7 @@ public class Main extends ApplicationAdapter {
         /* !! do all drawing within spriteBatch.begin() and end() statements !! */
 
         // draw asteroids
-        asteroid.drawAsteroids(spriteBatch);
+        asteroidManager.drawAsteroids(spriteBatch);
 
         // draw spaceship
         spaceship.draw(spriteBatch, worldWidth);

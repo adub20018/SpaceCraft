@@ -14,7 +14,6 @@ public class Main extends ApplicationAdapter {
     private FitViewport viewport;
 
     private Spaceship spaceship;
-//    private Asteroid asteroid;
 
     private AsteroidManager asteroidManager;
 
@@ -36,7 +35,6 @@ public class Main extends ApplicationAdapter {
         worldHeight = viewport.getWorldHeight();
 
         spaceship = new Spaceship();
-//        asteroid = new Asteroid();
         asteroidManager = new AsteroidManager();
     }
 

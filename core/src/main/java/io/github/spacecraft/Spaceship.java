@@ -12,12 +12,10 @@ public class Spaceship {
         texture = new Texture("spaceship.png");
         sprite = new Sprite(texture);
         sprite.setSize(1, 1); // set size for spaceship in world units
-
     }
 
     public void draw(SpriteBatch batch, float worldWidth ) {
         batch.draw(sprite, (worldWidth - 1.2f) / 2, 2, 1.2f, 1.2f); // draw spaceship in center of screen
-
     }
 
 }

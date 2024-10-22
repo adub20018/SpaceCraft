@@ -13,11 +13,8 @@ public class AsteroidManager {
     private SnapshotArray<Asteroid> asteroids;
     private float asteroidSpawnTimer = 0;
 
-
     public AsteroidManager() {
         asteroidTexture = new Texture("asteroid.png");
-        asteroids = new SnapshotArray<>();
-//        asteroidSprites = new Array<>();
         asteroids = new SnapshotArray<>();
     }
 
@@ -46,19 +43,15 @@ public class AsteroidManager {
         for (Asteroid asteroid : asteroids) {
             Sprite asteroidSprite = asteroid.getSprite();
             asteroidSprite.draw(batch);
-
         }
         if(asteroids.size > 0) {
             System.out.println(asteroids.get(0).getSprite().getX());
-            //System.out.println("Asteroids Drawn !!!!!!!!!!!!!");
         }
     }
 
     public void createAsteroid(float worldWidth, float worldHeight) {
         float asteroidWidth = 0.7f;
         float asteroidHeight = 0.7f;
-
-//        Sprite asteroidSprite = new Sprite(asteroidTexture);
 
         float x = MathUtils.random(0f, worldWidth - asteroidWidth);
         float y = worldHeight;

@@ -14,8 +14,8 @@ public class Asteroid {
     private Array<Sprite> asteroidSprites;
     private float asteroidSpawnTimer = 0;
 
-    public Asteroid(Texture texture, float x, float y) {
-        // texture = new Texture("asteroid.png");
+    public Asteroid(float x, float y) {
+        texture = new Texture("asteroid.png");
         sprite = new Sprite(texture);
         asteroidSprites = new Array<>();
     }

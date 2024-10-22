@@ -17,6 +17,7 @@ public class AsteroidManager {
     public AsteroidManager() {
         asteroidTexture = new Texture("asteroid.png");
 //        asteroidSprites = new Array<>();
+        asteroids = new SnapshotArray<>();
     }
 
     public void updateAsteroids(float worldWidth, float worldHeight) {
@@ -44,7 +45,9 @@ public class AsteroidManager {
         for (Asteroid asteroid : asteroids) {
             Sprite asteroidSprite = asteroid.getSprite();
             asteroidSprite.draw(batch);
+            System.out.println(asteroidSprite.getY() + "!!!!!!!!!!!!!!!!!!!");
         }
+        //System.out.println("Asteroids Drawn !!!!!!!!!!!!!");
     }
 
     public void createAsteroid(float worldWidth, float worldHeight) {
@@ -56,7 +59,7 @@ public class AsteroidManager {
         float x = MathUtils.random(0f, worldWidth - asteroidWidth);
         float y = worldHeight;
 
-        Asteroid newAsteroid = new Asteroid(asteroidTexture, x, y);
+        Asteroid newAsteroid = new Asteroid(x, y);
 
         // create the asteroids
 //        asteroidSprite.setSize(asteroidWidth, asteroidHeight);

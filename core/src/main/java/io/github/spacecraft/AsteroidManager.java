@@ -65,13 +65,6 @@ public class AsteroidManager {
 
         Asteroid newAsteroid = new Asteroid(x, y);
 
-        // create the asteroids
-//        asteroidSprite.setSize(asteroidWidth, asteroidHeight);
-//        asteroidSprite.setX(MathUtils.random(0f, worldWidth - asteroidWidth));
-//        asteroidSprite.setY(worldHeight);
-
-        // add asteroid to array
-//        asteroidSprites.add(asteroidSprite);
         asteroids.add(newAsteroid);
     }
 }

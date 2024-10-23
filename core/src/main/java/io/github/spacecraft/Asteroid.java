@@ -16,16 +16,22 @@ public class Asteroid {
     private float speed;
     private boolean harvesting;
     private float harvestWaitTime;
+    private float radius;
     private float deltatest;
 
-    public Asteroid(float x, float y) {
+    public Asteroid(float x, float y, int rarity, float radius) {
         texture = new Texture("asteroid.png");
         sprite = new Sprite(texture);
         sprite.setX(x);
         sprite.setY(y);
-        sprite.setSize(0.7f, 0.7f);
+        this.radius = radius;
+        sprite.setSize(radius, radius);
         asteroidSprites = new Array<>();
         speed = MathUtils.random(-2.5f,-0.9f);
+        if (rarity == 2) speed = MathUtils.random(-1.1f, -0.8f);
+        if (rarity == 3) speed = MathUtils.random(-0.9f, -0.7f);
+        if (rarity == 4) speed = MathUtils.random(-0.8f, -0.5f);
+        if (rarity == 5) speed = MathUtils.random(-0.5f, -0.2f);
         harvesting = false;
         harvestWaitTime = 10f;
     }

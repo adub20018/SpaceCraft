@@ -72,7 +72,7 @@ public class Spaceship {
                 harvestCount--;
             } else {
                 // if no asteroid to harvest
-                System.out.println("No asteroid available");
+                System.out.println("No asteroid available !!!!!!!!");
                 isHarvesting = false;
             }
         }

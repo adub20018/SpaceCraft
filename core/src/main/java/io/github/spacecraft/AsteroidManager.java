@@ -49,20 +49,55 @@ public class AsteroidManager {
             Sprite asteroidSprite = asteroid.getSprite();
             asteroidSprite.draw(batch);
         }
-        if(asteroids.size > 0) {
-            //System.out.println(asteroids.get(0).getSprite().getX());
-        }
+    }
+
+    private int randomSpawn() {
+        int rarityValue = MathUtils.random(0, 10000); // random value between 0 and 10000
+        int asteroidRarity = 1;
+
+        if (rarityValue < 9500) asteroidRarity = 1; // common (95%)
+        else if (rarityValue < 9900) asteroidRarity = 2; // uncommon (4%)
+        else if (rarityValue < 9990) asteroidRarity = 3; // rare (0.9%)
+        else if (rarityValue < 10000) asteroidRarity = 4; // epic (0.1%)
+        else asteroidRarity = 5; // legendary (0.001%)
+
+        return asteroidRarity;
     }
 
     public void createAsteroid(float worldWidth, float worldHeight) {
+        int asteroidRarity = randomSpawn();
+
         float asteroidWidth = 0.7f;
         float asteroidHeight = 0.7f;
 
         float x = MathUtils.random(0f, worldWidth - asteroidWidth);
         float y = worldHeight;
 
-        Asteroid newAsteroid = new Asteroid(x, y);
+        Asteroid newAsteroid = null;
 
+        // set asteroid with rarity level and colour
+        switch (asteroidRarity) {
+            case 1:
+                newAsteroid = new Asteroid(x, y, 1, 0.6f);
+                break;
+            case 2:
+                newAsteroid = new Asteroid(x, y, 2, 0.85f);
+                newAsteroid.getSprite().setColor(30 / 255f,  255 / 255f, 0 / 255f, 1); // green
+                break;
+            case 3:
+                newAsteroid = new Asteroid(x, y, 3, 1.05f);
+                newAsteroid.getSprite().setColor(0 / 255f, 112 / 255f, 221 / 255f, 1); // blue
+                break;
+            case 4:
+                newAsteroid = new Asteroid(x, y, 4, 1.25f);
+                newAsteroid.getSprite().setColor(163 / 255f, 53 / 255f, 238 / 255f, 1); // purple
+                break;
+            case 5:
+                newAsteroid = new Asteroid(x, y, 5, 1.5f);
+                newAsteroid.getSprite().setColor(253 / 255f, 208 / 255f,  23 / 255f, 1); // gold
+                System.out.println("IT HAPPENED!!!!");
+                break;
+        }
         asteroids.add(newAsteroid);
     }
 

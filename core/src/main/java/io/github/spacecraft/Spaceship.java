@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -17,11 +18,13 @@ public class Spaceship {
     private int harvestCount;
     private ShapeRenderer tractorBeam;
     protected Boolean isHarvesting;
-    private Vector2 spaceshipCoords, asteroidCoords;
+    public Vector2 spaceshipCoords, asteroidCoords;
     private Viewport viewport;
     private Preferences preferences;
     private int asteroidBalance;
     private GameHUD gameHUD;
+    public float spaceshipX, spaceshipY;
+    public Rectangle spaceRect;
 
     public Spaceship(Viewport viewport, GameHUD gameHUD) {
         this.viewport = viewport;
@@ -32,15 +35,16 @@ public class Spaceship {
         tractorBeam = new ShapeRenderer();
         isHarvesting = false;
         this.gameHUD = gameHUD;
-
+        spaceshipX = (viewport.getWorldWidth() - sprite.getWidth()) / 2;
+        spaceshipY = 3.5f;
+        spaceRect = new Rectangle(spaceshipX, spaceshipY,  sprite.getWidth(), sprite.getHeight());
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
         asteroidBalance = preferences.getInteger("asteroidBalance", 0);
 
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
-        float spaceshipX = (worldWidth - sprite.getWidth()) / 2;
-        float spaceshipY = 3.5f;
+
         batch.draw(sprite, spaceshipX, spaceshipY,  sprite.getWidth(), sprite.getHeight()); // draw spaceship in center of screen
 
         // store spaceship coords

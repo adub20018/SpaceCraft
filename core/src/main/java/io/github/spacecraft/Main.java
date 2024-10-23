@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -72,9 +73,16 @@ public class Main extends ApplicationAdapter {
     }
 
     private void input() {
+        Vector2 touchPos = new Vector2();
         // put on touch logic here
-        if(Gdx.input.justTouched()) {
-            spaceship.harvestAsteroid(asteroidManager);
+        touchPos.set(Gdx.input.getX(), Gdx.input.getY());
+        viewport.unproject(touchPos);
+        if (Gdx.input.justTouched()) {
+            System.out.println("Touched");
+            if (spaceship.spaceRect.contains(touchPos)) {
+                System.out.println("X COORD: " + Gdx.input.getX() + " Y COORD: " + Gdx.input.getY());
+                spaceship.harvestAsteroid(asteroidManager);
+            }
         }
     }
 

@@ -38,7 +38,7 @@ public class AsteroidManager {
 
         // manage asteroid re-spawning
         asteroidSpawnTimer += delta;
-        if (asteroidSpawnTimer > 10f) {
+        if (asteroidSpawnTimer > 1f) {
             asteroidSpawnTimer = 0.1f; // increase this to spawn more asteroids
             createAsteroid(worldWidth, worldHeight); // create new asteroid
         }

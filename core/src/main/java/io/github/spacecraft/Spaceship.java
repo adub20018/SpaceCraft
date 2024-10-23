@@ -1,12 +1,14 @@
 package io.github.spacecraft;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Spaceship {
@@ -17,8 +19,11 @@ public class Spaceship {
     protected Boolean isHarvesting;
     private Vector2 spaceshipCoords, asteroidCoords;
     private Viewport viewport;
+    private Preferences preferences;
+    private int asteroidBalance;
+    private GameHUD gameHUD;
 
-    public Spaceship(Viewport viewport) {
+    public Spaceship(Viewport viewport, GameHUD gameHUD) {
         this.viewport = viewport;
         texture = new Texture("spaceship.png");
         sprite = new Sprite(texture);
@@ -26,6 +31,11 @@ public class Spaceship {
         harvestCount = 1;
         tractorBeam = new ShapeRenderer();
         isHarvesting = false;
+        this.gameHUD = gameHUD;
+
+        preferences = Gdx.app.getPreferences("SpacecraftPreferences");
+        asteroidBalance = preferences.getInteger("asteroidBalance", 0);
+
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
@@ -43,6 +53,10 @@ public class Spaceship {
 
     public void incrementHarvestCount() {
         harvestCount++;
+        asteroidBalance++;
+        preferences.putInteger("asteroidBalance", asteroidBalance);
+        preferences.flush();
+        gameHUD.updateAsteroidBalanceLabel(asteroidBalance);
     }
 
     public void harvestAsteroid(AsteroidManager asteroidManager) {

@@ -20,6 +20,7 @@ public class Main extends ApplicationAdapter {
 
     private AsteroidManager asteroidManager;
     private GameMenu gameMenu;
+    private GameHUD gameHUD;
 
     private Stage stage;
 
@@ -41,14 +42,17 @@ public class Main extends ApplicationAdapter {
         worldWidth = viewport.getWorldWidth();
         worldHeight = viewport.getWorldHeight();
 
-        spaceship = new Spaceship(viewport);
-        asteroidManager = new AsteroidManager();
-
         // initialise stage
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         gameMenu = new GameMenu(stage);
+        gameHUD = new GameHUD(stage);
+
+        spaceship = new Spaceship(viewport, gameHUD);
+        asteroidManager = new AsteroidManager();
+
+
         deltatest = 0;
     }
 
@@ -59,6 +63,7 @@ public class Main extends ApplicationAdapter {
         draw();
 
         gameMenu.render(Gdx.graphics.getDeltaTime());
+        gameHUD.render(Gdx.graphics.getDeltaTime());
     }
 
     @Override

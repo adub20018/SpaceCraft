@@ -18,15 +18,20 @@ public class AsteroidManager {
         asteroids = new SnapshotArray<>();
     }
 
-    public void updateAsteroids(float worldWidth, float worldHeight) {
+    public void updateAsteroids(float worldWidth, float worldHeight, Spaceship spaceship) {
         float delta = Gdx.graphics.getDeltaTime();
 
         for (int i = asteroids.size - 1; i >= 0; i--) {
             Sprite asteroidSprite = asteroids.get(i).getSprite();
             asteroids.get(i).update(delta); // asteroid flow speed
-
+            if(asteroids.get(i).getHarvestWaitTime() <=0) {
+                spaceship.isHarvesting = false;
+                asteroids.removeIndex(i);
+                spaceship.incrementHarvestCount();
+                continue;
+            }
             // remove asteroid once it goes past the bottom of screen
-            if (asteroidSprite.getY() < -asteroidSprite.getHeight() || asteroids.get(i).getHarvestWaitTime() <=0) {
+            if (asteroidSprite.getY() < -asteroidSprite.getHeight()) {
                 asteroids.removeIndex(i);
             }
         }
@@ -44,20 +49,79 @@ public class AsteroidManager {
             Sprite asteroidSprite = asteroid.getSprite();
             asteroidSprite.draw(batch);
         }
-        if(asteroids.size > 0) {
-            System.out.println(asteroids.get(0).getSprite().getX());
-        }
+    }
+
+    private int randomSpawn() {
+        int rarityValue = MathUtils.random(0, 10000); // random value between 0 and 10000
+        int asteroidRarity = 1;
+
+        if (rarityValue < 9500) asteroidRarity = 1; // common (95%)
+        else if (rarityValue < 9900) asteroidRarity = 2; // uncommon (4%)
+        else if (rarityValue < 9990) asteroidRarity = 3; // rare (0.9%)
+        else if (rarityValue < 10000) asteroidRarity = 4; // epic (0.1%)
+        else asteroidRarity = 5; // legendary (0.001%)
+
+        return asteroidRarity;
     }
 
     public void createAsteroid(float worldWidth, float worldHeight) {
+        int asteroidRarity = randomSpawn();
+
         float asteroidWidth = 0.7f;
         float asteroidHeight = 0.7f;
 
         float x = MathUtils.random(0f, worldWidth - asteroidWidth);
         float y = worldHeight;
 
-        Asteroid newAsteroid = new Asteroid(x, y);
+        Asteroid newAsteroid = null;
 
+        // set asteroid with rarity level and colour
+        switch (asteroidRarity) {
+            case 1:
+                newAsteroid = new Asteroid(x, y, 1, 0.6f);
+                break;
+            case 2:
+                newAsteroid = new Asteroid(x, y, 2, 0.85f);
+                newAsteroid.getSprite().setColor(30 / 255f,  255 / 255f, 0 / 255f, 1); // green
+                break;
+            case 3:
+                newAsteroid = new Asteroid(x, y, 3, 1.05f);
+                newAsteroid.getSprite().setColor(0 / 255f, 112 / 255f, 221 / 255f, 1); // blue
+                break;
+            case 4:
+                newAsteroid = new Asteroid(x, y, 4, 1.25f);
+                newAsteroid.getSprite().setColor(163 / 255f, 53 / 255f, 238 / 255f, 1); // purple
+                break;
+            case 5:
+                newAsteroid = new Asteroid(x, y, 5, 1.5f);
+                newAsteroid.getSprite().setColor(253 / 255f, 208 / 255f,  23 / 255f, 1); // gold
+                System.out.println("IT HAPPENED!!!!");
+                break;
+        }
         asteroids.add(newAsteroid);
+    }
+
+    public Asteroid selectRandomAsteroid() {
+        System.out.println("click");
+
+        // set the range that asteroids can be harvested in
+        float topBoundary = 10.5f;
+        float bottomBoundary = 0.8f;
+
+        // filter asteroids to only those within boundaries
+        Array<Asteroid> validAsteroids = new Array<>();
+        for (Asteroid asteroid : asteroids) {
+            float asteroidY = asteroid.getSprite().getY();
+            if (asteroidY < topBoundary && asteroidY > bottomBoundary) { // if asteroid is within boundaries
+                validAsteroids.add(asteroid);
+            }
+        }
+
+        if (validAsteroids.size > 0) {
+            Asteroid selectedAsteroid = validAsteroids.get(MathUtils.random(0, validAsteroids.size - 1));
+            selectedAsteroid.setHarvesting(true);
+            return selectedAsteroid;
+        }
+        return null; // if no asteroids in view
     }
 }

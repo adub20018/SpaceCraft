@@ -5,8 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -17,6 +19,9 @@ public class Main extends ApplicationAdapter {
     private Spaceship spaceship;
 
     private AsteroidManager asteroidManager;
+    private GameMenu gameMenu;
+
+    private Stage stage;
 
     private float worldWidth;
     private float worldHeight;
@@ -38,6 +43,12 @@ public class Main extends ApplicationAdapter {
 
         spaceship = new Spaceship();
         asteroidManager = new AsteroidManager();
+
+        // initialise stage
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
+        gameMenu = new GameMenu(stage);
         deltatest = 0;
     }
 
@@ -46,6 +57,8 @@ public class Main extends ApplicationAdapter {
         input();
         logic();
         draw();
+
+        gameMenu.render(Gdx.graphics.getDeltaTime());
     }
 
     @Override

@@ -41,7 +41,7 @@ public class Main extends ApplicationAdapter {
         worldWidth = viewport.getWorldWidth();
         worldHeight = viewport.getWorldHeight();
 
-        spaceship = new Spaceship();
+        spaceship = new Spaceship(viewport);
         asteroidManager = new AsteroidManager();
 
         // initialise stage
@@ -83,6 +83,11 @@ public class Main extends ApplicationAdapter {
         ScreenUtils.clear(new Color(0 / 255f, 8 / 255f, 64 / 255f, 1));
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+
+        if (spaceship.isHarvesting) {
+            spaceship.drawTractorBeam();
+        }
+
         spriteBatch.begin();
 
         /* !! do all drawing within spriteBatch.begin() and end() statements !! */
@@ -94,5 +99,7 @@ public class Main extends ApplicationAdapter {
         spaceship.draw(spriteBatch, worldWidth);
 
         spriteBatch.end();
+
+
     }
 }

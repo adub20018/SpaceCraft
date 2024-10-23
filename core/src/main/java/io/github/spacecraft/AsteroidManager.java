@@ -25,6 +25,7 @@ public class AsteroidManager {
             Sprite asteroidSprite = asteroids.get(i).getSprite();
             asteroids.get(i).update(delta); // asteroid flow speed
             if(asteroids.get(i).getHarvestWaitTime() <=0) {
+                spaceship.isHarvesting = false;
                 asteroids.removeIndex(i);
                 spaceship.incrementHarvestCount();
                 continue;
@@ -37,7 +38,7 @@ public class AsteroidManager {
 
         // manage asteroid re-spawning
         asteroidSpawnTimer += delta;
-        if (asteroidSpawnTimer > 1f) {
+        if (asteroidSpawnTimer > 10f) {
             asteroidSpawnTimer = 0.1f; // increase this to spawn more asteroids
             createAsteroid(worldWidth, worldHeight); // create new asteroid
         }
@@ -65,10 +66,18 @@ public class AsteroidManager {
         asteroids.add(newAsteroid);
     }
 
-    public void pauseAsteroid() {
+    public Asteroid pauseAsteroid() {
+        // set the range that asteroids can be harvested in
+        float topBoundary = 10.5f;
+        float bottomBoundary = 0.8f;
         System.out.println("click");
-        if(asteroids.size>0) {
-            asteroids.get(MathUtils.random(0, asteroids.size - 1)).setHarvesting(true);
+        if(asteroids.size > 0) {
+            Asteroid asteroid = asteroids.get(MathUtils.random(0, asteroids.size - 1));
+            if (asteroid.getSprite().getY() > bottomBoundary && asteroid.getSprite().getY() < topBoundary) { // make sure asteroid is in view
+                asteroid.setHarvesting(true);
+                return asteroid;
+            }
         }
+        return null; // if no asteroids available
     }
 }

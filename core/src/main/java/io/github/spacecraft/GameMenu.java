@@ -22,17 +22,32 @@ public class GameMenu {
     private Window popupWindow;
     private float width;
     private float height;
+    private float edgeMargin;
+
+    private TextureRegionDrawable purpleBackground;
+    private TextureRegionDrawable blueBackground;
 
     public GameMenu(Stage stage) {
         this.stage = stage;
-
         skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
 
-        createMenuInterface();
-
+        edgeMargin = 25; // the gap around sides of screen (so nav does not squeeze against edge)
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
 
+        // create button colours
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(new Color(66 / 255f, 22 / 255f, 210 / 255f, 1));
+        pixmap.fill();
+        Texture purpleBackgroundTexture = new Texture(pixmap);
+        purpleBackground = new TextureRegionDrawable(new TextureRegion(purpleBackgroundTexture));
+
+        pixmap.setColor(new Color(46 / 255f, 59 / 255f, 240 / 255f, 1));
+        pixmap.fill();
+        Texture blueBackgroundTexture = new Texture(pixmap);
+        blueBackground = new TextureRegionDrawable(new TextureRegion(blueBackgroundTexture));
+
+        createMenuInterface();
     }
 
     private void createMenuInterface() {
@@ -48,35 +63,21 @@ public class GameMenu {
         Texture laboratoryTexture = new Texture("menu_icons/laboratory.png");
         Texture shopTexture = new Texture("menu_icons/shop.png");
 
-        // create purple background for image buttons
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(new Color(66 / 255f, 22 / 255f, 210 / 255f, 1));
-        pixmap.fill();
-        Texture purpleBackgroundTexture = new Texture(pixmap);
-        TextureRegionDrawable purpleBackgroundDrawable = new TextureRegionDrawable(new TextureRegion(purpleBackgroundTexture));
+        // create menu buttons
+        ImageButton upgradesButton = createMenuButton(upgradeTexture);
+        ImageButton refineryButton = createMenuButton(refineryTexture);
+        ImageButton homeButton = createMenuButton(homeTexture);
+        ImageButton laboratoryButton = createMenuButton(laboratoryTexture);
+        ImageButton shopButton = createMenuButton(shopTexture);
 
-        // create menu buttons and apply background colour
-        ImageButton upgradesButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(upgradeTexture)));
-        upgradesButton.getStyle().up = purpleBackgroundDrawable;
-        ImageButton refineryButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(refineryTexture)));
-        refineryButton.getStyle().up = purpleBackgroundDrawable;
-        ImageButton homeButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(homeTexture)));
-        homeButton.getStyle().up = purpleBackgroundDrawable;
-        ImageButton laboratoryButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(laboratoryTexture)));
-        laboratoryButton.getStyle().up = purpleBackgroundDrawable;
-        ImageButton shopButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(shopTexture)));
-        shopButton.getStyle().up = purpleBackgroundDrawable;
-
-        // calculate button size to fit edge to edge of screen
+        // calculate button size dynamically to fit all screen sizes
         int numOfButtons = 5;
-        float edgeMargin = 25;
         float margin = 10; // space between buttons
         float totalMargin = margin * (numOfButtons - 1);
-
-        float availableWidth = Gdx.graphics.getWidth() - edgeMargin * 2 - totalMargin;
-
+        float availableWidth = width - edgeMargin * 2 - totalMargin;
         float buttonWidth = availableWidth / numOfButtons;
         float buttonHeight = buttonWidth;
+
         // add buttons to table
         buttonTable.add(upgradesButton).size(buttonWidth, buttonHeight).padRight(margin);
         buttonTable.add(refineryButton).size(buttonWidth, buttonHeight).padRight(margin);
@@ -84,60 +85,37 @@ public class GameMenu {
         buttonTable.add(laboratoryButton).size(buttonWidth, buttonHeight).padRight(margin);
         buttonTable.add(shopButton).size(buttonWidth, buttonHeight);
 
-        buttonTable.setY(25);
+        buttonTable.setY(edgeMargin);
 
         // add table to stage
         stage.addActor(buttonTable);
 
         // add listeners to buttons
-        upgradesButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Table upgradesContent = createUpgradesContent();
-                showPopup("Upgrades", buttonHeight, upgradesContent);
-            }
-        });
-        refineryButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Table refineryContent = createRefineryContent();
-                showPopup("Refinery", buttonHeight, refineryContent);
-            }
-        });
+        upgradesButton.addListener(createButtonListener("Upgrades", buttonHeight, createUpgradesContent()));
+        refineryButton.addListener(createButtonListener("Refinery", buttonHeight, createRefineryContent()));
         homeButton.addListener(new ClickListener() {
-            @Override
+            @Override // home button is done manually because it just closes other menus
             public void clicked(InputEvent event, float x, float y) {
                 closePopup();
             }
         });
-        laboratoryButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Table upgradesContent = createUpgradesContent();
-                showPopup("Laboratory", buttonHeight, upgradesContent);
-            }
-        });
-        shopButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Table upgradesContent = createUpgradesContent();
-                showPopup("Shop", buttonHeight, upgradesContent);
-            }
-        });
+        laboratoryButton.addListener(createButtonListener("Laboratory", buttonHeight, createLaboratoryContent()));
+        shopButton.addListener(createButtonListener("Shop", buttonHeight, createShopContent()));
     }
+
     private void showPopup(String title, float buttonHeight, Table contentTable) {
         // remove previous popup if exists
         if (popupWindow != null) {
             popupWindow.remove();
         }
 
-        float totalWidth = width - 25 * 2;
+        float totalWidth = width - edgeMargin * 2;
 
         // create new popup window
         popupWindow = new Window(title, skin);
         popupWindow.setY(buttonHeight + 50);
         popupWindow.setSize(totalWidth, height * 0.3f);
-        popupWindow.setX(25);
+        popupWindow.setX(edgeMargin);
 
         // add content table to window
         popupWindow.add(contentTable).expand().fill(); // make content fill the popup
@@ -156,12 +134,31 @@ public class GameMenu {
         }
     }
 
+    private ImageButton createMenuButton(Texture buttonTexture) {
+        ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(buttonTexture)));
+        button.getStyle().up = purpleBackground; // default background colour
+        button.getStyle().down = blueBackground; // on press background colour
+        return button;
+
+    }
+
+    private ClickListener createButtonListener(String buttonTitle, float buttonHeight, Table contentTable) {
+        return new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                showPopup(buttonTitle, buttonHeight, contentTable);
+            }
+        };
+    }
+
     private Table createUpgradesContent() {
         Table contentTable = new Table();
         contentTable.setFillParent(true);
 
+        // add specific menu content here
         TextButton upgradeHarvestTimeButton = new TextButton("Upgrade Harvest Time", skin);
         upgradeHarvestTimeButton.setSize(100, 100);
+
         // add listeners for buttons
         upgradeHarvestTimeButton.addListener(new ClickListener() {
             @Override
@@ -174,11 +171,11 @@ public class GameMenu {
 
         return contentTable;
     }
-
     private Table createRefineryContent() {
         Table contentTable = new Table();
         contentTable.setFillParent(true);
 
+        // add specific menu content here
         TextButton refineAsteroidButton = new TextButton("Refine Asteroid", skin);
 
         // add listeners for buttons
@@ -190,6 +187,44 @@ public class GameMenu {
         });
 
         contentTable.add(refineAsteroidButton).pad(10).expandX();
+
+        return contentTable;
+    }
+    private Table createLaboratoryContent() {
+        Table contentTable = new Table();
+        contentTable.setFillParent(true);
+
+        // add specific menu content here
+        TextButton researchButton = new TextButton("Research in Laboratory", skin);
+
+        // add listeners for buttons
+        researchButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("Laboratory", "Researching in Laboratory");
+            }
+        });
+
+        contentTable.add(researchButton).pad(10).expandX();
+
+        return contentTable;
+    }
+    private Table createShopContent() {
+        Table contentTable = new Table();
+        contentTable.setFillParent(true);
+
+        // add specific menu content here
+        TextButton shopButton = new TextButton("Buy Something", skin);
+
+        // add listeners for buttons
+        shopButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.log("Shop", "Buying something in Shop");
+            }
+        });
+
+        contentTable.add(shopButton).pad(10).expandX();
 
         return contentTable;
     }

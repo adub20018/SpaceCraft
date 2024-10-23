@@ -80,7 +80,7 @@ public class Main extends ApplicationAdapter {
     }
 
     private void draw() {
-        ScreenUtils.clear(Color.PURPLE);
+        ScreenUtils.clear(new Color(0 / 255f, 8 / 255f, 64 / 255f, 1));
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
         spriteBatch.begin();

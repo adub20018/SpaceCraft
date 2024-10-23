@@ -17,7 +17,7 @@ public class Spaceship {
     }
 
     public void draw(SpriteBatch batch, float worldWidth ) {
-        batch.draw(sprite, (worldWidth - 1.2f) / 2, 2, 1.2f, 1.2f); // draw spaceship in center of screen
+        batch.draw(sprite, (worldWidth - 1.2f) / 2, 3.5f, 1.2f, 1.2f); // draw spaceship in center of screen
     }
 
     public int getHarvestCount() {

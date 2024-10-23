@@ -62,7 +62,7 @@ public class Spaceship {
     public void harvestAsteroid(AsteroidManager asteroidManager) {
         if (harvestCount > 0) {
             isHarvesting = true;
-            Asteroid harvestedAsteroid = asteroidManager.pauseAsteroid();
+            Asteroid harvestedAsteroid = asteroidManager.selectRandomAsteroid();
             if (harvestedAsteroid != null) {
                 asteroidCoords = new Vector2(
                     harvestedAsteroid.getSprite().getX() + harvestedAsteroid.getSprite().getWidth() / 2,

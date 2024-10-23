@@ -101,18 +101,27 @@ public class AsteroidManager {
         asteroids.add(newAsteroid);
     }
 
-    public Asteroid pauseAsteroid() {
+    public Asteroid selectRandomAsteroid() {
+        System.out.println("click");
+
         // set the range that asteroids can be harvested in
         float topBoundary = 10.5f;
         float bottomBoundary = 0.8f;
-        System.out.println("click");
-        if(asteroids.size > 0) {
-            Asteroid asteroid = asteroids.get(MathUtils.random(0, asteroids.size - 1));
-            if (asteroid.getSprite().getY() > bottomBoundary && asteroid.getSprite().getY() < topBoundary) { // make sure asteroid is in view
-                asteroid.setHarvesting(true);
-                return asteroid;
+
+        // filter asteroids to only those within boundaries
+        Array<Asteroid> validAsteroids = new Array<>();
+        for (Asteroid asteroid : asteroids) {
+            float asteroidY = asteroid.getSprite().getY();
+            if (asteroidY < topBoundary && asteroidY > bottomBoundary) { // if asteroid is within boundaries
+                validAsteroids.add(asteroid);
             }
         }
-        return null; // if no asteroids available
+
+        if (validAsteroids.size > 0) {
+            Asteroid selectedAsteroid = validAsteroids.get(MathUtils.random(0, validAsteroids.size - 1));
+            selectedAsteroid.setHarvesting(true);
+            return selectedAsteroid;
+        }
+        return null; // if no asteroids in view
     }
 }

@@ -22,6 +22,7 @@ public class Main extends ApplicationAdapter {
     private AsteroidManager asteroidManager;
     private GameMenu gameMenu;
     private GameHUD gameHUD;
+    private UpgradesManager upgradesManager;
 
     private Stage stage;
 
@@ -47,12 +48,15 @@ public class Main extends ApplicationAdapter {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        gameMenu = new GameMenu(stage);
         gameHUD = new GameHUD(stage);
 
         spaceship = new Spaceship(viewport, gameHUD);
-        asteroidManager = new AsteroidManager();
+        upgradesManager = new UpgradesManager(spaceship);
 
+        gameMenu = new GameMenu(stage, upgradesManager);
+
+
+        asteroidManager = new AsteroidManager();
 
         deltatest = 0;
     }
@@ -79,9 +83,8 @@ public class Main extends ApplicationAdapter {
         viewport.unproject(touchPos);
         if (Gdx.input.justTouched()) {
             System.out.println("Touched");
-            if (spaceship.spaceRect.contains(touchPos)) {
-                System.out.println("X COORD: " + Gdx.input.getX() + " Y COORD: " + Gdx.input.getY());
-                spaceship.harvestAsteroid(asteroidManager);
+            if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0) {
+                spaceship.tractorUpdate("click");
             }
         }
     }
@@ -89,7 +92,9 @@ public class Main extends ApplicationAdapter {
     private void logic() {
         //asteroid.updateAsteroidPosition(worldWidth, worldHeight);
         asteroidManager.updateAsteroids(worldWidth, worldHeight, spaceship);
-
+        if(spaceship.tractorUpdate("tick")){
+            spaceship.harvestAsteroid(asteroidManager);
+        }
     }
 
     private void draw() {

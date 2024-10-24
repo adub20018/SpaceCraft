@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Spaceship {
@@ -25,6 +24,8 @@ public class Spaceship {
     private GameHUD gameHUD;
     public float spaceshipX, spaceshipY;
     public Rectangle spaceRect;
+    public float tractorIdleCharge;
+    public float tractorClickLevel;
 
     public Spaceship(Viewport viewport, GameHUD gameHUD) {
         this.viewport = viewport;
@@ -40,7 +41,8 @@ public class Spaceship {
         spaceRect = new Rectangle(spaceshipX, spaceshipY,  sprite.getWidth(), sprite.getHeight());
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
         asteroidBalance = preferences.getInteger("asteroidBalance", 0);
-
+        tractorClickLevel = 10f;
+        tractorIdleCharge = 100f;
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
@@ -78,7 +80,9 @@ public class Spaceship {
                 // if no asteroid to harvest
                 System.out.println("No asteroid available !!!!!!!!");
                 isHarvesting = false;
+                return;
             }
+            tractorIdleCharge += 100f;
         }
     }
 
@@ -95,5 +99,25 @@ public class Spaceship {
 
     public void dispose() {
         tractorBeam.dispose(); // dispose of tractor beam when no longer needed
+    }
+
+    public boolean tractorUpdate(String updateType) {
+        if(harvestCount<=0) return false;
+        switch(updateType) {
+            case("tick"): {
+                tractorIdleCharge -= Gdx.graphics.getDeltaTime();
+                break;
+            }
+            case("click"): {
+                tractorIdleCharge -= tractorClickLevel;
+                break;
+            }
+        }
+        System.out.println(tractorIdleCharge);
+        return tractorIdleCharge <= 0;
+    }
+
+    public void setClickLevel(float value) {
+        tractorClickLevel = value;
     }
 }

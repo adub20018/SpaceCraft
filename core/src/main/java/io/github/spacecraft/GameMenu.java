@@ -23,12 +23,16 @@ public class GameMenu {
     private float width;
     private float height;
     private float edgeMargin;
+    float availableWidth;
 
     private TextureRegionDrawable purpleBackground;
     private TextureRegionDrawable blueBackground;
 
-    public GameMenu(Stage stage) {
+    private UpgradesManager upgradesManager;
+
+    public GameMenu(Stage stage, UpgradesManager upgradesManager) {
         this.stage = stage;
+        this.upgradesManager = upgradesManager;
         skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
 
         edgeMargin = 25; // the gap around sides of screen (so nav does not squeeze against edge)
@@ -74,7 +78,7 @@ public class GameMenu {
         int numOfButtons = 5;
         float margin = 10; // space between buttons
         float totalMargin = margin * (numOfButtons - 1);
-        float availableWidth = width - edgeMargin * 2 - totalMargin;
+        availableWidth = width - edgeMargin * 2 - totalMargin;
         float buttonWidth = availableWidth / numOfButtons;
         float buttonHeight = buttonWidth;
 
@@ -156,18 +160,60 @@ public class GameMenu {
         contentTable.setFillParent(true);
 
         // add specific menu content here
+        // upgrade click level
+        TextButton upgradeClickLevel = new TextButton("Upgrade Click Level", skin);
+        upgradeClickLevel.setSize(100, 100);
+
+        // upgrade idle charge
+        TextButton upgradeIdleCharge = new TextButton("Upgrade Click Level", skin);
+        upgradeIdleCharge.setSize(100, 100);
+
+        // upgrade navigation
+        TextButton upgradeNavigation = new TextButton("Upgrade Click Level", skin);
+        upgradeNavigation.setSize(100, 100);
+
+        // upgrade harvest time
         TextButton upgradeHarvestTimeButton = new TextButton("Upgrade Harvest Time", skin);
         upgradeHarvestTimeButton.setSize(100, 100);
 
         // add listeners for buttons
+        upgradeClickLevel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                upgradesManager.upgradeClickLevel();
+                Gdx.app.log("Upgrades", "Click Level Upgraded");
+            }
+        });
+
+        upgradeIdleCharge.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                upgradesManager.upgradeIdleCharge();
+                Gdx.app.log("Upgrades", "Click Level Upgraded");
+            }
+        });
+
+        upgradeNavigation.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                upgradesManager.upgradeNavigation();
+                Gdx.app.log("Upgrades", "Click Level Upgraded");
+            }
+        });
+
         upgradeHarvestTimeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                upgradesManager.upgradeHarvestTime();
                 Gdx.app.log("Upgrades", "Harvest Time Upgraded");
             }
         });
 
-        contentTable.add(upgradeHarvestTimeButton).size(200, 200);
+        contentTable.add(upgradeClickLevel).size(400, 200).pad(50);
+        contentTable.add(upgradeIdleCharge).size(400, 200).pad(50);
+        contentTable.row();
+        contentTable.add(upgradeNavigation).size(400, 200).pad(50);
+        contentTable.add(upgradeHarvestTimeButton).size(400, 200).pad(50);
 
         return contentTable;
     }
@@ -178,6 +224,7 @@ public class GameMenu {
         // add specific menu content here
         TextButton refineAsteroidButton = new TextButton("Refine Asteroid", skin);
 
+
         // add listeners for buttons
         refineAsteroidButton.addListener(new ClickListener() {
             @Override
@@ -186,7 +233,8 @@ public class GameMenu {
             }
         });
 
-        contentTable.add(refineAsteroidButton).pad(10).expandX();
+        contentTable.add(refineAsteroidButton).size(availableWidth, 200);
+
 
         return contentTable;
     }
@@ -195,17 +243,62 @@ public class GameMenu {
         contentTable.setFillParent(true);
 
         // add specific menu content here
-        TextButton researchButton = new TextButton("Research in Laboratory", skin);
+        // increase tractor quantity
+        TextButton upgradeTractorQuantity = new TextButton("Upgrade Tractor Quantity", skin);
+        upgradeTractorQuantity.setSize(100, 100);
+
+        // upgrade harvest scanner
+        TextButton upgradeScanner = new TextButton("Upgrade Harvest Scanner", skin);
+        upgradeScanner.setSize(100, 100);
+
+        // upgrade refinery quality
+        TextButton upgradeRefineryQuality = new TextButton("Upgrade Refinery Quality", skin);
+        upgradeRefineryQuality.setSize(100, 100);
+
+        // upgrade to auto refine
+        TextButton upgradeToAutoRefine = new TextButton("Uprade To Auto Refine", skin);
+        upgradeToAutoRefine.setSize(100, 100);
 
         // add listeners for buttons
-        researchButton.addListener(new ClickListener() {
+        upgradeTractorQuantity.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("Laboratory", "Researching in Laboratory");
+                upgradesManager.upgradeTractorQuantity();
+                Gdx.app.log("Laboratory", "Tractor Quantity Upgraded");
             }
         });
 
-        contentTable.add(researchButton).pad(10).expandX();
+        upgradeScanner.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                upgradesManager.upgradeScanner();
+                Gdx.app.log("Laboratory", "Scanner Upgraded");
+            }
+        });
+
+        upgradeRefineryQuality.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                upgradesManager.upgradeRefineryQuality();
+                Gdx.app.log("Laboratory", "Refinery Quality Upgraded");
+            }
+        });
+
+        upgradeToAutoRefine.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                upgradesManager.upgradeToAutoRefine();
+                Gdx.app.log("Laboratory", "Auto Refine Upgraded");
+            }
+        });
+
+        contentTable.add(upgradeTractorQuantity).size(400, 200).pad(50);
+        contentTable.add(upgradeScanner).size(400, 200).pad(50);
+        contentTable.row();
+        contentTable.add(upgradeRefineryQuality).size(400, 200).pad(50);
+        contentTable.add(upgradeToAutoRefine).size(400, 200).pad(50);
+
+        contentTable.row();
 
         return contentTable;
     }

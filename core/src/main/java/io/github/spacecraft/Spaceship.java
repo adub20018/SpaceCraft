@@ -37,7 +37,7 @@ public class Spaceship {
         isHarvesting = false;
         this.gameHUD = gameHUD;
         spaceshipX = (viewport.getWorldWidth() - sprite.getWidth()) / 2;
-        spaceshipY = 3.5f;
+        spaceshipY = 5.5f;
         spaceRect = new Rectangle(spaceshipX, spaceshipY,  sprite.getWidth(), sprite.getHeight());
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
         asteroidBalance = preferences.getInteger("asteroidBalance", 0);
@@ -113,7 +113,7 @@ public class Spaceship {
                 break;
             }
         }
-        System.out.println(tractorIdleCharge);
+        // System.out.println(tractorIdleCharge);
         return tractorIdleCharge <= 0;
     }
 

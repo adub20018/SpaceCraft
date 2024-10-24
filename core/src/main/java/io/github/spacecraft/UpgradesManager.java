@@ -6,7 +6,7 @@ import com.badlogic.gdx.Preferences;
 public class UpgradesManager {
     private Preferences preferences;
     private int asteroidsBalance;
-    private float clickLevel;
+    private int clickLevel;
     private int asteroidScanner;
 
     private Spaceship spaceship;
@@ -15,7 +15,7 @@ public class UpgradesManager {
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
 
         asteroidsBalance = preferences.getInteger("asteroidsBalance", 0);
-        clickLevel = preferences.getFloat("clickLevel", 0f);
+        clickLevel = preferences.getInteger("clickLevel", 0);
         asteroidScanner = preferences.getInteger("asteroidScanner", 0);
 
         this.spaceship = spaceship;
@@ -32,15 +32,16 @@ public class UpgradesManager {
 
         // subtract cost from balance
 
-        float value = clickLevel * 2f;
-
+        int value = clickLevel += 2;
+        System.out.println("Click Level: " + value);
         // calculate level increase formula
 
         // call spaceship.setClickLevel
         spaceship.setClickLevel(value);
         System.out.println("Upgrading Click Level !!!!!!!");
 
-        preferences.putFloat("clickLevel", value);
+        preferences.putInteger("clickLevel", value);
+        preferences.flush();
 
         // then spaceship.getClickLevel will be passed to asteroidManager
     }

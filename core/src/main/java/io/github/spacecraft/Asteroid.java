@@ -18,6 +18,8 @@ public class Asteroid {
     private float harvestWaitTime;
     private float radius;
     private float deltatest;
+    private int rarity;
+
 
     public Asteroid(float x, float y, int rarity, float radius) {
         texture = new Texture("asteroid.png");
@@ -28,6 +30,7 @@ public class Asteroid {
         sprite.setSize(radius, radius);
         asteroidSprites = new Array<>();
         speed = MathUtils.random(-2.5f,-0.9f);
+        this.rarity = rarity;
         if (rarity == 2) speed = MathUtils.random(-1.1f, -0.8f);
         if (rarity == 3) speed = MathUtils.random(-0.9f, -0.7f);
         if (rarity == 4) speed = MathUtils.random(-0.8f, -0.5f);
@@ -64,6 +67,14 @@ public class Asteroid {
     }
     public void setHarvesting(boolean harvesting) {
         this.harvesting = harvesting;
+    }
+
+    public int getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(int rarity) {
+        this.rarity = rarity;
     }
 
 }

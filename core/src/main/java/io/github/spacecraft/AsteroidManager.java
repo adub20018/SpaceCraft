@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 
+import java.util.Comparator;
+
 public class AsteroidManager {
     private Texture asteroidTexture;
     private SnapshotArray<Asteroid> asteroids;
@@ -121,6 +123,31 @@ public class AsteroidManager {
             Asteroid selectedAsteroid = validAsteroids.get(MathUtils.random(0, validAsteroids.size - 1));
             selectedAsteroid.setHarvesting(true);
             return selectedAsteroid;
+        }
+        return null; // if no asteroids in view
+    }
+
+    public Asteroid selectLargestAsteroid() {
+        System.out.println("click");
+
+        // set the range that asteroids can be harvested in
+        float topBoundary = 10.5f;
+        float bottomBoundary = 0.8f;
+
+        // filter asteroids to only those within boundaries
+        Array<Asteroid> validAsteroids = new Array<>();
+        for (Asteroid asteroid : asteroids) {
+            float asteroidY = asteroid.getSprite().getY();
+            if (asteroidY < topBoundary && asteroidY > bottomBoundary) { // if asteroid is within boundaries
+                validAsteroids.add(asteroid);
+            }
+        }
+        // default sort order is ascending, we want to get the Highest rarity
+        validAsteroids.sort(Comparator.comparingInt(Asteroid::getRarity).reversed());
+
+        if (validAsteroids.size > 0) {
+            validAsteroids.get(0).setHarvesting(true);
+            return validAsteroids.get(0);
         }
         return null; // if no asteroids in view
     }

@@ -44,6 +44,7 @@ public class Asteroid {
             sprite.translateY(speed * delta);
         } else {
             harvestWaitTime -= delta;
+            //System.out.println(harvestWaitTime);
         }
 
         //System.out.println(harvestWaitTime);

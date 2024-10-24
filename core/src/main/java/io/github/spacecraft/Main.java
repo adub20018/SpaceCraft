@@ -79,9 +79,9 @@ public class Main extends ApplicationAdapter {
         viewport.unproject(touchPos);
         if (Gdx.input.justTouched()) {
             System.out.println("Touched");
-            if (spaceship.spaceRect.contains(touchPos)) {
-                System.out.println("X COORD: " + Gdx.input.getX() + " Y COORD: " + Gdx.input.getY());
-                spaceship.harvestAsteroid(asteroidManager);
+            if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0) {
+                //System.out.println("X COORD: " + Gdx.input.getX() + " Y COORD: " + Gdx.input.getY());
+                spaceship.tractorUpdate("click");
             }
         }
     }
@@ -89,7 +89,9 @@ public class Main extends ApplicationAdapter {
     private void logic() {
         //asteroid.updateAsteroidPosition(worldWidth, worldHeight);
         asteroidManager.updateAsteroids(worldWidth, worldHeight, spaceship);
-
+        if(spaceship.tractorUpdate("tick")){
+            spaceship.harvestAsteroid(asteroidManager);
+        }
     }
 
     private void draw() {

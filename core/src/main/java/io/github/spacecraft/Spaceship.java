@@ -25,6 +25,8 @@ public class Spaceship {
     private GameHUD gameHUD;
     public float spaceshipX, spaceshipY;
     public Rectangle spaceRect;
+    public float tractorCharge;
+    public float tractorLevel;
 
     public Spaceship(Viewport viewport, GameHUD gameHUD) {
         this.viewport = viewport;
@@ -40,7 +42,8 @@ public class Spaceship {
         spaceRect = new Rectangle(spaceshipX, spaceshipY,  sprite.getWidth(), sprite.getHeight());
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
         asteroidBalance = preferences.getInteger("asteroidBalance", 0);
-
+        tractorLevel = 10f;
+        tractorCharge = 100f;
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
@@ -78,7 +81,9 @@ public class Spaceship {
                 // if no asteroid to harvest
                 System.out.println("No asteroid available !!!!!!!!");
                 isHarvesting = false;
+                return;
             }
+            tractorCharge += 100f;
         }
     }
 
@@ -95,5 +100,21 @@ public class Spaceship {
 
     public void dispose() {
         tractorBeam.dispose(); // dispose of tractor beam when no longer needed
+    }
+
+    public boolean tractorUpdate(String updateType) {
+        if(harvestCount<=0) return false;
+        switch(updateType) {
+            case("tick"): {
+                tractorCharge -= Gdx.graphics.getDeltaTime();
+                break;
+            }
+            case("click"): {
+                tractorCharge -= tractorLevel;
+                break;
+            }
+        }
+        System.out.println(tractorCharge);
+        return tractorCharge <= 0;
     }
 }

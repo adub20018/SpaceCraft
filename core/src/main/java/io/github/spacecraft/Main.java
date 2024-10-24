@@ -80,7 +80,6 @@ public class Main extends ApplicationAdapter {
         if (Gdx.input.justTouched()) {
             System.out.println("Touched");
             if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0) {
-                //System.out.println("X COORD: " + Gdx.input.getX() + " Y COORD: " + Gdx.input.getY());
                 spaceship.tractorUpdate("click");
             }
         }

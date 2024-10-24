@@ -22,6 +22,7 @@ public class Main extends ApplicationAdapter {
     private AsteroidManager asteroidManager;
     private GameMenu gameMenu;
     private GameHUD gameHUD;
+    private UpgradesManager upgradesManager;
 
     private Stage stage;
 
@@ -47,12 +48,15 @@ public class Main extends ApplicationAdapter {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        gameMenu = new GameMenu(stage);
         gameHUD = new GameHUD(stage);
 
         spaceship = new Spaceship(viewport, gameHUD);
-        asteroidManager = new AsteroidManager();
+        upgradesManager = new UpgradesManager(spaceship);
 
+        gameMenu = new GameMenu(stage, upgradesManager);
+
+
+        asteroidManager = new AsteroidManager();
 
         deltatest = 0;
     }

@@ -20,8 +20,8 @@ public class Main extends ApplicationAdapter {
     private Spaceship spaceship;
 
     private AsteroidManager asteroidManager;
-    private GameMenu gameMenu;
     private GameHUD gameHUD;
+    private GameMenu gameMenu;
     private UpgradesManager upgradesManager;
 
     private Stage stage;
@@ -53,7 +53,7 @@ public class Main extends ApplicationAdapter {
         spaceship = new Spaceship(viewport, gameHUD);
         upgradesManager = new UpgradesManager(spaceship);
 
-        gameMenu = new GameMenu(stage, upgradesManager);
+        gameMenu = new GameMenu(stage, upgradesManager, gameHUD);
 
 
         asteroidManager = new AsteroidManager();

@@ -11,18 +11,29 @@ public class UpgradesManager {
     private int idleLevel;
     private int navigatorLevel;
     private int harvestTimeLevel;
+    private boolean isScanner;
 
     private Spaceship spaceship;
     public UpgradesManager(Spaceship spaceship) {
         // get stats
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
-
+        preferences.putInteger("asteroidsBalance", 0);
+        preferences.putInteger("clickLevel", 1);
+        preferences.putInteger("idleLevel", 0);
+        preferences.putInteger("navigatorLevel",0);
+        preferences.putInteger("harvestTimeLevel",0);
+        preferences.putInteger("asteroidScanner", 0);
+        preferences.putBoolean("isScanner",false);
+        preferences.putInteger("harvestCount", 1);
+        preferences.flush();
         asteroidsBalance = preferences.getInteger("asteroidsBalance", 0);
         clickLevel = preferences.getInteger("clickLevel", 1);
         idleLevel = preferences.getInteger("idleLevel", 0);
         navigatorLevel = preferences.getInteger("navigatorLevel",0);
         harvestTimeLevel = preferences.getInteger("harvestTimeLevel",0);
         asteroidScanner = preferences.getInteger("asteroidScanner", 0);
+        isScanner = preferences.getBoolean("isScanner",false);
+        preferences.getInteger("harvestCount", 1);
 
         this.spaceship = spaceship;
 
@@ -34,7 +45,13 @@ public class UpgradesManager {
         spaceship.setIdleLevel(idleLevel);
         spaceship.setNavigatorLevel(navigatorLevel);
         spaceship.setHarvestTimeLevel(harvestTimeLevel);
+        spaceship.isScanner = isScanner;
     }
+
+
+    // *******************
+    // Upgrades section
+    // *******************
 
     public void upgradeClickLevel() {
         // check asteroids balance
@@ -86,12 +103,20 @@ public class UpgradesManager {
         preferences.flush();
     }
 
-
+    // *******************
     // Laboratory section
+    // *******************
     public void upgradeTractorQuantity() {
+        spaceship.setHarvestCount(spaceship.getHarvestCount()+1);
+        preferences.putInteger("harvestCount", spaceship.getHarvestCount());
+        preferences.flush();
     }
 
     public void upgradeScanner() {
+        System.out.println("Scanner upgraded!!!");
+        spaceship.isScanner = true;
+        preferences.putBoolean("isScanner", true);
+        preferences.flush();
     }
 
     public void upgradeRefineryQuality() {

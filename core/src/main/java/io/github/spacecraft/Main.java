@@ -83,6 +83,7 @@ public class Main extends ApplicationAdapter {
         viewport.unproject(touchPos);
         if (Gdx.input.justTouched()) {
             System.out.println("Touched");
+            System.out.println("IDLE CHARGE: " + spaceship.tractorIdleCharge);
             if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0) {
                 spaceship.tractorUpdate("click");
             }
@@ -117,7 +118,5 @@ public class Main extends ApplicationAdapter {
         spaceship.draw(spriteBatch, worldWidth);
 
         spriteBatch.end();
-
-
     }
 }

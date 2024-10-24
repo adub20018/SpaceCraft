@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -23,7 +24,11 @@ public class GameMenu {
     private float width;
     private float height;
     private float edgeMargin;
+
+    float outerPadding = 25;     // dynamically calculate the size of buttons within table
+    float innerPadding = 12.5f; // padding on edges shared with other button (to avoid double padding)
     float availableWidth;
+    float popupWidth;
 
     private TextureRegionDrawable purpleBackground;
     private TextureRegionDrawable blueBackground;
@@ -113,13 +118,18 @@ public class GameMenu {
             popupWindow.remove();
         }
 
-        float totalWidth = width - edgeMargin * 2;
+        popupWidth = width - edgeMargin * 2;
 
         // create new popup window
         popupWindow = new Window(title, skin);
         popupWindow.setY(buttonHeight + 50);
-        popupWindow.setSize(totalWidth, height * 0.3f);
+        popupWindow.setSize(popupWidth, height * 0.3f);
         popupWindow.setX(edgeMargin);
+
+        // make window scrollable
+//        ScrollPane scrollPane = new ScrollPane(contentTable, skin);
+//        scrollPane.setFillParent(true);
+//        scrollPane.setScrollingDisabled(false, false);
 
         // add content table to window
         popupWindow.add(contentTable).expand().fill(); // make content fill the popup
@@ -162,19 +172,15 @@ public class GameMenu {
         // add specific menu content here
         // upgrade click level
         TextButton upgradeClickLevel = new TextButton("Upgrade Click Level", skin);
-        upgradeClickLevel.setSize(100, 100);
 
         // upgrade idle charge
         TextButton upgradeIdleCharge = new TextButton("Upgrade Click Level", skin);
-        upgradeIdleCharge.setSize(100, 100);
 
         // upgrade navigation
         TextButton upgradeNavigation = new TextButton("Upgrade Click Level", skin);
-        upgradeNavigation.setSize(100, 100);
 
         // upgrade harvest time
         TextButton upgradeHarvestTimeButton = new TextButton("Upgrade Harvest Time", skin);
-        upgradeHarvestTimeButton.setSize(100, 100);
 
         // add listeners for buttons
         upgradeClickLevel.addListener(new ClickListener() {
@@ -209,11 +215,11 @@ public class GameMenu {
             }
         });
 
-        contentTable.add(upgradeClickLevel).size(400, 200).pad(50);
-        contentTable.add(upgradeIdleCharge).size(400, 200).pad(50);
+        contentTable.add(upgradeClickLevel).expandX().fillX().height(200).pad(outerPadding, outerPadding, innerPadding, innerPadding);
+        contentTable.add(upgradeIdleCharge).expandX().fillX().height(200).pad(outerPadding, innerPadding, innerPadding, outerPadding);
         contentTable.row();
-        contentTable.add(upgradeNavigation).size(400, 200).pad(50);
-        contentTable.add(upgradeHarvestTimeButton).size(400, 200).pad(50);
+        contentTable.add(upgradeNavigation).expandX().fillX().height(200).pad(innerPadding, outerPadding, outerPadding, innerPadding);
+        contentTable.add(upgradeHarvestTimeButton).expandX().fillX().height(200).pad(innerPadding, innerPadding, outerPadding, outerPadding);
 
         return contentTable;
     }
@@ -292,11 +298,14 @@ public class GameMenu {
             }
         });
 
-        contentTable.add(upgradeTractorQuantity).size(400, 200).pad(50);
-        contentTable.add(upgradeScanner).size(400, 200).pad(50);
+        contentTable.add(upgradeTractorQuantity).fillX().height(200).pad(outerPadding, outerPadding, innerPadding, innerPadding);
+
+        contentTable.add(upgradeScanner).fillX().height(200).pad(outerPadding, innerPadding, innerPadding, outerPadding);
+
         contentTable.row();
-        contentTable.add(upgradeRefineryQuality).size(400, 200).pad(50);
-        contentTable.add(upgradeToAutoRefine).size(400, 200).pad(50);
+        contentTable.add(upgradeRefineryQuality).fillX().height(200).pad(innerPadding, outerPadding, outerPadding, innerPadding);
+
+        contentTable.add(upgradeToAutoRefine).expandX().fillX().height(200).pad(innerPadding, innerPadding, outerPadding, outerPadding);
 
         contentTable.row();
 

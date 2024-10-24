@@ -42,7 +42,10 @@ public class AsteroidManager {
         asteroidSpawnTimer += delta;
         if (asteroidSpawnTimer > 1f) {
             asteroidSpawnTimer = 0.1f; // increase this to spawn more asteroids
-            createAsteroid(worldWidth, worldHeight); // create new asteroid
+            createAsteroid(worldWidth, worldHeight);
+            if(MathUtils.random(0,99)<spaceship.navigatorLevel) {
+                createAsteroid(worldWidth, worldHeight); // create new asteroid
+            }
         }
     }
 
@@ -127,7 +130,7 @@ public class AsteroidManager {
         return null; // if no asteroids in view
     }
 
-    public Asteroid selectLargestAsteroid() {
+    public Asteroid selectLargestAsteroid(Spaceship spaceship) {
         System.out.println("click");
 
         // set the range that asteroids can be harvested in
@@ -147,6 +150,7 @@ public class AsteroidManager {
 
         if (validAsteroids.size > 0) {
             validAsteroids.get(0).setHarvesting(true);
+            validAsteroids.get(0).setHarvestWaitTime(validAsteroids.get(0).getHarvestWaitTime()*(1-(0.02f*spaceship.getHarvestTimeLevel())));
             return validAsteroids.get(0);
         }
         return null; // if no asteroids in view

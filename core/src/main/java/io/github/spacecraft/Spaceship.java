@@ -25,7 +25,10 @@ public class Spaceship {
     public float spaceshipX, spaceshipY;
     public Rectangle spaceRect;
     public float tractorIdleCharge;
-    public float tractorClickLevel;
+    public int tractorIdleLevel;
+    public int tractorClickLevel;
+    public int navigatorLevel;
+    public int harvestTimeLevel;
 
     public Spaceship(Viewport viewport, GameHUD gameHUD) {
         this.viewport = viewport;
@@ -41,8 +44,11 @@ public class Spaceship {
         spaceRect = new Rectangle(spaceshipX, spaceshipY,  sprite.getWidth(), sprite.getHeight());
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
         asteroidBalance = preferences.getInteger("asteroidBalance", 0);
-        tractorClickLevel = 10f;
+        tractorClickLevel = 1;
+        tractorIdleLevel = 0;
         tractorIdleCharge = 100f;
+        navigatorLevel = 0;
+        harvestTimeLevel = 0;
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
@@ -68,7 +74,7 @@ public class Spaceship {
     public void harvestAsteroid(AsteroidManager asteroidManager) {
         if (harvestCount > 0) {
             isHarvesting = true;
-            Asteroid harvestedAsteroid = asteroidManager.selectLargestAsteroid();
+            Asteroid harvestedAsteroid = asteroidManager.selectLargestAsteroid(this);
             if (harvestedAsteroid != null) {
                 asteroidCoords = new Vector2(
                     harvestedAsteroid.getSprite().getX() + harvestedAsteroid.getSprite().getWidth() / 2,
@@ -105,11 +111,13 @@ public class Spaceship {
         if(harvestCount<=0) return false;
         switch(updateType) {
             case("tick"): {
-                tractorIdleCharge -= Gdx.graphics.getDeltaTime();
+                tractorIdleCharge -= Gdx.graphics.getDeltaTime()*(1+(0.05f * tractorIdleLevel));
+                //System.out.println(tractorIdleCharge);
+                //System.out.println(tractorIdleLevel);
                 break;
             }
             case("click"): {
-                tractorIdleCharge -= tractorClickLevel;
+                tractorIdleCharge -= 10 + (tractorClickLevel * 0.25f);
                 break;
             }
         }
@@ -117,7 +125,21 @@ public class Spaceship {
         return tractorIdleCharge <= 0;
     }
 
-    public void setClickLevel(float value) {
+    public void setClickLevel(int value) {
         tractorClickLevel = value;
     }
+    public void setIdleLevel(int tractorIdleLevel) {
+        this.tractorIdleLevel = tractorIdleLevel;
+    }
+    public void setNavigatorLevel(int navigatorLevel) {
+        this.navigatorLevel = navigatorLevel;
+    }
+    public int getHarvestTimeLevel() {
+        return harvestTimeLevel;
+    }
+
+    public void setHarvestTimeLevel(int harvestTimeLevel) {
+        this.harvestTimeLevel = harvestTimeLevel;
+    }
+
 }

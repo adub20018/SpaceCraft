@@ -84,6 +84,7 @@ public class Main extends ApplicationAdapter {
         if (Gdx.input.justTouched()) {
             System.out.println("Touched");
             System.out.println("IDLE CHARGE: " + spaceship.tractorIdleCharge);
+            System.out.println(spaceship.tractorClickLevel);
             if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0) {
                 spaceship.tractorUpdate("click");
             }

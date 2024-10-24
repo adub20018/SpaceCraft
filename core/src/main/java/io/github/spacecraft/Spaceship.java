@@ -29,6 +29,7 @@ public class Spaceship {
     public int tractorClickLevel;
     public int navigatorLevel;
     public int harvestTimeLevel;
+    public boolean isScanner;
 
     public Spaceship(Viewport viewport, GameHUD gameHUD) {
         this.viewport = viewport;
@@ -49,6 +50,7 @@ public class Spaceship {
         tractorIdleCharge = 100f;
         navigatorLevel = 0;
         harvestTimeLevel = 0;
+        isScanner = false;
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
@@ -62,6 +64,9 @@ public class Spaceship {
     public int getHarvestCount() {
         return harvestCount;
     }
+    public void setHarvestCount(int harvestCount) {
+        this.harvestCount = harvestCount;
+    }
 
     public void incrementHarvestCount() {
         harvestCount++;
@@ -74,7 +79,13 @@ public class Spaceship {
     public void harvestAsteroid(AsteroidManager asteroidManager) {
         if (harvestCount > 0) {
             isHarvesting = true;
-            Asteroid harvestedAsteroid = asteroidManager.selectLargestAsteroid(this);
+            Asteroid harvestedAsteroid;
+            if(!isScanner) {
+                harvestedAsteroid = asteroidManager.selectRandomAsteroid(this);
+            } else {
+                harvestedAsteroid = asteroidManager.selectLargestAsteroid(this);
+            }
+
             if (harvestedAsteroid != null) {
                 asteroidCoords = new Vector2(
                     harvestedAsteroid.getSprite().getX() + harvestedAsteroid.getSprite().getWidth() / 2,

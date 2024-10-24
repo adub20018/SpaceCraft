@@ -11,6 +11,7 @@ public class UpgradesManager {
     private int idleLevel;
     private int navigatorLevel;
     private int harvestTimeLevel;
+    private boolean isScanner;
 
     private Spaceship spaceship;
     public UpgradesManager(Spaceship spaceship) {
@@ -23,6 +24,8 @@ public class UpgradesManager {
         navigatorLevel = preferences.getInteger("navigatorLevel",0);
         harvestTimeLevel = preferences.getInteger("harvestTimeLevel",0);
         asteroidScanner = preferences.getInteger("asteroidScanner", 0);
+        isScanner = preferences.getBoolean("isScanner",false);
+        preferences.getInteger("harvestCount", 1);
 
         this.spaceship = spaceship;
 
@@ -34,7 +37,13 @@ public class UpgradesManager {
         spaceship.setIdleLevel(idleLevel);
         spaceship.setNavigatorLevel(navigatorLevel);
         spaceship.setHarvestTimeLevel(harvestTimeLevel);
+        spaceship.isScanner = isScanner;
     }
+
+
+    // *******************
+    // Upgrades section
+    // *******************
 
     public void upgradeClickLevel() {
         // check asteroids balance
@@ -86,12 +95,20 @@ public class UpgradesManager {
         preferences.flush();
     }
 
-
+    // *******************
     // Laboratory section
+    // *******************
     public void upgradeTractorQuantity() {
+        spaceship.setHarvestCount(spaceship.getHarvestCount()+1);
+        preferences.putInteger("harvestCount", spaceship.getHarvestCount());
+        preferences.flush();
     }
 
     public void upgradeScanner() {
+        System.out.println("Scanner upgraded!!!");
+        spaceship.isScanner = true;
+        preferences.putBoolean("isScanner", true);
+        preferences.flush();
     }
 
     public void upgradeRefineryQuality() {

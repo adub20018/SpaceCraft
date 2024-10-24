@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Spaceship {
@@ -17,7 +18,8 @@ public class Spaceship {
     private int harvestCount;
     private ShapeRenderer tractorBeam;
     protected Boolean isHarvesting;
-    public Vector2 spaceshipCoords, asteroidCoords;
+    public Vector2 spaceshipCoords;
+    public SnapshotArray<Vector2> asteroidCoords;
     private Viewport viewport;
     private Preferences preferences;
     private int asteroidBalance;
@@ -44,13 +46,14 @@ public class Spaceship {
         spaceshipY = 3.5f;
         spaceRect = new Rectangle(spaceshipX, spaceshipY,  sprite.getWidth(), sprite.getHeight());
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
-        asteroidBalance = preferences.getInteger("asteroidBalance", 0);
+        asteroidBalance = 0;
         tractorClickLevel = 1;
         tractorIdleLevel = 0;
         tractorIdleCharge = 100f;
         navigatorLevel = 0;
         harvestTimeLevel = 0;
         isScanner = false;
+        asteroidCoords = new SnapshotArray<>();
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
@@ -71,12 +74,17 @@ public class Spaceship {
     public void incrementHarvestCount() {
         harvestCount++;
         asteroidBalance++;
-        preferences.putInteger("asteroidBalance", asteroidBalance);
+        preferences.putInteger("asteroidBalance", 0);
         preferences.flush();
         gameHUD.updateAsteroidBalanceLabel(asteroidBalance);
+        asteroidCoords.begin();
+        //asteroidCoords.pop();
+        asteroidCoords.removeIndex(0);
+        asteroidCoords.end();
     }
 
     public void harvestAsteroid(AsteroidManager asteroidManager) {
+        tractorIdleCharge += 100f;
         if (harvestCount > 0) {
             isHarvesting = true;
             Asteroid harvestedAsteroid;
@@ -87,11 +95,12 @@ public class Spaceship {
             }
 
             if (harvestedAsteroid != null) {
-                asteroidCoords = new Vector2(
+                asteroidCoords.begin();
+                asteroidCoords.add(new Vector2(
                     harvestedAsteroid.getSprite().getX() + harvestedAsteroid.getSprite().getWidth() / 2,
                     harvestedAsteroid.getSprite().getY() + harvestedAsteroid.getSprite().getHeight() / 2
-                );
-                drawTractorBeam();
+                ));
+                asteroidCoords.end();
                 harvestCount--;
             } else {
                 // if no asteroid to harvest
@@ -99,7 +108,6 @@ public class Spaceship {
                 isHarvesting = false;
                 return;
             }
-            tractorIdleCharge += 100f;
         }
     }
 
@@ -108,7 +116,10 @@ public class Spaceship {
             tractorBeam.setProjectionMatrix(viewport.getCamera().combined);
             tractorBeam.begin(ShapeRenderer.ShapeType.Line);
             tractorBeam.setColor(Color.RED);
-            tractorBeam.line(spaceshipCoords.x, spaceshipCoords.y, asteroidCoords.x, asteroidCoords.y);
+            for(Vector2 asteroidCoord : asteroidCoords) {
+                tractorBeam.line(spaceshipCoords.x, spaceshipCoords.y, asteroidCoord.x, asteroidCoord.y);
+            }
+
             Gdx.gl.glLineWidth(4f); // set the tractor beam width
             tractorBeam.end();
         }

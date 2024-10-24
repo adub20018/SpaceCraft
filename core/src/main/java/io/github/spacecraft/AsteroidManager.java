@@ -27,9 +27,11 @@ public class AsteroidManager {
             Sprite asteroidSprite = asteroids.get(i).getSprite();
             asteroids.get(i).update(delta); // asteroid flow speed
             if(asteroids.get(i).getHarvestWaitTime() <=0) {
-                spaceship.isHarvesting = false;
                 asteroids.removeIndex(i);
                 spaceship.incrementHarvestCount();
+                if(spaceship.asteroidCoords.size == 0) {
+                    spaceship.isHarvesting = false;
+                }
                 continue;
             }
             // remove asteroid once it goes past the bottom of screen
@@ -107,7 +109,7 @@ public class AsteroidManager {
     }
 
     public Asteroid selectRandomAsteroid(Spaceship spaceship) {
-        System.out.println("click");
+        System.out.println("Random");
 
         // set the range that asteroids can be harvested in
         float topBoundary = 10.5f;
@@ -125,14 +127,14 @@ public class AsteroidManager {
         if (validAsteroids.size > 0) {
             Asteroid selectedAsteroid = validAsteroids.get(MathUtils.random(0, validAsteroids.size - 1));
             selectedAsteroid.setHarvesting(true);
-            selectedAsteroid.setHarvestWaitTime(validAsteroids.get(0).getHarvestWaitTime()*(1-(0.02f*spaceship.getHarvestTimeLevel())));
+            selectedAsteroid.setHarvestWaitTime(selectedAsteroid.getHarvestWaitTime()*(1-(0.02f*spaceship.getHarvestTimeLevel())));
             return selectedAsteroid;
         }
         return null; // if no asteroids in view
     }
 
     public Asteroid selectLargestAsteroid(Spaceship spaceship) {
-        System.out.println("click");
+        System.out.println("Largest");
 
         // set the range that asteroids can be harvested in
         float topBoundary = 10.5f;

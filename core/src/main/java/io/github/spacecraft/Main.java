@@ -85,6 +85,7 @@ public class Main extends ApplicationAdapter {
             System.out.println("Touched");
             System.out.println("IDLE CHARGE: " + spaceship.tractorIdleCharge);
             System.out.println(spaceship.tractorClickLevel);
+            System.out.println(spaceship.getHarvestCount());
             if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0) {
                 spaceship.tractorUpdate("click");
             }
@@ -94,8 +95,11 @@ public class Main extends ApplicationAdapter {
     private void logic() {
         //asteroid.updateAsteroidPosition(worldWidth, worldHeight);
         asteroidManager.updateAsteroids(worldWidth, worldHeight, spaceship);
+        //System.out.println(spaceship.getHarvestCount());
         if(spaceship.tractorUpdate("tick")){
+            System.out.println("TICK HARVEST");
             spaceship.harvestAsteroid(asteroidManager);
+
         }
     }
 

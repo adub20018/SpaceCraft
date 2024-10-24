@@ -17,7 +17,15 @@ public class UpgradesManager {
     public UpgradesManager(Spaceship spaceship) {
         // get stats
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
-
+        preferences.putInteger("asteroidsBalance", 0);
+        preferences.putInteger("clickLevel", 1);
+        preferences.putInteger("idleLevel", 0);
+        preferences.putInteger("navigatorLevel",0);
+        preferences.putInteger("harvestTimeLevel",0);
+        preferences.putInteger("asteroidScanner", 0);
+        preferences.putBoolean("isScanner",false);
+        preferences.putInteger("harvestCount", 1);
+        preferences.flush();
         asteroidsBalance = preferences.getInteger("asteroidsBalance", 0);
         clickLevel = preferences.getInteger("clickLevel", 1);
         idleLevel = preferences.getInteger("idleLevel", 0);

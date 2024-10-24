@@ -106,7 +106,7 @@ public class AsteroidManager {
         asteroids.add(newAsteroid);
     }
 
-    public Asteroid selectRandomAsteroid() {
+    public Asteroid selectRandomAsteroid(Spaceship spaceship) {
         System.out.println("click");
 
         // set the range that asteroids can be harvested in
@@ -125,6 +125,7 @@ public class AsteroidManager {
         if (validAsteroids.size > 0) {
             Asteroid selectedAsteroid = validAsteroids.get(MathUtils.random(0, validAsteroids.size - 1));
             selectedAsteroid.setHarvesting(true);
+            selectedAsteroid.setHarvestWaitTime(validAsteroids.get(0).getHarvestWaitTime()*(1-(0.02f*spaceship.getHarvestTimeLevel())));
             return selectedAsteroid;
         }
         return null; // if no asteroids in view

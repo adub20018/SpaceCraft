@@ -131,5 +131,16 @@ public class UpgradesManager {
 
     // call set click level (called in spaceship constructor)
     // on upgrade- update spaceship
-
+    public int getClickLevel() {
+        return clickLevel;
+    }
+    public int getIdleChargeLevel() {
+        return idleLevel;
+    }
+    public int getNavigatorLevel() {
+        return navigatorLevel;
+    }
+    public int getHarvestTimeLevel() {
+        return harvestTimeLevel;
+    }
 }

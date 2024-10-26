@@ -172,10 +172,10 @@ public class GameMenu {
         };
     }
 
-    private HorizontalGroup createUpgradesButtonContent(String title, int levelGetter) {
+    private Table createUpgradesButtonContent(String title, int levelGetter) {
         int levelCost = 2; // set the cost of upgrade to display
 
-        HorizontalGroup clickLevelButtonContent = new HorizontalGroup();
+        Table buttonTable = new Table();
         VerticalGroup clickLevelButtonTitle = new VerticalGroup();
         Label titleLabel = new Label(title, skin);
         titleLabel.setFontScale(1.5f);
@@ -194,15 +194,13 @@ public class GameMenu {
         levelAndCostTable.row();
         levelAndCostTable.add(upgradeCostLabel).width(100);
 
-        clickLevelButtonContent.addActor(clickLevelButtonTitle);
-        clickLevelButtonContent.left();
+        buttonTable.add(clickLevelButtonTitle);
+        buttonTable.add().growX();
+        buttonTable.add(levelAndCostTable);
+        buttonTable.pad(25);
 
-        clickLevelButtonContent.addActor(levelAndCostTable);
-        clickLevelButtonContent.space(50);
-
-        return clickLevelButtonContent;
+        return buttonTable;
     }
-
 
     private void updateButtonContent(TextButton button, String title, int levelGetter) {
         button.clearChildren();
@@ -219,22 +217,22 @@ public class GameMenu {
         // upgrade click level
         TextButton upgradeClickLevel = new TextButton("", skin);
         upgradeClickLevel.clearChildren(); // remove empty text so new content be centered
-        upgradeClickLevel.add(createUpgradesButtonContent("Click\nLevel", upgradesManager.getClickLevel()));
+        upgradeClickLevel.add(createUpgradesButtonContent("Click\nLevel", upgradesManager.getClickLevel())).expand().fill();
 
         // upgrade idle charge
         TextButton upgradeIdleCharge = new TextButton("", skin);
         upgradeIdleCharge.clearChildren();
-        upgradeIdleCharge.add(createUpgradesButtonContent("Idle\nCharge", upgradesManager.getIdleChargeLevel()));
+        upgradeIdleCharge.add(createUpgradesButtonContent("Idle\nCharge", upgradesManager.getIdleChargeLevel())).expand().fill();
 
         // upgrade navigation
         TextButton upgradeNavigation = new TextButton("", skin);
         upgradeNavigation.clearChildren();
-        upgradeNavigation.add(createUpgradesButtonContent("Navigator", upgradesManager.getNavigatorLevel()));
+        upgradeNavigation.add(createUpgradesButtonContent("Navigator", upgradesManager.getNavigatorLevel())).expand().fill();
 
         // upgrade harvest time
         TextButton upgradeHarvestTimeButton = new TextButton("", skin);
         upgradeHarvestTimeButton.clearChildren();
-        upgradeHarvestTimeButton.add(createUpgradesButtonContent("Harvest\nTime", upgradesManager.getHarvestTimeLevel()));
+        upgradeHarvestTimeButton.add(createUpgradesButtonContent("Harvest\nTime", upgradesManager.getHarvestTimeLevel())).expand().fill();
 
         // add listeners for buttons
         upgradeClickLevel.addListener(new ClickListener() {

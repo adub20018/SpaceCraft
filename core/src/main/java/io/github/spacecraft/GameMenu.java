@@ -42,7 +42,7 @@ public class GameMenu {
         this.stage = stage;
         this.upgradesManager = upgradesManager;
         this.gameHUD = gameHUD;
-        skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("newUiSkin/uiskin.json"));
 
 
         edgeMargin = 25; // the gap around sides of screen (so nav does not squeeze against edge)

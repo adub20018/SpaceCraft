@@ -1,11 +1,13 @@
 package io.github.spacecraft;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -24,6 +26,7 @@ public class GameMenu {
     private float width;
     private float height;
     private float edgeMargin;
+    GameHUD gameHUD;
 
     float outerPadding = 25;     // dynamically calculate the size of buttons within table
     float innerPadding = 12.5f; // padding on edges shared with other button (to avoid double padding)
@@ -35,10 +38,12 @@ public class GameMenu {
 
     private UpgradesManager upgradesManager;
 
-    public GameMenu(Stage stage, UpgradesManager upgradesManager) {
+    public GameMenu(Stage stage, UpgradesManager upgradesManager, GameHUD gameHUD) {
         this.stage = stage;
         this.upgradesManager = upgradesManager;
+        this.gameHUD = gameHUD;
         skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
+
 
         edgeMargin = 25; // the gap around sides of screen (so nav does not squeeze against edge)
         width = Gdx.graphics.getWidth();
@@ -226,10 +231,29 @@ public class GameMenu {
     private Table createRefineryContent() {
         Table contentTable = new Table();
         contentTable.setFillParent(true);
+        contentTable.top();
+        contentTable.padTop(50);
 
         // add specific menu content here
         TextButton refineAsteroidButton = new TextButton("Refine Asteroid", skin);
 
+        HorizontalGroup resourceCounters = new HorizontalGroup(); // stores all resource counts
+
+        // individual resource counters
+        HorizontalGroup asteroidCounterGroup = gameHUD.createAsteroidCounterGroup();
+        HorizontalGroup gravititeCounterGroup = gameHUD.createGravititeCounterGroup();
+        HorizontalGroup tritaniumCounterGroup = gameHUD.createTritaniumCounterGroup();
+        HorizontalGroup cubaneCounterGroup = gameHUD.createCubaneCounterGroup();
+
+        // add counters to group
+        resourceCounters.addActor(asteroidCounterGroup);
+        resourceCounters.addActor(gravititeCounterGroup);
+        resourceCounters.addActor(tritaniumCounterGroup);
+        resourceCounters.addActor(cubaneCounterGroup);
+
+        contentTable.add(refineAsteroidButton).size(availableWidth, 150);
+        contentTable.row();
+        contentTable.add(resourceCounters).left();
 
         // add listeners for buttons
         refineAsteroidButton.addListener(new ClickListener() {
@@ -238,10 +262,6 @@ public class GameMenu {
                 Gdx.app.log("Refinery", "Refining Asteroid");
             }
         });
-
-        contentTable.add(refineAsteroidButton).size(availableWidth, 200);
-
-
         return contentTable;
     }
     private Table createLaboratoryContent() {

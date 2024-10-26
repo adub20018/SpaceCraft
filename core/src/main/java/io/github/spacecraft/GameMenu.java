@@ -31,8 +31,9 @@ public class GameMenu {
     private float edgeMargin;
     GameHUD gameHUD;
 
-    float outerPadding = 25;     // dynamically calculate the size of buttons within table
-    float innerPadding = 12.5f; // padding on edges shared with other button (to avoid double padding)
+    float outerPadding = 15;     // dynamically calculate the size of buttons within table
+    float innerPadding = 7.5f; // padding on edges shared with other button (to avoid double padding)
+    float buttonHeight = 150;
     float availableWidth;
     float popupWidth;
 
@@ -140,7 +141,7 @@ public class GameMenu {
 //        scrollPane.setScrollingDisabled(false, false);
 
         // add content table to window
-        popupWindow.add(contentTable).expand().fill(); // make content fill the popup
+        popupWindow.add(contentTable).expandX().fill().padTop(outerPadding); // make content fill the popup
 
         stage.addActor(popupWindow);
     }
@@ -172,6 +173,10 @@ public class GameMenu {
         };
     }
 
+    // *******************
+    // Ship Upgrades section
+    // *******************
+
     private Table createUpgradesButtonContent(String title, int levelGetter) {
         int levelCost = 2; // set the cost of upgrade to display
 
@@ -197,15 +202,15 @@ public class GameMenu {
         buttonTable.add(clickLevelButtonTitle);
         buttonTable.add().growX();
         buttonTable.add(levelAndCostTable);
-        buttonTable.pad(25);
+        buttonTable.pad(10);
 
         return buttonTable;
     }
 
     private void updateButtonContent(TextButton button, String title, int levelGetter) {
+        // clear existing and add new button content
         button.clearChildren();
-
-        button.add(createUpgradesButtonContent(title, levelGetter));
+        button.add(createUpgradesButtonContent(title, levelGetter)).expand().fill();
     }
 
     private Table createUpgradesContent() {
@@ -279,19 +284,23 @@ public class GameMenu {
             }
         });
 
-        contentTable.add(upgradeClickLevel).expandX().fillX().height(200).pad(outerPadding, outerPadding, innerPadding, innerPadding);
-        contentTable.add(upgradeIdleCharge).expandX().fillX().height(200).pad(outerPadding, innerPadding, innerPadding, outerPadding);
+        contentTable.add(upgradeClickLevel).expandX().fillX().height(buttonHeight).pad(outerPadding, outerPadding, innerPadding, innerPadding);
+        contentTable.add(upgradeIdleCharge).expandX().fillX().height(buttonHeight).pad(outerPadding, innerPadding, innerPadding, outerPadding);
         contentTable.row();
-        contentTable.add(upgradeNavigation).expandX().fillX().height(200).pad(innerPadding, outerPadding, outerPadding, innerPadding);
-        contentTable.add(upgradeHarvestTimeButton).expandX().fillX().height(200).pad(innerPadding, innerPadding, outerPadding, outerPadding);
+        contentTable.add(upgradeNavigation).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, outerPadding, innerPadding);
+        contentTable.add(upgradeHarvestTimeButton).expandX().fillX().height(buttonHeight).pad(innerPadding, innerPadding, outerPadding, outerPadding);
 
         return contentTable;
     }
+
+    // *******************
+    // Refinery section
+    // *******************
+
     private Table createRefineryContent() {
         Table contentTable = new Table();
         contentTable.setFillParent(true);
-        contentTable.top();
-        contentTable.padTop(50);
+        contentTable.padTop(outerPadding);
 
         // add specific menu content here
         TextButton refineAsteroidButton = new TextButton("Refine Asteroid", skin);
@@ -323,26 +332,35 @@ public class GameMenu {
         });
         return contentTable;
     }
+
+    // *******************
+    // Laboratory section
+    // *******************
+
     private Table createLaboratoryContent() {
         Table contentTable = new Table();
         contentTable.setFillParent(true);
 
-        // add specific menu content here
+        // ******* NEED TO CHANGE BUTTON GETTERS TO GET LAB BUTTON LEVELS - CURRENTLY USING CLICK LEVEL AS DEFAULT WHILE LAB LEVELS ARE IN DEVELOPMENt
         // increase tractor quantity
-        TextButton upgradeTractorQuantity = new TextButton("Upgrade Tractor Quantity", skin);
-        upgradeTractorQuantity.setSize(100, 100);
+        TextButton upgradeTractorQuantity = new TextButton("", skin);
+        upgradeTractorQuantity.clearChildren();
+        upgradeTractorQuantity.add(createUpgradesButtonContent("Tractor\nQuantity", upgradesManager.getClickLevel())).expand().fill();
 
         // upgrade harvest scanner
-        TextButton upgradeScanner = new TextButton("Upgrade Harvest Scanner", skin);
-        upgradeScanner.setSize(100, 100);
+        TextButton upgradeScanner = new TextButton("", skin);
+        upgradeScanner.clearChildren();
+        upgradeScanner.add(createUpgradesButtonContent("Harvest\nScanner", upgradesManager.getClickLevel())).expand().fill();
 
         // upgrade refinery quality
-        TextButton upgradeRefineryQuality = new TextButton("Upgrade Refinery Quality", skin);
-        upgradeRefineryQuality.setSize(100, 100);
+        TextButton upgradeRefineryQuality = new TextButton("", skin);
+        upgradeRefineryQuality.clearChildren();
+        upgradeRefineryQuality.add(createUpgradesButtonContent("Refinery\nQuality", upgradesManager.getClickLevel())).expand().fill();
 
         // upgrade to auto refine
-        TextButton upgradeToAutoRefine = new TextButton("Uprade To Auto Refine", skin);
-        upgradeToAutoRefine.setSize(100, 100);
+        TextButton upgradeToAutoRefine = new TextButton("", skin);
+        upgradeToAutoRefine.clearChildren();
+        upgradeToAutoRefine.add(createUpgradesButtonContent("Auto\nRefine", upgradesManager.getClickLevel())).expand().fill();
 
         // add listeners for buttons
         upgradeTractorQuantity.addListener(new ClickListener() {
@@ -377,16 +395,12 @@ public class GameMenu {
             }
         });
 
-        contentTable.add(upgradeTractorQuantity).fillX().height(200).pad(outerPadding, outerPadding, innerPadding, innerPadding);
-
-        contentTable.add(upgradeScanner).fillX().height(200).pad(outerPadding, innerPadding, innerPadding, outerPadding);
-
+        contentTable.add(upgradeTractorQuantity).expandX().fillX().height(buttonHeight).pad(outerPadding, outerPadding, innerPadding, innerPadding);
+        contentTable.add(upgradeScanner).expandX().fillX().height(buttonHeight).pad(outerPadding, innerPadding, innerPadding, outerPadding);
         contentTable.row();
-        contentTable.add(upgradeRefineryQuality).fillX().height(200).pad(innerPadding, outerPadding, outerPadding, innerPadding);
+        contentTable.add(upgradeRefineryQuality).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, outerPadding, innerPadding);
+        contentTable.add(upgradeToAutoRefine).expandX().fillX().height(buttonHeight).pad(innerPadding, innerPadding, outerPadding, outerPadding);
 
-        contentTable.add(upgradeToAutoRefine).expandX().fillX().height(200).pad(innerPadding, innerPadding, outerPadding, outerPadding);
-
-        contentTable.row();
 
         return contentTable;
     }

@@ -331,6 +331,7 @@ public class GameMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Refinery", "Refining Asteroid");
+                upgradesManager.doRefine();
             }
         });
         return contentTable;

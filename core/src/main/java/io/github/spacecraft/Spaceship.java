@@ -36,6 +36,7 @@ public class Spaceship {
     private int refineQualityLevel;
     private int autoRefineLevel;
     private int scannerLevel;
+    private int tritaniumBalance, gravititeBalance, cubaneBalance;
 
     public Spaceship(Viewport viewport, GameHUD gameHUD) {
         this.viewport = viewport;
@@ -51,6 +52,9 @@ public class Spaceship {
         spaceRect = new Rectangle(spaceshipX, spaceshipY,  sprite.getWidth(), sprite.getHeight());
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
         asteroidBalance = 0;
+        tritaniumBalance = 0;
+        gravititeBalance = 0;
+        cubaneBalance = 0;
         tractorClickLevel = 1;
         tractorIdleLevel = 0;
         tractorIdleCharge = 100f;
@@ -61,6 +65,7 @@ public class Spaceship {
         tractorQuantityLevel = 1;
         refineQualityLevel = 1;
         autoRefineLevel = 0;
+        updateValues();
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
@@ -85,7 +90,6 @@ public class Spaceship {
         preferences.flush();
         gameHUD.updateAsteroidBalanceLabel(asteroidBalance);
         asteroidCoords.begin();
-        //asteroidCoords.pop();
         asteroidCoords.removeIndex(0);
         asteroidCoords.end();
     }
@@ -134,6 +138,14 @@ public class Spaceship {
 
     public void dispose() {
         tractorBeam.dispose(); // dispose of tractor beam when no longer needed
+    }
+
+    public void updateValues() {
+        System.out.println(asteroidBalance+"   "+tritaniumBalance+"   "+gravititeBalance+"   "+cubaneBalance);
+        gameHUD.updateAsteroidBalanceLabel(asteroidBalance);
+        gameHUD.updateTritaniumBalanceLabel(tritaniumBalance);
+        gameHUD.updateGravititeBalanceLabel(gravititeBalance);
+        gameHUD.updateCubaneBalanceLabel(cubaneBalance);
     }
 
     public boolean tractorUpdate(String updateType) {
@@ -185,5 +197,38 @@ public class Spaceship {
 
     public void setScannerLevel(int currentLevel) {
         scannerLevel = currentLevel;
+    }
+
+
+    public int getTritaniumBalance() {
+        return tritaniumBalance;
+    }
+
+    public void setTritaniumBalance(int tritaniumBalance) {
+        this.tritaniumBalance = tritaniumBalance;
+    }
+
+    public int getGravititeBalance() {
+        return gravititeBalance;
+    }
+
+    public void setGravititeBalance(int gravititeBalance) {
+        this.gravititeBalance = gravititeBalance;
+    }
+
+    public int getCubaneBalance() {
+        return cubaneBalance;
+    }
+
+    public void setCubaneBalance(int cubaneBalance) {
+        this.cubaneBalance = cubaneBalance;
+    }
+
+    public void setAsteroidBalance(int asteroidsBalance) {
+        this.asteroidBalance = asteroidsBalance;
+    }
+
+    public int getAsteroidBalance() {
+        return asteroidBalance;
     }
 }

@@ -16,12 +16,16 @@ public class UpgradesManager {
     private int refineQualityLevel;
     private int autoRefineLevel;
     private int scannerLevel;
+    private int tritaniumBalance, gravititeBalance, cubaneBalance;
 
     private Spaceship spaceship;
     public UpgradesManager(Spaceship spaceship) {
         // get stats
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
         preferences.putInteger("asteroidsBalance", 0);
+        preferences.putInteger("tritaniumBalance", 0);
+        preferences.putInteger("gravititeBalance", 0);
+        preferences.putInteger("cubaneBalance", 0);
         preferences.putInteger("clickLevel", 1);
         preferences.putInteger("idleLevel", 0);
         preferences.putInteger("navigatorLevel",0);
@@ -32,6 +36,9 @@ public class UpgradesManager {
         preferences.putInteger("tractorQuantityLevel", 1);
         preferences.flush();
         asteroidsBalance = preferences.getInteger("asteroidsBalance", 0);
+        tritaniumBalance = preferences.getInteger("tritaniumBalance", 0);
+        gravititeBalance = preferences.getInteger("gravititeBalance", 0);
+        cubaneBalance    = preferences.getInteger("cubaneBalance", 0);
         clickLevel = preferences.getInteger("clickLevel", 1);
         idleLevel = preferences.getInteger("idleLevel", 0);
         navigatorLevel = preferences.getInteger("navigatorLevel",0);
@@ -45,11 +52,12 @@ public class UpgradesManager {
         preferences.getInteger("harvestCount", 1);
 
         this.spaceship = spaceship;
-
+        System.out.println("INTIAL TRITANIUM BALANCE: " + tritaniumBalance);
         init();
     }
 
     public void init() {
+        spaceship.setAsteroidBalance(asteroidsBalance);
         spaceship.setClickLevel(clickLevel);
         spaceship.setIdleLevel(idleLevel);
         spaceship.setNavigatorLevel(navigatorLevel);
@@ -60,6 +68,9 @@ public class UpgradesManager {
         spaceship.setRefineQualityLevel(refineQualityLevel);
         spaceship.setAutoRefineLevel(autoRefineLevel);
         spaceship.setScannerLevel(scannerLevel);
+        spaceship.setTritaniumBalance(tritaniumBalance);
+        spaceship.setGravititeBalance(gravititeBalance);
+        spaceship.setCubaneBalance(cubaneBalance);
     }
 
 
@@ -149,6 +160,27 @@ public class UpgradesManager {
         spaceship.setRefineQualityLevel(newAutoRefineLevel);
         preferences.putInteger("autoRefineLevel", newAutoRefineLevel);
         preferences.flush();
+    }
+
+    public void doRefine() {
+        asteroidsBalance = spaceship.getAsteroidBalance();
+        System.out.println(asteroidsBalance);
+        if(asteroidsBalance>0) {
+            int newAsteroidsBalance = asteroidsBalance -=1;
+            int newTritaniumBalance = tritaniumBalance +=1;
+            int newGravititeBalance = gravititeBalance +=1;
+            int newCubaneBalance = cubaneBalance +=1;
+            spaceship.setTritaniumBalance(newTritaniumBalance);
+            spaceship.setGravititeBalance(newGravititeBalance);
+            spaceship.setCubaneBalance(newCubaneBalance);
+            spaceship.setAsteroidBalance(newAsteroidsBalance);
+            preferences.putInteger("tritaniumBalance", newTritaniumBalance);
+            preferences.putInteger("gravititeBalance", newGravititeBalance);
+            preferences.putInteger("cubaneBalance", newCubaneBalance);
+            preferences.putInteger("asteroidsBalance", newAsteroidsBalance);
+            preferences.flush();
+            spaceship.updateValues();
+        }
     }
 
     // upgrades

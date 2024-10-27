@@ -12,6 +12,10 @@ public class UpgradesManager {
     private int navigatorLevel;
     private int harvestTimeLevel;
     private boolean isScanner;
+    private int tractorQuantityLevel;
+    private int refineQualityLevel;
+    private int autoRefineLevel;
+    private int scannerLevel;
 
     private Spaceship spaceship;
     public UpgradesManager(Spaceship spaceship) {
@@ -25,6 +29,7 @@ public class UpgradesManager {
         preferences.putInteger("asteroidScanner", 0);
         preferences.putBoolean("isScanner",false);
         preferences.putInteger("harvestCount", 1);
+        preferences.putInteger("tractorQuantityLevel", 1);
         preferences.flush();
         asteroidsBalance = preferences.getInteger("asteroidsBalance", 0);
         clickLevel = preferences.getInteger("clickLevel", 1);
@@ -33,6 +38,10 @@ public class UpgradesManager {
         harvestTimeLevel = preferences.getInteger("harvestTimeLevel",0);
         asteroidScanner = preferences.getInteger("asteroidScanner", 0);
         isScanner = preferences.getBoolean("isScanner",false);
+        tractorQuantityLevel = preferences.getInteger("tractorQuantityLevel", 1);
+        refineQualityLevel = preferences.getInteger("refineQualityLevel", 1);
+        autoRefineLevel = preferences.getInteger("autoRefineLevel", 0);
+        scannerLevel = preferences.getInteger("scannerLevel", 0);
         preferences.getInteger("harvestCount", 1);
 
         this.spaceship = spaceship;
@@ -46,6 +55,11 @@ public class UpgradesManager {
         spaceship.setNavigatorLevel(navigatorLevel);
         spaceship.setHarvestTimeLevel(harvestTimeLevel);
         spaceship.isScanner = isScanner;
+        spaceship.setTractorQuantityLevel(tractorQuantityLevel);
+        spaceship.setHarvestCount(tractorQuantityLevel);
+        spaceship.setRefineQualityLevel(refineQualityLevel);
+        spaceship.setAutoRefineLevel(autoRefineLevel);
+        spaceship.setScannerLevel(scannerLevel);
     }
 
 
@@ -66,8 +80,6 @@ public class UpgradesManager {
         System.out.println("Upgrading Click Level !!!!!!!");
         preferences.putInteger("clickLevel", value);
         preferences.flush();
-
-        // then spaceship.getClickLevel will be passed to asteroidManager
     }
 
     public void upgradeIdleCharge() {
@@ -107,12 +119,18 @@ public class UpgradesManager {
     // Laboratory section
     // *******************
     public void upgradeTractorQuantity() {
+        int newTractorQuantityLevel = tractorQuantityLevel+=1;
+        spaceship.setTractorQuantityLevel(newTractorQuantityLevel);
         spaceship.setHarvestCount(spaceship.getHarvestCount()+1);
+        preferences.putInteger("tractorQuantityLevel", newTractorQuantityLevel );
         preferences.putInteger("harvestCount", spaceship.getHarvestCount());
         preferences.flush();
     }
 
     public void upgradeScanner() {
+        int newScannerLevel = scannerLevel+=1;
+        spaceship.setScannerLevel(newScannerLevel);
+        preferences.putInteger("scannerLevel", newScannerLevel);
         System.out.println("Scanner upgraded!!!");
         spaceship.isScanner = true;
         preferences.putBoolean("isScanner", true);
@@ -120,17 +138,20 @@ public class UpgradesManager {
     }
 
     public void upgradeRefineryQuality() {
+        int newRefineQualityLevel = refineQualityLevel+=1;
+        spaceship.setRefineQualityLevel(newRefineQualityLevel);
+        preferences.putInteger("refineQualityLevel", newRefineQualityLevel);
+        preferences.flush();
     }
 
     public void upgradeToAutoRefine() {
+        int newAutoRefineLevel = autoRefineLevel+=1;
+        spaceship.setRefineQualityLevel(newAutoRefineLevel);
+        preferences.putInteger("autoRefineLevel", newAutoRefineLevel);
+        preferences.flush();
     }
 
-    // upgrade scanner -> call spaceship.setUpgradeScanner
-
-    // do the upgrade logic -> call spaceship.setUpgrade
-
-    // call set click level (called in spaceship constructor)
-    // on upgrade- update spaceship
+    // upgrades
     public int getClickLevel() {
         return clickLevel;
     }
@@ -142,5 +163,19 @@ public class UpgradesManager {
     }
     public int getHarvestTimeLevel() {
         return harvestTimeLevel;
+    }
+
+    // laboratory
+    public int getTractorQuantityLevel() {
+        return tractorQuantityLevel;
+    }
+    public int getAutoRefineLevel() {
+        return autoRefineLevel;
+    }
+    public int getRefineQualityLevel() {
+        return refineQualityLevel;
+    }
+    public int getScannerLevel() {
+        return scannerLevel;
     }
 }

@@ -32,6 +32,10 @@ public class Spaceship {
     public int navigatorLevel;
     public int harvestTimeLevel;
     public boolean isScanner;
+    public int tractorQuantityLevel;
+    private int refineQualityLevel;
+    private int autoRefineLevel;
+    private int scannerLevel;
 
     public Spaceship(Viewport viewport, GameHUD gameHUD) {
         this.viewport = viewport;
@@ -54,6 +58,9 @@ public class Spaceship {
         harvestTimeLevel = 0;
         isScanner = false;
         asteroidCoords = new SnapshotArray<>();
+        tractorQuantityLevel = 1;
+        refineQualityLevel = 1;
+        autoRefineLevel = 0;
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
@@ -164,4 +171,19 @@ public class Spaceship {
         this.harvestTimeLevel = harvestTimeLevel;
     }
 
+    public void setTractorQuantityLevel(int currentLevel) {
+        tractorQuantityLevel = currentLevel;
+    }
+
+    public void setRefineQualityLevel(int currentLevel) {
+        refineQualityLevel = currentLevel;
+    }
+
+    public void setAutoRefineLevel(int currentLevel) {
+        autoRefineLevel = currentLevel;
+    }
+
+    public void setScannerLevel(int currentLevel) {
+        scannerLevel = currentLevel;
+    }
 }

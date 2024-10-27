@@ -348,31 +348,30 @@ public class GameMenu {
         // increase tractor quantity
         TextButton upgradeTractorQuantity = new TextButton("", skin);
         upgradeTractorQuantity.clearChildren();
-        upgradeTractorQuantity.add(createUpgradesButtonContent("Tractor\nQuantity", upgradesManager.getClickLevel())).expand().fill();
+        upgradeTractorQuantity.add(createUpgradesButtonContent("Tractor\nQuantity", upgradesManager.getTractorQuantityLevel())).expand().fill();
 
         // upgrade harvest scanner
         TextButton upgradeScanner = new TextButton("", skin);
         upgradeScanner.clearChildren();
-        upgradeScanner.add(createUpgradesButtonContent("Harvest\nScanner", upgradesManager.getClickLevel())).expand().fill();
+        upgradeScanner.add(createUpgradesButtonContent("Harvest\nScanner", upgradesManager.getScannerLevel())).expand().fill();
 
         // upgrade refinery quality
         TextButton upgradeRefineryQuality = new TextButton("", skin);
         upgradeRefineryQuality.clearChildren();
-        upgradeRefineryQuality.add(createUpgradesButtonContent("Refinery\nQuality", upgradesManager.getClickLevel())).expand().fill();
+        upgradeRefineryQuality.add(createUpgradesButtonContent("Refinery\nQuality", upgradesManager.getRefineQualityLevel())).expand().fill();
 
         // upgrade to auto refine
         TextButton upgradeToAutoRefine = new TextButton("", skin);
         upgradeToAutoRefine.clearChildren();
-        upgradeToAutoRefine.add(createUpgradesButtonContent("Auto\nRefine", upgradesManager.getClickLevel())).expand().fill();
+        upgradeToAutoRefine.add(createUpgradesButtonContent("Auto\nRefine", upgradesManager.getAutoRefineLevel())).expand().fill();
 
-        // ************ CHANGE updateButtonContent getter to corresponding lab levels (currently using getClickLevel while lab upgrade levels in development)
         // add listeners for buttons
         upgradeTractorQuantity.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeTractorQuantity();
                 //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                updateButtonContent(upgradeTractorQuantity, "Tractor\nQuantity", upgradesManager.getClickLevel());
+                updateButtonContent(upgradeTractorQuantity, "Tractor\nQuantity", upgradesManager.getTractorQuantityLevel());
                 //}
             }
         });
@@ -382,7 +381,7 @@ public class GameMenu {
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeScanner();
                 //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                updateButtonContent(upgradeScanner, "Harvest\nScanner", upgradesManager.getClickLevel());
+                updateButtonContent(upgradeScanner, "Harvest\nScanner", upgradesManager.getScannerLevel());
                 //}
             }
         });
@@ -392,7 +391,7 @@ public class GameMenu {
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeRefineryQuality();
                 //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                updateButtonContent(upgradeRefineryQuality, "Refinery\nQuality", upgradesManager.getClickLevel());
+                updateButtonContent(upgradeRefineryQuality, "Refinery\nQuality", upgradesManager.getRefineQualityLevel());
                 //}
             }
         });
@@ -402,7 +401,7 @@ public class GameMenu {
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeToAutoRefine();
                 //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                updateButtonContent(upgradeToAutoRefine, "Auto\nRefine", upgradesManager.getClickLevel());
+                updateButtonContent(upgradeToAutoRefine, "Auto\nRefine", upgradesManager.getAutoRefineLevel());
                 //}
             }
         });
@@ -412,7 +411,6 @@ public class GameMenu {
         contentTable.row();
         contentTable.add(upgradeRefineryQuality).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, outerPadding, innerPadding);
         contentTable.add(upgradeToAutoRefine).expandX().fillX().height(buttonHeight).pad(innerPadding, innerPadding, outerPadding, outerPadding);
-
 
         return contentTable;
     }

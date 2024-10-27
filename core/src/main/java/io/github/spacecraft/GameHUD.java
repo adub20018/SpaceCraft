@@ -41,6 +41,9 @@ public class GameHUD {
         font.setColor(Color.WHITE);
 
         asteroidLabelList = new Array<>();
+        gravititeLabelList = new Array<>();
+        tritaniumLabelList = new Array<>();
+        cubaneLabelList = new Array<>();
 
         // create counter groups
         HorizontalGroup asteroidCounterGroup = createAsteroidCounterGroup();
@@ -130,6 +133,7 @@ public class GameHUD {
         // display gravitite balance counter
         gravititeBalanceLabel = new Label("" + gravititeBalance, new Label.LabelStyle(font, Color.WHITE));
         gravititeBalanceLabel.setFontScale(2.5f);
+        gravititeLabelList.add(gravititeBalanceLabel);
 
         // create group to display gravitite image next to balance counter
         HorizontalGroup gravititeCounterGroup = new HorizontalGroup();
@@ -157,6 +161,7 @@ public class GameHUD {
         // display tritanium balance counter
         tritaniumBalanceLabel = new Label("" + tritaniumBalance, new Label.LabelStyle(font, Color.WHITE));
         tritaniumBalanceLabel.setFontScale(2.5f);
+        tritaniumLabelList.add(tritaniumBalanceLabel);
 
         // create group to display tritanium image next to balance counter
         HorizontalGroup tritaniumCounterGroup = new HorizontalGroup();
@@ -184,6 +189,7 @@ public class GameHUD {
         // display cubane balance counter
         cubaneBalanceLabel = new Label("" + cubaneBalance, new Label.LabelStyle(font, Color.WHITE));
         cubaneBalanceLabel.setFontScale(2.5f);
+        cubaneLabelList.add(cubaneBalanceLabel);
 
         // create group to display cubane image next to balance counter
         HorizontalGroup cubaneCounterGroup = new HorizontalGroup();

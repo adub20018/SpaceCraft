@@ -47,8 +47,8 @@ public class Main extends ApplicationAdapter {
         // initialise stage
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-
         gameHUD = new GameHUD(stage);
+
 
         spaceship = new Spaceship(viewport, gameHUD);
         upgradesManager = new UpgradesManager(spaceship);
@@ -57,7 +57,7 @@ public class Main extends ApplicationAdapter {
 
 
         asteroidManager = new AsteroidManager();
-
+        spaceship.updateValues();
         deltatest = 0;
     }
 
@@ -84,8 +84,9 @@ public class Main extends ApplicationAdapter {
         if (Gdx.input.justTouched()) {
             System.out.println("Touched");
             System.out.println("IDLE CHARGE: " + spaceship.tractorIdleCharge);
-            System.out.println(spaceship.tractorClickLevel);
-            System.out.println(spaceship.getHarvestCount());
+//            System.out.println(spaceship.tractorClickLevel);
+//            System.out.println(spaceship.getHarvestCount());
+
             if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0) {
                 spaceship.tractorUpdate("click");
             }

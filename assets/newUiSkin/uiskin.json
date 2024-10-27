@@ -1,0 +1,106 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	default-font: {
+		file: default.fnt
+		scaledSize: -1
+		markupEnabled: false
+		flip: false
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	green: {
+		r: 0
+		g: 1
+		b: 0
+		a: 1
+	}
+	white: {
+		r: 1
+		g: 1
+		b: 1
+		a: 1
+	}
+	red: {
+		r: 1
+		g: 0
+		b: 0
+		a: 1
+	}
+	blue: {
+		r: 0
+		g: 0
+		b: 1
+		a: 1
+	}
+	black: {
+		r: 0
+		g: 0
+		b: 0
+		a: 1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+	dialogDim: {
+		name: white
+		color: {
+			r: 0
+			g: 0
+			b: 0
+			a: 0.45
+		}
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: default-font
+		fontColor: white
+	}
+	CostLabel: {
+		font: default-font
+		background: default-round-large
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+	default: {
+		background: default-rect
+		hScroll: default-scroll
+		hScrollKnob: default-round-large
+		vScroll: default-scroll
+		vScrollKnob: default-round-large
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: {
+		font: default-font
+		fontColor: white
+		up: default-round
+		down: default-round-down
+	}
+	toggle: {
+		font: default-font
+		fontColor: white
+		downFontColor: red
+		up: default-round
+		down: default-round-down
+		checked: default-round-down
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+	default: {
+		background: default-window
+		titleFont: default-font
+		titleFontColor: white
+	}
+	dialog: {
+		background: default-window
+		titleFont: default-font
+		titleFontColor: white
+		stageBackground: dialogDim
+	}
+}
+}

@@ -119,7 +119,8 @@ public class AsteroidManager {
         Array<Asteroid> validAsteroids = new Array<>();
         for (Asteroid asteroid : asteroids) {
             float asteroidY = asteroid.getSprite().getY();
-            if ((asteroidY < topBoundary && asteroidY > bottomBoundary)&&!asteroid.isHarvesting()) { // if asteroid is within boundaries
+            // if asteroid is within boundaries AND is not currently being harvested
+            if ((asteroidY < topBoundary && asteroidY > bottomBoundary)&&!asteroid.isHarvesting()) {
                 validAsteroids.add(asteroid);
             }
         }
@@ -144,7 +145,8 @@ public class AsteroidManager {
         Array<Asteroid> validAsteroids = new Array<>();
         for (Asteroid asteroid : asteroids) {
             float asteroidY = asteroid.getSprite().getY();
-            if ((asteroidY < topBoundary && asteroidY > bottomBoundary)&&!asteroid.isHarvesting()) { // if asteroid is within boundaries
+            // if asteroid is within boundaries AND is not currently being harvested
+            if ((asteroidY < topBoundary && asteroidY > bottomBoundary)&&!asteroid.isHarvesting()) {
                 validAsteroids.add(asteroid);
             }
         }

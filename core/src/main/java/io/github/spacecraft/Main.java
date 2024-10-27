@@ -87,7 +87,7 @@ public class Main extends ApplicationAdapter {
 //            System.out.println(spaceship.tractorClickLevel);
 //            System.out.println(spaceship.getHarvestCount());
 
-            if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0) {
+            if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0&&!upgradesManager.isPoppedUp()) {
                 spaceship.tractorUpdate("click");
             }
         }

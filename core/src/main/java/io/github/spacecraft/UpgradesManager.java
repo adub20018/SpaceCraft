@@ -17,6 +17,7 @@ public class UpgradesManager {
     private int autoRefineLevel;
     private int scannerLevel;
     private int tritaniumBalance, gravititeBalance, cubaneBalance;
+    private boolean poppedUp;
 
     private Spaceship spaceship;
     public UpgradesManager(Spaceship spaceship) {
@@ -37,7 +38,7 @@ public class UpgradesManager {
         autoRefineLevel = preferences.getInteger("autoRefineLevel", 0);
         scannerLevel = preferences.getInteger("scannerLevel", 0);
         //preferences.getInteger("harvestCount", 1);
-
+        poppedUp = false;
         this.spaceship = spaceship;
         System.out.println("INTIAL TRITANIUM BALANCE: " + tritaniumBalance);
         init();
@@ -244,5 +245,15 @@ public class UpgradesManager {
     }
     public int getScannerLevel() {
         return scannerLevel;
+    }
+
+
+
+
+    public boolean isPoppedUp() {
+        return poppedUp;
+    }
+    public void setPoppedUp(boolean poppedUp) {
+        this.poppedUp = poppedUp;
     }
 }

@@ -128,6 +128,7 @@ public class GameMenu {
         if (popupWindow != null) {
             popupWindow.remove();
         }
+        upgradesManager.setPoppedUp(true);
 
         popupWidth = width - edgeMargin * 2;
 
@@ -157,6 +158,7 @@ public class GameMenu {
         if (popupWindow != null) {
             popupWindow.remove();
         }
+        upgradesManager.setPoppedUp(false);
     }
 
     private ImageButton createMenuButton(Texture buttonTexture) {

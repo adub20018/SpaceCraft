@@ -116,7 +116,7 @@ public class Spaceship {
             } else {
                 // if no asteroid to harvest
                 System.out.println("No asteroid available !!!!!!!!");
-                isHarvesting = false;
+                //isHarvesting = false;
                 return;
             }
         }

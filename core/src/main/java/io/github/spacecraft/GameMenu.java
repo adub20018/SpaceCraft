@@ -21,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Align;
 
+import org.w3c.dom.Text;
+
 public class GameMenu {
     private Stage stage;
     private Skin skin;
@@ -30,7 +32,7 @@ public class GameMenu {
     private float height;
     private float edgeMargin;
     GameHUD gameHUD;
-
+    private TextButton upgradeClickLevel, upgradeIdleCharge, upgradeNavigation, upgradeHarvestTimeButton, upgradeTractorQuantity, upgradeScanner, upgradeRefineryQuality, upgradeToAutoRefine;
     float outerPadding = 15;     // dynamically calculate the size of buttons within table
     float innerPadding = 7.5f; // padding on edges shared with other button (to avoid double padding)
     float buttonHeight = 150;
@@ -221,22 +223,22 @@ public class GameMenu {
         // add specific menu content here
 
         // upgrade click level
-        TextButton upgradeClickLevel = new TextButton("", skin);
+        upgradeClickLevel = new TextButton("", skin);
         upgradeClickLevel.clearChildren(); // remove empty text so new content be centered
         upgradeClickLevel.add(createUpgradesButtonContent("Click\nLevel", upgradesManager.getClickLevel())).expand().fill();
 
         // upgrade idle charge
-        TextButton upgradeIdleCharge = new TextButton("", skin);
+        upgradeIdleCharge = new TextButton("", skin);
         upgradeIdleCharge.clearChildren();
         upgradeIdleCharge.add(createUpgradesButtonContent("Idle\nCharge", upgradesManager.getIdleChargeLevel())).expand().fill();
 
         // upgrade navigation
-        TextButton upgradeNavigation = new TextButton("", skin);
+        upgradeNavigation = new TextButton("", skin);
         upgradeNavigation.clearChildren();
         upgradeNavigation.add(createUpgradesButtonContent("Navigator", upgradesManager.getNavigatorLevel())).expand().fill();
 
         // upgrade harvest time
-        TextButton upgradeHarvestTimeButton = new TextButton("", skin);
+        upgradeHarvestTimeButton = new TextButton("", skin);
         upgradeHarvestTimeButton.clearChildren();
         upgradeHarvestTimeButton.add(createUpgradesButtonContent("Harvest\nTime", upgradesManager.getHarvestTimeLevel())).expand().fill();
 
@@ -347,22 +349,22 @@ public class GameMenu {
 
         // ******* NEED TO CHANGE BUTTON GETTERS TO GET LAB BUTTON LEVELS - CURRENTLY USING CLICK LEVEL AS DEFAULT WHILE LAB LEVELS ARE IN DEVELOPMENt
         // increase tractor quantity
-        TextButton upgradeTractorQuantity = new TextButton("", skin);
+        upgradeTractorQuantity = new TextButton("", skin);
         upgradeTractorQuantity.clearChildren();
         upgradeTractorQuantity.add(createUpgradesButtonContent("Tractor\nQuantity", upgradesManager.getTractorQuantityLevel())).expand().fill();
 
         // upgrade harvest scanner
-        TextButton upgradeScanner = new TextButton("", skin);
+        upgradeScanner = new TextButton("", skin);
         upgradeScanner.clearChildren();
         upgradeScanner.add(createUpgradesButtonContent("Harvest\nScanner", upgradesManager.getScannerLevel())).expand().fill();
 
         // upgrade refinery quality
-        TextButton upgradeRefineryQuality = new TextButton("", skin);
+        upgradeRefineryQuality = new TextButton("", skin);
         upgradeRefineryQuality.clearChildren();
         upgradeRefineryQuality.add(createUpgradesButtonContent("Refinery\nQuality", upgradesManager.getRefineQualityLevel())).expand().fill();
 
         // upgrade to auto refine
-        TextButton upgradeToAutoRefine = new TextButton("", skin);
+        upgradeToAutoRefine = new TextButton("", skin);
         upgradeToAutoRefine.clearChildren();
         upgradeToAutoRefine.add(createUpgradesButtonContent("Auto\nRefine", upgradesManager.getAutoRefineLevel())).expand().fill();
 
@@ -420,18 +422,30 @@ public class GameMenu {
         contentTable.setFillParent(true);
 
         // add specific menu content here
-        TextButton shopButton = new TextButton("Buy Something", skin);
+        TextButton shopButton = new TextButton("Reset Stats", skin);
 
         // add listeners for buttons
         shopButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Shop", "Buying something in Shop");
+                upgradesManager.resetStats();
+                updateButtonContent(upgradeClickLevel, "Click\nLevel", upgradesManager.getClickLevel());
+                updateButtonContent(upgradeIdleCharge, "Idle\nCharge", upgradesManager.getIdleChargeLevel());
+                updateButtonContent(upgradeNavigation, "Navigator", upgradesManager.getNavigatorLevel());
+                updateButtonContent(upgradeHarvestTimeButton, "Harvest\nTime", upgradesManager.getHarvestTimeLevel());
+                updateButtonContent(upgradeTractorQuantity, "Tractor\nQuantity", upgradesManager.getTractorQuantityLevel());
+                updateButtonContent(upgradeScanner, "Harvest\nScanner", upgradesManager.getScannerLevel());
+                updateButtonContent(upgradeRefineryQuality, "Refinery\nQuality", upgradesManager.getRefineQualityLevel());
+                updateButtonContent(upgradeToAutoRefine, "Auto\nRefine", upgradesManager.getAutoRefineLevel());
             }
         });
+
+
 
         contentTable.add(shopButton).pad(10).expandX();
 
         return contentTable;
     }
+
 }

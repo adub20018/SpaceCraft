@@ -57,7 +57,7 @@ public class Main extends ApplicationAdapter {
 
 
         asteroidManager = new AsteroidManager();
-
+        spaceship.updateValues();
         deltatest = 0;
     }
 

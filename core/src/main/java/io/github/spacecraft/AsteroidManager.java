@@ -32,7 +32,7 @@ public class AsteroidManager {
                 if(spaceship.asteroidCoords.size == 0) {
                     spaceship.isHarvesting = false;
                 }
-                continue;
+                //continue;
             }
             // remove asteroid once it goes past the bottom of screen
             if (asteroidSprite.getY() < -asteroidSprite.getHeight()) {
@@ -119,7 +119,8 @@ public class AsteroidManager {
         Array<Asteroid> validAsteroids = new Array<>();
         for (Asteroid asteroid : asteroids) {
             float asteroidY = asteroid.getSprite().getY();
-            if (asteroidY < topBoundary && asteroidY > bottomBoundary) { // if asteroid is within boundaries
+            // if asteroid is within boundaries AND is not currently being harvested
+            if ((asteroidY < topBoundary && asteroidY > bottomBoundary)&&!asteroid.isHarvesting()) {
                 validAsteroids.add(asteroid);
             }
         }
@@ -144,7 +145,8 @@ public class AsteroidManager {
         Array<Asteroid> validAsteroids = new Array<>();
         for (Asteroid asteroid : asteroids) {
             float asteroidY = asteroid.getSprite().getY();
-            if (asteroidY < topBoundary && asteroidY > bottomBoundary) { // if asteroid is within boundaries
+            // if asteroid is within boundaries AND is not currently being harvested
+            if ((asteroidY < topBoundary && asteroidY > bottomBoundary)&&!asteroid.isHarvesting()) {
                 validAsteroids.add(asteroid);
             }
         }
@@ -157,5 +159,8 @@ public class AsteroidManager {
             return validAsteroids.get(0);
         }
         return null; // if no asteroids in view
+    }
+    public SnapshotArray<Asteroid> getAsteroids() {
+        return asteroids;
     }
 }

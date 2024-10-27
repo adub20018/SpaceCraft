@@ -36,7 +36,7 @@ public class Asteroid {
         if (rarity == 4) speed = MathUtils.random(-0.8f, -0.5f);
         if (rarity == 5) speed = MathUtils.random(-0.5f, -0.2f);
         harvesting = false;
-        harvestWaitTime = 1f;
+        harvestWaitTime = 10f;
     }
 
     public void update(float delta) {

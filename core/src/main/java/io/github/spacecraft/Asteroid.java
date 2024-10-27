@@ -71,6 +71,10 @@ public class Asteroid {
         this.harvesting = harvesting;
     }
 
+    public boolean isHarvesting() {
+        return this.harvesting;
+    }
+
     public int getRarity() {
         return rarity;
     }

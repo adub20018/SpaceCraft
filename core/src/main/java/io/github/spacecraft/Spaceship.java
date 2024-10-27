@@ -86,8 +86,6 @@ public class Spaceship {
     public void incrementHarvestCount() {
         harvestCount++;
         asteroidBalance++;
-        preferences.putInteger("asteroidBalance", 0);
-        preferences.flush();
         gameHUD.updateAsteroidBalanceLabel(asteroidBalance);
         asteroidCoords.begin();
         asteroidCoords.removeIndex(0);

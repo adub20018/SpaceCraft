@@ -161,6 +161,7 @@ public class GameHUD {
         // display tritanium balance counter
         tritaniumBalanceLabel = new Label("" + tritaniumBalance, new Label.LabelStyle(font, Color.WHITE));
         tritaniumBalanceLabel.setFontScale(2.5f);
+        tritaniumLabelList.add(tritaniumBalanceLabel);
 
         // create group to display tritanium image next to balance counter
         HorizontalGroup tritaniumCounterGroup = new HorizontalGroup();
@@ -188,6 +189,7 @@ public class GameHUD {
         // display cubane balance counter
         cubaneBalanceLabel = new Label("" + cubaneBalance, new Label.LabelStyle(font, Color.WHITE));
         cubaneBalanceLabel.setFontScale(2.5f);
+        cubaneLabelList.add(cubaneBalanceLabel);
 
         // create group to display cubane image next to balance counter
         HorizontalGroup cubaneCounterGroup = new HorizontalGroup();

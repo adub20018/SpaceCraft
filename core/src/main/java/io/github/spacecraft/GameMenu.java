@@ -181,32 +181,38 @@ public class GameMenu {
     private void updateButtonContent(TextButton button, String title, int levelGetter) {
         // clear existing and add new button content
         button.clearChildren();
-        button.add(createUpgradesButtonContent(title, levelGetter)).expand().fill();
+        button.add(createUpgradesButtonContent(title, levelGetter, true)).expand().fill();
     }
 
     // *******************
     // Ship Upgrades section
     // *******************
 
-    private Table createUpgradesButtonContent(String title, int levelGetter) {
+    private Table createUpgradesButtonContent(String title, int levelGetter, boolean available) {
         int levelCost = 2; // set the cost of upgrade to display
 
         Table buttonTable = new Table();
         VerticalGroup clickLevelButtonTitle = new VerticalGroup();
         Label titleLabel = new Label(title, skin);
-        titleLabel.setFontScale(1.5f);
+        titleLabel.setFontScale(2f);
         titleLabel.setAlignment(Align.left);
 
         Table levelAndCostTable = new Table();
         Label currentLevelLabel = new Label(levelGetter + "/50", skin, "CostLabel");
-        currentLevelLabel.setFontScale(1.5f);
+        currentLevelLabel.setFontScale(2f);
         currentLevelLabel.setAlignment(Align.center);
         Label upgradeCostLabel = new Label(String.valueOf(levelCost), skin, "CostLabel");
-        upgradeCostLabel.setFontScale(1.5f);
+        upgradeCostLabel.setFontScale(2f);
         upgradeCostLabel.setAlignment(Align.center);
 
+        if (!available) {
+            Label.LabelStyle unavailableLabelStyle = skin.get("unavailable", Label.LabelStyle.class);
+            currentLevelLabel.setStyle(unavailableLabelStyle);
+            upgradeCostLabel.setStyle(unavailableLabelStyle);
+        }
+
         clickLevelButtonTitle.addActor(titleLabel);
-        levelAndCostTable.add(currentLevelLabel).width(100);
+        levelAndCostTable.add(currentLevelLabel).width(100).padBottom(5);
         levelAndCostTable.row();
         levelAndCostTable.add(upgradeCostLabel).width(100);
 
@@ -227,22 +233,26 @@ public class GameMenu {
         // upgrade click level
         upgradeClickLevel = new TextButton("", skin);
         upgradeClickLevel.clearChildren(); // remove empty text so new content be centered
-        upgradeClickLevel.add(createUpgradesButtonContent("Click\nLevel", upgradesManager.getClickLevel())).expand().fill();
+        upgradeClickLevel.add(createUpgradesButtonContent("Click\nLevel", upgradesManager.getClickLevel(), true)).expand().fill();
 
         // upgrade idle charge
         upgradeIdleCharge = new TextButton("", skin);
+        if (5 < 10) {
+            TextButton.TextButtonStyle unavailableStyle = skin.get("unavailable", TextButton.TextButtonStyle.class);
+            upgradeIdleCharge.setStyle(unavailableStyle);
+        }
         upgradeIdleCharge.clearChildren();
-        upgradeIdleCharge.add(createUpgradesButtonContent("Idle\nCharge", upgradesManager.getIdleChargeLevel())).expand().fill();
+        upgradeIdleCharge.add(createUpgradesButtonContent("Idle\nCharge", upgradesManager.getIdleChargeLevel(), false)).expand().fill();
 
         // upgrade navigation
         upgradeNavigation = new TextButton("", skin);
         upgradeNavigation.clearChildren();
-        upgradeNavigation.add(createUpgradesButtonContent("Navigator", upgradesManager.getNavigatorLevel())).expand().fill();
+        upgradeNavigation.add(createUpgradesButtonContent("Navigator", upgradesManager.getNavigatorLevel(), true)).expand().fill();
 
         // upgrade harvest time
         upgradeHarvestTimeButton = new TextButton("", skin);
         upgradeHarvestTimeButton.clearChildren();
-        upgradeHarvestTimeButton.add(createUpgradesButtonContent("Harvest\nTime", upgradesManager.getHarvestTimeLevel())).expand().fill();
+        upgradeHarvestTimeButton.add(createUpgradesButtonContent("Harvest\nTime", upgradesManager.getHarvestTimeLevel(), true)).expand().fill();
 
         // add listeners for buttons
         upgradeClickLevel.addListener(new ClickListener() {
@@ -306,7 +316,7 @@ public class GameMenu {
         // add specific menu content here
         TextButton refineAsteroidButton = new TextButton("", skin);
         Label refineLabel = new Label("Refine", skin);
-        refineLabel.setFontScale(1.5f);
+        refineLabel.setFontScale(2f);
 
         refineAsteroidButton.clearChildren();
         refineAsteroidButton.add(refineLabel);
@@ -353,22 +363,22 @@ public class GameMenu {
         // increase tractor quantity
         upgradeTractorQuantity = new TextButton("", skin);
         upgradeTractorQuantity.clearChildren();
-        upgradeTractorQuantity.add(createUpgradesButtonContent("Tractor\nQuantity", upgradesManager.getTractorQuantityLevel())).expand().fill();
+        upgradeTractorQuantity.add(createUpgradesButtonContent("Tractor\nQuantity", upgradesManager.getTractorQuantityLevel(), true)).expand().fill();
 
         // upgrade harvest scanner
         upgradeScanner = new TextButton("", skin);
         upgradeScanner.clearChildren();
-        upgradeScanner.add(createUpgradesButtonContent("Harvest\nScanner", upgradesManager.getScannerLevel())).expand().fill();
+        upgradeScanner.add(createUpgradesButtonContent("Harvest\nScanner", upgradesManager.getScannerLevel(), true)).expand().fill();
 
         // upgrade refinery quality
         upgradeRefineryQuality = new TextButton("", skin);
         upgradeRefineryQuality.clearChildren();
-        upgradeRefineryQuality.add(createUpgradesButtonContent("Refinery\nQuality", upgradesManager.getRefineQualityLevel())).expand().fill();
+        upgradeRefineryQuality.add(createUpgradesButtonContent("Refinery\nQuality", upgradesManager.getRefineQualityLevel(), true)).expand().fill();
 
         // upgrade to auto refine
         upgradeToAutoRefine = new TextButton("", skin);
         upgradeToAutoRefine.clearChildren();
-        upgradeToAutoRefine.add(createUpgradesButtonContent("Auto\nRefine", upgradesManager.getAutoRefineLevel())).expand().fill();
+        upgradeToAutoRefine.add(createUpgradesButtonContent("Auto\nRefine", upgradesManager.getAutoRefineLevel(), true)).expand().fill();
 
         // add listeners for buttons
         upgradeTractorQuantity.addListener(new ClickListener() {
@@ -424,7 +434,11 @@ public class GameMenu {
         contentTable.setFillParent(true);
 
         // add specific menu content here
-        TextButton shopButton = new TextButton("Reset Stats", skin);
+        TextButton shopButton = new TextButton("", skin);
+        Label resetStatsLabel = new Label("Reset Stats", skin);
+        resetStatsLabel.setFontScale(2f);
+        shopButton.clearChildren();
+        shopButton.add(resetStatsLabel);
 
         // add listeners for buttons
         shopButton.addListener(new ClickListener() {

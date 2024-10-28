@@ -54,7 +54,8 @@ public class Main extends ApplicationAdapter {
         upgradesManager = new UpgradesManager(spaceship);
 
         gameMenu = new GameMenu(stage, upgradesManager, gameHUD);
-
+        spaceship.setGameMenu(gameMenu);
+        spaceship.setUpgradesManager(upgradesManager);
 
         asteroidManager = new AsteroidManager();
         spaceship.updateValues();

@@ -2,6 +2,8 @@ package io.github.spacecraft;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.math.MathUtils;
+import io.github.spacecraft.Costs;
 
 public class UpgradesManager {
     private Preferences preferences;
@@ -16,7 +18,7 @@ public class UpgradesManager {
     private int refineQualityLevel;
     private int autoRefineLevel;
     private int scannerLevel;
-    private int tritaniumBalance, gravititeBalance, cubaneBalance;
+    public int gravititeBalance, tritaniumBalance, cubaneBalance;
     private boolean poppedUp;
 
     private Spaceship spaceship;
@@ -24,8 +26,8 @@ public class UpgradesManager {
         // get stats
         preferences = Gdx.app.getPreferences("SpacecraftPreferences");
         asteroidsBalance = preferences.getInteger("asteroidsBalance", 0);
-        tritaniumBalance = preferences.getInteger("tritaniumBalance", 0);
         gravititeBalance = preferences.getInteger("gravititeBalance", 0);
+        tritaniumBalance = preferences.getInteger("tritaniumBalance", 0);
         cubaneBalance    = preferences.getInteger("cubaneBalance", 0);
         clickLevel = preferences.getInteger("clickLevel", 1);
         idleLevel = preferences.getInteger("idleLevel", 0);
@@ -45,7 +47,7 @@ public class UpgradesManager {
     }
 
     public void init() {
-        spaceship.setAsteroidBalance(asteroidsBalance);
+        spaceship.setAsteroidBalance(1000);
         spaceship.setClickLevel(clickLevel);
         spaceship.setIdleLevel(idleLevel);
         spaceship.setNavigatorLevel(navigatorLevel);
@@ -59,6 +61,7 @@ public class UpgradesManager {
         spaceship.setTritaniumBalance(tritaniumBalance);
         spaceship.setGravititeBalance(gravititeBalance);
         spaceship.setCubaneBalance(cubaneBalance);
+        System.out.println("IDLE LEVEL: "+spaceship.tractorIdleLevel);
     }
 
 
@@ -68,17 +71,21 @@ public class UpgradesManager {
 
     public void upgradeClickLevel() {
         // check asteroids balance
-
+        gravititeBalance = spaceship.getGravititeBalance();
         // subtract cost from balance
-
-        int value = clickLevel+=1;
-        System.out.println("Click Level: " + value);
-        // calculate level increase formula
-        // call spaceship.setClickLevel
-        spaceship.setClickLevel(value);
-        System.out.println("Upgrading Click Level !!!!!!!");
-        preferences.putInteger("clickLevel", value);
-        preferences.flush();
+        if(gravititeBalance>=Costs.getClickLevelCost(clickLevel)){
+            int newGravititeBalance = gravititeBalance -= Costs.getClickLevelCost(clickLevel);
+            int value = clickLevel+=1;
+            System.out.println("Click Level: " + value);
+            // calculate level increase formula
+            // call spaceship.setClickLevel
+            spaceship.setClickLevel(value);
+            spaceship.setGravititeBalance(newGravititeBalance);
+            System.out.println("Upgrading Click Level !!!!!!!");
+            preferences.putInteger("clickLevel", value);
+            preferences.flush();
+            spaceship.updateValues();
+        }
     }
 
     public void upgradeIdleCharge() {
@@ -88,7 +95,7 @@ public class UpgradesManager {
         // call spaceship.setClickLevel
         spaceship.setIdleLevel(value);
         System.out.println("Upgrading Idle Level !!!!!!!");
-        preferences.putInteger("IdleLevel", value);
+        preferences.putInteger("idleLevel", value);
         preferences.flush();
     }
 
@@ -99,7 +106,7 @@ public class UpgradesManager {
         // call spaceship.setClickLevel
         spaceship.setNavigatorLevel(value);
         System.out.println("Upgrading Navigator Level !!!!!!!");
-        preferences.putInteger("NavigatorLevel", value);
+        preferences.putInteger("navigatorLevel", value);
         preferences.flush();
     }
 
@@ -152,12 +159,25 @@ public class UpgradesManager {
 
     public void doRefine() {
         asteroidsBalance = spaceship.getAsteroidBalance();
-        System.out.println(asteroidsBalance);
+        //System.out.println(asteroidsBalance);
         if(asteroidsBalance>0) {
-            int newAsteroidsBalance = asteroidsBalance -=1;
-            int newTritaniumBalance = tritaniumBalance +=1;
-            int newGravititeBalance = gravititeBalance +=1;
-            int newCubaneBalance = cubaneBalance +=1;
+            int roll = MathUtils.random(0, 100);
+            int newAsteroidsBalance = asteroidsBalance -= 1;
+            int newTritaniumBalance = tritaniumBalance;
+            int newGravititeBalance = gravititeBalance;
+            int newCubaneBalance = cubaneBalance;
+            if (roll < 50) {
+                // success, chose either tritanium or gravitite
+                roll = MathUtils.random(0, 10);
+                if(roll%2==1)newTritaniumBalance = tritaniumBalance += 1;
+                if(roll%2==0)newGravititeBalance = gravititeBalance += 1;
+                if(roll==10) newCubaneBalance = cubaneBalance += 1;
+            } else if (roll > 99) {
+                // Special case, get 5 of all
+                newTritaniumBalance = tritaniumBalance += 5;
+                newGravititeBalance = gravititeBalance += 5;
+                newCubaneBalance = cubaneBalance += 5;
+            }
             spaceship.setTritaniumBalance(newTritaniumBalance);
             spaceship.setGravititeBalance(newGravititeBalance);
             spaceship.setCubaneBalance(newCubaneBalance);
@@ -255,5 +275,9 @@ public class UpgradesManager {
     }
     public void setPoppedUp(boolean poppedUp) {
         this.poppedUp = poppedUp;
+    }
+
+    public void updateValues() {
+        spaceship.updateValues();
     }
 }

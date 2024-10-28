@@ -24,6 +24,7 @@ public class Spaceship {
     private Preferences preferences;
     private int asteroidBalance;
     private GameHUD gameHUD;
+    private GameMenu gameMenu;
     public float spaceshipX, spaceshipY;
     public Rectangle spaceRect;
     public float tractorIdleCharge;
@@ -65,7 +66,7 @@ public class Spaceship {
         tractorQuantityLevel = 1;
         refineQualityLevel = 1;
         autoRefineLevel = 0;
-        updateValues();
+//        updateValues();
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
@@ -90,6 +91,7 @@ public class Spaceship {
         asteroidCoords.begin();
         asteroidCoords.removeIndex(0);
         asteroidCoords.end();
+
     }
 
     public void harvestAsteroid(AsteroidManager asteroidManager) {
@@ -144,13 +146,64 @@ public class Spaceship {
         gameHUD.updateTritaniumBalanceLabel(tritaniumBalance);
         gameHUD.updateGravititeBalanceLabel(gravititeBalance);
         gameHUD.updateCubaneBalanceLabel(cubaneBalance);
+
+
+
+        // CLICK LEVEL
+        if(upgradesManager.gravititeBalance<Costs.getClickLevelCost(upgradesManager.getClickLevel())) {
+            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
+                "Click\nLevel", upgradesManager.getClickLevel(),
+                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", false);
+        } else {
+        gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
+            "Click\nLevel", upgradesManager.getClickLevel(),
+            Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", true);
+        }
+
+
+        // IDLE CHARGE
+        if(upgradesManager.gravititeBalance<Costs.getClickLevelCost(upgradesManager.getClickLevel())) {
+            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
+                "Click\nLevel", upgradesManager.getClickLevel(),
+                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", false);
+        } else {
+            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
+                "Click\nLevel", upgradesManager.getClickLevel(),
+                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", true);
+        }
+
+
+        // NAVIGATOR
+        if(upgradesManager.gravititeBalance<Costs.getClickLevelCost(upgradesManager.getClickLevel())) {
+            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
+                "Click\nLevel", upgradesManager.getClickLevel(),
+                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", false);
+        } else {
+            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
+                "Click\nLevel", upgradesManager.getClickLevel(),
+                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", true);
+        }
+
+
+        // HARVEST TIME
+        if(upgradesManager.gravititeBalance<Costs.getClickLevelCost(upgradesManager.getClickLevel())) {
+            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
+                "Click\nLevel", upgradesManager.getClickLevel(),
+                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", false);
+        } else {
+            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
+                "Click\nLevel", upgradesManager.getClickLevel(),
+                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", true);
+        }
+
+
     }
 
     public boolean tractorUpdate(String updateType) {
         if(harvestCount<=0) return false;
         switch(updateType) {
             case("tick"): {
-                tractorIdleCharge -= Gdx.graphics.getDeltaTime()*(1+(0.05f * tractorIdleLevel));
+                tractorIdleCharge -= Gdx.graphics.getDeltaTime()*(1+(0.5f * tractorIdleLevel));
                 //System.out.println(tractorIdleCharge);
                 //System.out.println(tractorIdleLevel);
                 break;
@@ -229,4 +282,16 @@ public class Spaceship {
     public int getAsteroidBalance() {
         return asteroidBalance;
     }
+
+    public void setGameMenu(GameMenu gameMenu) {
+        this.gameMenu = gameMenu;
+    }
+
+    public void setUpgradesManager(UpgradesManager upgradesManager) {
+        this.upgradesManager = upgradesManager;
+    }
+
+    private UpgradesManager upgradesManager;
+
+
 }

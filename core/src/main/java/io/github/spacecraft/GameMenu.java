@@ -32,7 +32,7 @@ public class GameMenu {
     private float height;
     private float edgeMargin;
     GameHUD gameHUD;
-    private TextButton upgradeClickLevel, upgradeIdleCharge, upgradeNavigation, upgradeHarvestTimeButton, upgradeTractorQuantity, upgradeScanner, upgradeRefineryQuality, upgradeToAutoRefine;
+    public TextButton upgradeClickLevel, upgradeIdleCharge, upgradeNavigation, upgradeHarvestTimeButton, upgradeTractorQuantity, upgradeScanner, upgradeRefineryQuality, upgradeToAutoRefine;
     float outerPadding = 15;     // dynamically calculate the size of buttons within table
     float innerPadding = 7.5f; // padding on edges shared with other button (to avoid double padding)
     float buttonHeight = 150;
@@ -177,8 +177,23 @@ public class GameMenu {
         };
     }
 
+    // method to update button content when an upgrade has been purchased WITH LEVEL COST
+    public void updateButtonContent(TextButton button, String title, int levelGetter, int levelCost, String res, boolean isAvailable) {
+        // clear existing and add new button content
+        if(!isAvailable) {
+            TextButton.TextButtonStyle unavailableStyle = skin.get("unavailable", TextButton.TextButtonStyle.class);
+            button.setStyle(unavailableStyle);
+        } else {
+            TextButton.TextButtonStyle availableStyle = skin.get("default", TextButton.TextButtonStyle.class);
+            button.setStyle(availableStyle);
+        }
+        button.clearChildren();
+        button.add(createUpgradesButtonContent(title, levelGetter, isAvailable, levelCost, res)).expand().fill();
+    }
+
     // method to update button content when an upgrade has been purchased
-    private void updateButtonContent(TextButton button, String title, int levelGetter) {
+
+    public void updateButtonContent(TextButton button, String title, int levelGetter) {
         // clear existing and add new button content
         button.clearChildren();
         button.add(createUpgradesButtonContent(title, levelGetter, true)).expand().fill();
@@ -187,9 +202,46 @@ public class GameMenu {
     // *******************
     // Ship Upgrades section
     // *******************
+                                // WITH LEVEL COST
+    private Table createUpgradesButtonContent(String title, int levelGetter, boolean available, int levelCost, String res) {
+        //int levelCost = levelCost; // set the cost of upgrade to display
+
+        Table buttonTable = new Table();
+        VerticalGroup clickLevelButtonTitle = new VerticalGroup();
+        Label titleLabel = new Label(title, skin);
+        titleLabel.setFontScale(2f);
+        titleLabel.setAlignment(Align.left);
+
+        Table levelAndCostTable = new Table();
+        Label currentLevelLabel = new Label(levelGetter + "/50", skin, "CostLabel");
+        currentLevelLabel.setFontScale(2f);
+        currentLevelLabel.setAlignment(Align.center);
+        Label upgradeCostLabel = new Label(String.valueOf(levelCost), skin, "CostLabel");
+        upgradeCostLabel.setFontScale(2f);
+        upgradeCostLabel.setAlignment(Align.center);
+
+        if (!available) {
+            Label.LabelStyle unavailableLabelStyle = skin.get("unavailable", Label.LabelStyle.class);
+            currentLevelLabel.setStyle(unavailableLabelStyle);
+            upgradeCostLabel.setStyle(unavailableLabelStyle);
+        }
+
+        clickLevelButtonTitle.addActor(titleLabel);
+        levelAndCostTable.add(currentLevelLabel).width(100).padBottom(5);
+        levelAndCostTable.row();
+        levelAndCostTable.add(upgradeCostLabel).width(100);
+
+        buttonTable.add(clickLevelButtonTitle);
+        buttonTable.add().growX();
+        buttonTable.add(levelAndCostTable);
+        buttonTable.pad(10);
+
+        return buttonTable;
+    }
+
 
     private Table createUpgradesButtonContent(String title, int levelGetter, boolean available) {
-        int levelCost = 2; // set the cost of upgrade to display
+        int levelCost = 2;
 
         Table buttonTable = new Table();
         VerticalGroup clickLevelButtonTitle = new VerticalGroup();
@@ -232,13 +284,16 @@ public class GameMenu {
 
         // upgrade click level
         upgradeClickLevel = new TextButton("", skin);
+        if(upgradesManager.gravititeBalance<Costs.getClickLevelCost(upgradesManager.getClickLevel())) {}
+        TextButton.TextButtonStyle unavailableStyle = skin.get("unavailable", TextButton.TextButtonStyle.class);
+        upgradeClickLevel.setStyle(unavailableStyle);
         upgradeClickLevel.clearChildren(); // remove empty text so new content be centered
-        upgradeClickLevel.add(createUpgradesButtonContent("Click\nLevel", upgradesManager.getClickLevel(), true)).expand().fill();
+        upgradeClickLevel.add(createUpgradesButtonContent("Click\nLevel", upgradesManager.getClickLevel(), true,Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite")).expand().fill();
 
         // upgrade idle charge
         upgradeIdleCharge = new TextButton("", skin);
         if (5 < 10) {
-            TextButton.TextButtonStyle unavailableStyle = skin.get("unavailable", TextButton.TextButtonStyle.class);
+            //TextButton.TextButtonStyle unavailableStyle = skin.get("unavailable", TextButton.TextButtonStyle.class);
             upgradeIdleCharge.setStyle(unavailableStyle);
         }
         upgradeIdleCharge.clearChildren();
@@ -260,7 +315,8 @@ public class GameMenu {
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeClickLevel(); // boolean to show if upgrade was paid for
                 //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                updateButtonContent(upgradeClickLevel, "Click\nLevel", upgradesManager.getClickLevel());
+                //updateButtonContent(upgradeClickLevel, "Click\nLevel", upgradesManager.getClickLevel(), Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", true);
+                upgradesManager.updateValues();
                 //}
             }
         });
@@ -446,7 +502,7 @@ public class GameMenu {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Shop", "Buying something in Shop");
                 upgradesManager.resetStats();
-                updateButtonContent(upgradeClickLevel, "Click\nLevel", upgradesManager.getClickLevel());
+                //updateButtonContent(upgradeClickLevel, "Click\nLevel", upgradesManager.getClickLevel());
                 updateButtonContent(upgradeIdleCharge, "Idle\nCharge", upgradesManager.getIdleChargeLevel());
                 updateButtonContent(upgradeNavigation, "Navigator", upgradesManager.getNavigatorLevel());
                 updateButtonContent(upgradeHarvestTimeButton, "Harvest\nTime", upgradesManager.getHarvestTimeLevel());

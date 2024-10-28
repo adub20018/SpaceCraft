@@ -92,9 +92,26 @@ public class Spaceship {
         this.harvestCount = harvestCount;
     }
 
-    public void incrementHarvestCount() {
+    public void incrementHarvestCount(int rarity) {
         harvestCount++;
-        asteroidBalance++;
+        switch(rarity) {
+            case(1):
+                asteroidBalance++;
+                break;
+            case(2):
+                asteroidBalance+=5;
+                break;
+            case(3):
+                asteroidBalance+=25;
+                break;
+            case(4):
+                asteroidBalance+=125;
+                break;
+            case(5):
+                asteroidBalance+=1000;
+                break;
+        }
+        //asteroidBalance++;
         gameHUD.updateAsteroidBalanceLabel(asteroidBalance);
         asteroidCoords.begin();
         asteroidCoords.removeIndex(0);

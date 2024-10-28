@@ -204,11 +204,11 @@ public class UpgradesManager {
             preferences.putInteger("cubaneBalance", newCubaneBalance);
             preferences.putInteger("asteroidsBalance", newAsteroidsBalance);
             preferences.flush();
-            spaceship.updateValues();
             if(firstrefine) {
                 for(int i=1;i<=autoRefineLevel;i++) {
                     doRefine(false);
                 }
+            spaceship.updateValues();
             }
         }
     }

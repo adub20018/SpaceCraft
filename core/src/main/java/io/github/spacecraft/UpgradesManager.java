@@ -174,7 +174,7 @@ public class UpgradesManager {
         preferences.flush();
     }
 
-    public void doRefine() {
+    public void doRefine(boolean firstrefine) {
         asteroidsBalance = spaceship.getAsteroidBalance();
         //System.out.println(asteroidsBalance);
         if(asteroidsBalance>0) {
@@ -205,6 +205,11 @@ public class UpgradesManager {
             preferences.putInteger("asteroidsBalance", newAsteroidsBalance);
             preferences.flush();
             spaceship.updateValues();
+            if(firstrefine) {
+                for(int i=1;i<=autoRefineLevel;i++) {
+                    doRefine(false);
+                }
+            }
         }
     }
     public void resetStats() {

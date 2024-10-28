@@ -183,19 +183,19 @@ public class UpgradesManager {
             int newTritaniumBalance = tritaniumBalance;
             int newGravititeBalance = gravititeBalance;
             int newCubaneBalance = cubaneBalance;
-            if (roll < 50) {
+            if (roll > (99 - refineQualityLevel)) {
+                // Special case, get 5 of all
+                newTritaniumBalance = tritaniumBalance += 5;
+                newGravititeBalance = gravititeBalance += 5;
+                newCubaneBalance = cubaneBalance += 5;
+            }else if (roll < 50 + refineQualityLevel) {
                 // success, chose either tritanium or gravitite
                 roll = MathUtils.random(0, 10);
                 if(roll%2==1)newTritaniumBalance = tritaniumBalance += 1;
                 if(roll%2==0)newGravititeBalance = gravititeBalance += 1;
                 if(roll==10) newCubaneBalance = cubaneBalance += 1;
-            } else if (roll > 99) {
-                // Special case, get 5 of all
-                newTritaniumBalance = tritaniumBalance += 5;
-                newGravititeBalance = gravititeBalance += 5;
-                newCubaneBalance = cubaneBalance += 5;
             }
-            spaceship.setTritaniumBalance(newTritaniumBalance);
+                spaceship.setTritaniumBalance(newTritaniumBalance);
             spaceship.setGravititeBalance(newGravititeBalance);
             spaceship.setCubaneBalance(newCubaneBalance);
             spaceship.setAsteroidBalance(newAsteroidsBalance);

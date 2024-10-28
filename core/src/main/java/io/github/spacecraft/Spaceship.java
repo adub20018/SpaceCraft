@@ -77,6 +77,14 @@ public class Spaceship {
         spaceshipCoords = new Vector2(spaceshipX + sprite.getWidth() / 2, spaceshipY + sprite.getHeight() / 2);
     }
 
+    public void setSize(float width, float height) {
+        sprite.setSize(width, height);
+
+        spaceshipX = (viewport.getWorldWidth() - width) / 2;
+        spaceshipY = 3.5f;
+        spaceRect.set(spaceshipX, spaceshipY,  sprite.getWidth(), sprite.getHeight());
+    }
+
     public int getHarvestCount() {
         return harvestCount;
     }

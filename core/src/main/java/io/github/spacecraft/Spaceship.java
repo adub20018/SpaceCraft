@@ -162,38 +162,40 @@ public class Spaceship {
 
 
         // IDLE CHARGE
-        if(upgradesManager.gravititeBalance<Costs.getClickLevelCost(upgradesManager.getClickLevel())) {
-            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
-                "Click\nLevel", upgradesManager.getClickLevel(),
-                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", false);
+        if(upgradesManager.tritaniumBalance<Costs.getIdleLevelCost(upgradesManager.getIdleChargeLevel())) {
+            gameMenu.updateButtonContent(gameMenu.upgradeIdleCharge,
+                "Idle\nCharge", upgradesManager.getIdleChargeLevel(),
+                Costs.getIdleLevelCost(upgradesManager.getIdleChargeLevel()),"tritanium", false);
         } else {
-            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
-                "Click\nLevel", upgradesManager.getClickLevel(),
-                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", true);
+            gameMenu.updateButtonContent(gameMenu.upgradeIdleCharge,
+                "Idle\nCharge", upgradesManager.getIdleChargeLevel(),
+                Costs.getIdleLevelCost(upgradesManager.getIdleChargeLevel()),"tritanium", true);
         }
 
 
         // NAVIGATOR
-        if(upgradesManager.gravititeBalance<Costs.getClickLevelCost(upgradesManager.getClickLevel())) {
-            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
-                "Click\nLevel", upgradesManager.getClickLevel(),
-                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", false);
+        System.out.println("NAVIGATOR");
+        if(upgradesManager.cubaneBalance<Costs.getNavigatorLevelCost(upgradesManager.getNavigatorLevel())) {
+            gameMenu.updateButtonContent(gameMenu.upgradeNavigation,
+                "Navigator", upgradesManager.getNavigatorLevel(),
+                Costs.getNavigatorLevelCost(upgradesManager.getNavigatorLevel()),"cubane", false);
         } else {
-            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
-                "Click\nLevel", upgradesManager.getClickLevel(),
-                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", true);
+            System.out.println("NAVIGATOR TRUE");
+            gameMenu.updateButtonContent(gameMenu.upgradeNavigation,
+                "Navigator", upgradesManager.getNavigatorLevel(),
+                Costs.getNavigatorLevelCost(upgradesManager.getNavigatorLevel()),"cubane", true);
         }
 
 
         // HARVEST TIME
-        if(upgradesManager.gravititeBalance<Costs.getClickLevelCost(upgradesManager.getClickLevel())) {
-            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
-                "Click\nLevel", upgradesManager.getClickLevel(),
-                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", false);
+        if(upgradesManager.tritaniumBalance<Costs.getHarvestTimeLevelCost(upgradesManager.getHarvestTimeLevel())) {
+            gameMenu.updateButtonContent(gameMenu.upgradeHarvestTimeButton,
+                "Harvest\nTime", upgradesManager.getHarvestTimeLevel(),
+                Costs.getHarvestTimeLevelCost(upgradesManager.getHarvestTimeLevel()),"tritanium", false);
         } else {
-            gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
-                "Click\nLevel", upgradesManager.getClickLevel(),
-                Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", true);
+            gameMenu.updateButtonContent(gameMenu.upgradeHarvestTimeButton,
+                "Harvest\nTime", upgradesManager.getHarvestTimeLevel(),
+                Costs.getHarvestTimeLevelCost(upgradesManager.getHarvestTimeLevel()),"tritanium", true);
         }
 
 

@@ -84,41 +84,58 @@ public class UpgradesManager {
             System.out.println("Upgrading Click Level !!!!!!!");
             preferences.putInteger("clickLevel", value);
             preferences.flush();
-            spaceship.updateValues();
+            //spaceship.updateValues();
         }
     }
 
     public void upgradeIdleCharge() {
-        int value = idleLevel+=1;
-        System.out.println("Idle Level: " + value);
-        // calculate level increase formula
-        // call spaceship.setClickLevel
-        spaceship.setIdleLevel(value);
-        System.out.println("Upgrading Idle Level !!!!!!!");
-        preferences.putInteger("idleLevel", value);
-        preferences.flush();
+        tritaniumBalance = spaceship.getTritaniumBalance();
+
+        if(tritaniumBalance>=Costs.getIdleLevelCost(idleLevel)) {
+            int newTritaniumBalance = tritaniumBalance -= Costs.getIdleLevelCost(idleLevel);
+            int value = idleLevel+=1;
+            System.out.println("Idle Level: " + value);
+            // calculate level increase formula
+            // call spaceship.setClickLevel
+            spaceship.setIdleLevel(value);
+            spaceship.setTritaniumBalance(newTritaniumBalance);
+            System.out.println("Upgrading Idle Level !!!!!!!");
+            preferences.putInteger("idleLevel", value);
+            preferences.flush();
+        }
     }
 
     public void upgradeNavigation() {
-        int value = navigatorLevel+=1;
-        System.out.println("Navigator Level: " + value);
-        // calculate level increase formula
-        // call spaceship.setClickLevel
-        spaceship.setNavigatorLevel(value);
-        System.out.println("Upgrading Navigator Level !!!!!!!");
-        preferences.putInteger("navigatorLevel", value);
-        preferences.flush();
+        cubaneBalance = spaceship.getCubaneBalance();
+
+        if(cubaneBalance>=Costs.getNavigatorLevelCost(navigatorLevel)) {
+            int newCubaneBalance = cubaneBalance -= Costs.getNavigatorLevelCost(navigatorLevel);
+            int value = navigatorLevel+=1;
+            System.out.println("Navigator Level: " + value);
+            // calculate level increase formula
+            // call spaceship.setClickLevel
+            spaceship.setNavigatorLevel(value);
+            spaceship.setCubaneBalance(newCubaneBalance);
+            System.out.println("Upgrading Navigator Level !!!!!!!");
+            preferences.putInteger("navigatorLevel", value);
+            preferences.flush();
+        }
     }
 
     public void upgradeHarvestTime() {
-        int value = harvestTimeLevel+=1;
-        System.out.println("Harvest Time Level: " + value);
-        // calculate level increase formula
-        // call spaceship.setClickLevel
-        spaceship.setHarvestTimeLevel(value);
-        System.out.println("Upgrading harvest time Level !!!!!!!");
-        preferences.putInteger("harvestTimeLevel", value);
-        preferences.flush();
+        tritaniumBalance = spaceship.getTritaniumBalance();
+        if(tritaniumBalance>=Costs.getHarvestTimeLevelCost(harvestTimeLevel)) {
+            int newTritaniumBalance = tritaniumBalance -= Costs.getHarvestTimeLevelCost(harvestTimeLevel);
+            int value = harvestTimeLevel += 1;
+            System.out.println("Harvest Time Level: " + value);
+            // calculate level increase formula
+            // call spaceship.setClickLevel
+            spaceship.setHarvestTimeLevel(value);
+            spaceship.setTritaniumBalance(newTritaniumBalance);
+            System.out.println("Upgrading harvest time Level !!!!!!!");
+            preferences.putInteger("harvestTimeLevel", value);
+            preferences.flush();
+        }
     }
 
     // *******************

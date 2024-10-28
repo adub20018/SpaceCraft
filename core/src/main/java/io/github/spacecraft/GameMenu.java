@@ -326,7 +326,8 @@ public class GameMenu {
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeIdleCharge();
                 //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                updateButtonContent(upgradeIdleCharge, "Idle\nCharge", upgradesManager.getIdleChargeLevel());
+                //updateButtonContent(upgradeIdleCharge, "Idle\nCharge", upgradesManager.getIdleChargeLevel());
+                upgradesManager.updateValues();
                 //}
             }
         });
@@ -336,7 +337,8 @@ public class GameMenu {
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeNavigation();
                 //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                updateButtonContent(upgradeNavigation, "Navigator", upgradesManager.getNavigatorLevel());
+                //updateButtonContent(upgradeNavigation, "Navigator", upgradesManager.getNavigatorLevel());
+                upgradesManager.updateValues();
                 //}
             }
         });
@@ -346,7 +348,8 @@ public class GameMenu {
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeHarvestTime();
                 //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                updateButtonContent(upgradeHarvestTimeButton, "Harvest\nTime", upgradesManager.getHarvestTimeLevel());
+                //updateButtonContent(upgradeHarvestTimeButton, "Harvest\nTime", upgradesManager.getHarvestTimeLevel());
+                upgradesManager.updateValues();
                 //}
             }
         });

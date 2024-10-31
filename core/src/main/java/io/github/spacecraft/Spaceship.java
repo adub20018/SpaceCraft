@@ -231,12 +231,12 @@ public class Spaceship {
         switch(updateType) {
             case("tick"): {
                 tractorIdleCharge -= Gdx.graphics.getDeltaTime()*(1+(0.5f * tractorIdleLevel));
-                //System.out.println(tractorIdleCharge);
-                //System.out.println(tractorIdleLevel);
+                gameHUD.updateProgressBar(tractorIdleCharge);
                 break;
             }
             case("click"): {
                 tractorIdleCharge -= 10 + (tractorClickLevel * 0.25f);
+                gameHUD.updateProgressBar(tractorIdleCharge);
                 break;
             }
         }

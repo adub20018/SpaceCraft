@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -17,9 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 
 import org.w3c.dom.Text;
 
@@ -212,24 +215,38 @@ public class GameMenu {
         titleLabel.setFontScale(2f);
         titleLabel.setAlignment(Align.left);
 
+        Table levelCostTable = new Table();
+        levelCostTable.setBackground(skin.getDrawable("square-large"));
         Table levelAndCostTable = new Table();
         Label currentLevelLabel = new Label(levelGetter + "/50", skin, "CostLabel");
         currentLevelLabel.setFontScale(2f);
         currentLevelLabel.setAlignment(Align.center);
-        Label upgradeCostLabel = new Label(String.valueOf(levelCost), skin, "CostLabel");
+        Label upgradeCostLabel = new Label(String.valueOf(levelCost), skin);
         upgradeCostLabel.setFontScale(2f);
-        upgradeCostLabel.setAlignment(Align.center);
+        //upgradeCostLabel.setAlignment(Align.center);
+
+        Drawable resourceDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal(res + ".png"))); // res should be the path to your image file
+        Image resourceImage = new Image(resourceDrawable);
+        resourceImage.setScale(0.9f);
+        resourceImage.setAlign(Align.center);
+        resourceImage.setScaling(Scaling.fit); // Ensures it fits within bounds without distortion
 
         if (!available) {
             Label.LabelStyle unavailableLabelStyle = skin.get("unavailable", Label.LabelStyle.class);
             currentLevelLabel.setStyle(unavailableLabelStyle);
-            upgradeCostLabel.setStyle(unavailableLabelStyle);
+            //upgradeCostLabel.setStyle(unavailableLabelStyle);
+            levelCostTable.setBackground(skin.getDrawable("unavailable-square-large"));
         }
 
+        levelCostTable.add(resourceImage).padLeft(-15).padBottom(4);
+        levelCostTable.add(upgradeCostLabel).padLeft(-75);
+
         clickLevelButtonTitle.addActor(titleLabel);
-        levelAndCostTable.add(currentLevelLabel).width(100).padBottom(5);
+
+        levelAndCostTable.add(currentLevelLabel).padBottom(5).growX();
         levelAndCostTable.row();
-        levelAndCostTable.add(upgradeCostLabel).width(100);
+        levelAndCostTable.add(levelCostTable);
+
 
         buttonTable.add(clickLevelButtonTitle);
         buttonTable.add().growX();
@@ -288,7 +305,7 @@ public class GameMenu {
         TextButton.TextButtonStyle unavailableStyle = skin.get("unavailable", TextButton.TextButtonStyle.class);
         upgradeClickLevel.setStyle(unavailableStyle);
         upgradeClickLevel.clearChildren(); // remove empty text so new content be centered
-        upgradeClickLevel.add(createUpgradesButtonContent("Click\nLevel", upgradesManager.getClickLevel(), true,Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite")).expand().fill();
+        upgradeClickLevel.add(createUpgradesButtonContent("Click\nLevel", upgradesManager.getClickLevel(), true, Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite")).expand().fill();
 
         // upgrade idle charge
         upgradeIdleCharge = new TextButton("", skin);

@@ -1,7 +1,6 @@
 package io.github.spacecraft;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -24,8 +22,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 
-import org.w3c.dom.Text;
-
 public class GameMenu {
     private Stage stage;
     private Skin skin;
@@ -35,7 +31,7 @@ public class GameMenu {
     private float height;
     private float edgeMargin;
     GameHUD gameHUD;
-    public TextButton upgradeClickLevel, upgradeIdleCharge, upgradeNavigation, upgradeHarvestTimeButton, upgradeTractorQuantity, upgradeScanner, upgradeRefineryQuality, upgradeToAutoRefine;
+    public TextButton upgradeClickLevel, upgradeIdleCharge, upgradeNavigation, upgradeHarvestTimeButton, upgradeTractorQuantity, upgradeScanner, upgradeRefineryQuality, upgradeRefinePower;
     float outerPadding = 15;     // dynamically calculate the size of buttons within table
     float innerPadding = 7.5f; // padding on edges shared with other button (to avoid double padding)
     float buttonHeight = 150;
@@ -301,7 +297,7 @@ public class GameMenu {
 
         // upgrade click level
         upgradeClickLevel = new TextButton("", skin);
-        if(upgradesManager.gravititeBalance<Costs.getClickLevelCost(upgradesManager.getClickLevel())) {}
+        //if(upgradesManager.gravititeBalance<Costs.getClickLevelCost(upgradesManager.getClickLevel())) {}
         TextButton.TextButtonStyle unavailableStyle = skin.get("unavailable", TextButton.TextButtonStyle.class);
         upgradeClickLevel.setStyle(unavailableStyle);
         upgradeClickLevel.clearChildren(); // remove empty text so new content be centered
@@ -452,9 +448,9 @@ public class GameMenu {
         upgradeRefineryQuality.add(createUpgradesButtonContent("Refinery\nQuality", upgradesManager.getRefineQualityLevel(), true)).expand().fill();
 
         // upgrade to auto refine
-        upgradeToAutoRefine = new TextButton("", skin);
-        upgradeToAutoRefine.clearChildren();
-        upgradeToAutoRefine.add(createUpgradesButtonContent("Auto\nRefine", upgradesManager.getAutoRefineLevel(), true)).expand().fill();
+        upgradeRefinePower = new TextButton("", skin);
+        upgradeRefinePower.clearChildren();
+        upgradeRefinePower.add(createUpgradesButtonContent("Refine\nPower", upgradesManager.getRefinePowerLevel(), true)).expand().fill();
 
         // add listeners for buttons
         upgradeTractorQuantity.addListener(new ClickListener() {
@@ -487,12 +483,12 @@ public class GameMenu {
             }
         });
 
-        upgradeToAutoRefine.addListener(new ClickListener() {
+        upgradeRefinePower.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                upgradesManager.upgradeToAutoRefine();
+                upgradesManager.upgradeRefinePower();
                 //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                updateButtonContent(upgradeToAutoRefine, "Auto\nRefine", upgradesManager.getAutoRefineLevel());
+                updateButtonContent(upgradeRefinePower, "Refine\nPower", upgradesManager.getRefinePowerLevel());
                 //}
             }
         });
@@ -501,7 +497,7 @@ public class GameMenu {
         contentTable.add(upgradeScanner).expandX().fillX().height(buttonHeight).pad(outerPadding, innerPadding, innerPadding, outerPadding);
         contentTable.row();
         contentTable.add(upgradeRefineryQuality).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, outerPadding, innerPadding);
-        contentTable.add(upgradeToAutoRefine).expandX().fillX().height(buttonHeight).pad(innerPadding, innerPadding, outerPadding, outerPadding);
+        contentTable.add(upgradeRefinePower).expandX().fillX().height(buttonHeight).pad(innerPadding, innerPadding, outerPadding, outerPadding);
 
         return contentTable;
     }
@@ -529,7 +525,7 @@ public class GameMenu {
                 updateButtonContent(upgradeTractorQuantity, "Tractor\nQuantity", upgradesManager.getTractorQuantityLevel());
                 updateButtonContent(upgradeScanner, "Harvest\nScanner", upgradesManager.getScannerLevel());
                 updateButtonContent(upgradeRefineryQuality, "Refinery\nQuality", upgradesManager.getRefineQualityLevel());
-                updateButtonContent(upgradeToAutoRefine, "Auto\nRefine", upgradesManager.getAutoRefineLevel());
+                updateButtonContent(upgradeRefinePower, "Refine\nPower", upgradesManager.getRefinePowerLevel());
             }
         });
 

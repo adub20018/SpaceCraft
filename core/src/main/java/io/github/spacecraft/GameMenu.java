@@ -177,7 +177,7 @@ public class GameMenu {
     }
 
     // method to update button content when an upgrade has been purchased WITH LEVEL COST
-    public void updateButtonContent(TextButton button, String title, int levelGetter, int levelCost, String res, boolean isAvailable) {
+    public void updateButtonContent(TextButton button, String title, int levelGetter, int[] levelCost, String res, boolean isAvailable) {
         // clear existing and add new button content
         if(!isAvailable) {
             TextButton.TextButtonStyle unavailableStyle = skin.get("unavailable", TextButton.TextButtonStyle.class);
@@ -202,7 +202,7 @@ public class GameMenu {
     // Ship Upgrades section
     // *******************
                                 // WITH LEVEL COST
-    private Table createUpgradesButtonContent(String title, int levelGetter, boolean available, int levelCost, String res) {
+    private Table createUpgradesButtonContent(String title, int levelGetter, boolean available, int[] levelCost, String res) {
         //int levelCost = levelCost; // set the cost of upgrade to display
 
         Table buttonTable = new Table();
@@ -217,25 +217,77 @@ public class GameMenu {
         Label currentLevelLabel = new Label(levelGetter + "/50", skin, "CostLabel");
         currentLevelLabel.setFontScale(2f);
         currentLevelLabel.setAlignment(Align.center);
-        Label upgradeCostLabel = new Label(String.valueOf(levelCost), skin);
-        upgradeCostLabel.setFontScale(2f);
-        //upgradeCostLabel.setAlignment(Align.center);
 
-        Drawable resourceDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal(res + ".png"))); // res should be the path to your image file
-        Image resourceImage = new Image(resourceDrawable);
-        resourceImage.setScale(0.9f);
-        resourceImage.setAlign(Align.center);
-        resourceImage.setScaling(Scaling.fit); // Ensures it fits within bounds without distortion
+        // gravitite case
+        if (levelCost[0] > 0) {
+            Label gravititeCostLabel = new Label(String.valueOf(levelCost[0]), skin);
+            gravititeCostLabel.setFontScale(2f);
+            //gravititeCostLabel.setAlignment(Align.center);
 
-        if (!available) {
-            Label.LabelStyle unavailableLabelStyle = skin.get("unavailable", Label.LabelStyle.class);
-            currentLevelLabel.setStyle(unavailableLabelStyle);
-            //upgradeCostLabel.setStyle(unavailableLabelStyle);
-            levelCostTable.setBackground(skin.getDrawable("unavailable-square-large"));
+            // gravitite image
+            Drawable gravititeDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("gravitite.png"))); // res should be the path to your image file
+            Image gravititeImage = new Image(gravititeDrawable);
+            gravititeImage.setScale(0.9f);
+            gravititeImage.setAlign(Align.center);
+            gravititeImage.setScaling(Scaling.fit); // Ensures it fits within bounds without distortion
+
+            if (!available) {
+                Label.LabelStyle unavailableLabelStyle = skin.get("unavailable", Label.LabelStyle.class);
+                currentLevelLabel.setStyle(unavailableLabelStyle);
+                //upgradeCostLabel.setStyle(unavailableLabelStyle);
+                levelCostTable.setBackground(skin.getDrawable("unavailable-square-large"));
+            }
+
+            levelCostTable.add(gravititeImage).padLeft(-15).padBottom(4);
+            levelCostTable.add(gravititeCostLabel).padLeft(-75);
         }
 
-        levelCostTable.add(resourceImage).padLeft(-15).padBottom(4);
-        levelCostTable.add(upgradeCostLabel).padLeft(-75);
+        // tritanium case
+        if (levelCost[1] > 0) {
+            Label tritaniumCostLabel = new Label(String.valueOf(levelCost[1]), skin);
+            tritaniumCostLabel.setFontScale(2f);
+            //tritaniumCostLabel.setAlignment(Align.center);
+
+            // cubane image
+            Drawable tritaniumDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("tritanium.png"))); // res should be the path to your image file
+            Image tritaniumImage = new Image(tritaniumDrawable);
+            tritaniumImage.setScale(0.9f);
+            tritaniumImage.setAlign(Align.center);
+            tritaniumImage.setScaling(Scaling.fit); // Ensures it fits within bounds without distortion
+
+            if (!available) {
+                Label.LabelStyle unavailableLabelStyle = skin.get("unavailable", Label.LabelStyle.class);
+                currentLevelLabel.setStyle(unavailableLabelStyle);
+                levelCostTable.setBackground(skin.getDrawable("unavailable-square-large"));
+            }
+
+            levelCostTable.add(tritaniumImage).padLeft(-15).padBottom(4);
+            levelCostTable.add(tritaniumCostLabel).padLeft(-75);
+        }
+
+        // cubane case
+        if (levelCost[2] > 0) {
+            Label cubaneCostLabel = new Label(String.valueOf(levelCost[1]), skin);
+            cubaneCostLabel.setFontScale(2f);
+            //cubaneCostLabel.setAlignment(Align.center);
+
+            // cubane image
+            Drawable cubaneDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("cubane.png"))); // res should be the path to your image file
+            Image cubaneImage = new Image(cubaneDrawable);
+            cubaneImage.setScale(0.9f);
+            cubaneImage.setAlign(Align.center);
+            cubaneImage.setScaling(Scaling.fit); // Ensures it fits within bounds without distortion
+
+            if (!available) {
+                Label.LabelStyle unavailableLabelStyle = skin.get("unavailable", Label.LabelStyle.class);
+                currentLevelLabel.setStyle(unavailableLabelStyle);
+                levelCostTable.setBackground(skin.getDrawable("unavailable-square-large"));
+            }
+
+            levelCostTable.add(cubaneImage).padLeft(-15).padBottom(4);
+            levelCostTable.add(cubaneCostLabel).padLeft(-75);
+        }
+
 
         clickLevelButtonTitle.addActor(titleLabel);
 

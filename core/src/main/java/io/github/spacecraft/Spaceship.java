@@ -184,14 +184,14 @@ public class Spaceship {
         gameMenu.updateButtonContent(gameMenu.upgradeIdleCharge,
             "Idle\nCharge", upgradesManager.getIdleChargeLevel(),
             Costs.getIdleLevelCost(upgradesManager.getIdleChargeLevel()),"tritanium",
-            upgradesManager.tritaniumBalance<Costs.getIdleLevelCost(upgradesManager.getIdleChargeLevel())[1]);
+            upgradesManager.tritaniumBalance>=Costs.getIdleLevelCost(upgradesManager.getIdleChargeLevel())[1]);
 
 
         // NAVIGATOR
         gameMenu.updateButtonContent(gameMenu.upgradeNavigation,
             "Navigator", upgradesManager.getNavigatorLevel(),
             Costs.getNavigatorLevelCost(upgradesManager.getNavigatorLevel()),"cubane",
-            upgradesManager.cubaneBalance<Costs.getNavigatorLevelCost(upgradesManager.getNavigatorLevel())[2]);
+            upgradesManager.cubaneBalance>=Costs.getNavigatorLevelCost(upgradesManager.getNavigatorLevel())[2]);
 
         // HARVEST TIME
         gameMenu.updateButtonContent(gameMenu.upgradeHarvestTimeButton,
@@ -212,20 +212,20 @@ public class Spaceship {
 
         // SCANNER
         gameMenu.updateButtonContent(gameMenu.upgradeScanner,"Harvest\nScanner",upgradesManager.getScannerLevel(),
-            Costs.getHarvestScannerCost(upgradesManager.getScannerLevel()),"AlL",
+            Costs.getHarvestScannerCost(upgradesManager.getScannerLevel()),"tritanium",
             gravititeBalance>=Costs.getHarvestScannerCost(scannerLevel)[0]&&
                 tritaniumBalance>=Costs.getHarvestScannerCost(scannerLevel)[1]&&
                 cubaneBalance>=Costs.getHarvestScannerCost(scannerLevel)[2]&&!isScanner);
 
         // REFINERY QUALITY
         gameMenu.updateButtonContent(gameMenu.upgradeRefineryQuality, "Refinery\nQuality", upgradesManager.getRefineQualityLevel(),
-        Costs.getRefineryQualityCost(upgradesManager.getRefineQualityLevel()),"all",
+        Costs.getRefineryQualityCost(upgradesManager.getRefineQualityLevel()),"tritanium",
             gravititeBalance>=Costs.getRefineryQualityCost(refineQualityLevel)[0]&&
                 cubaneBalance>=Costs.getRefineryQualityCost(refineQualityLevel)[2]);
 
         // REFINE POWER
         gameMenu.updateButtonContent(gameMenu.upgradeRefinePower,"Refine\nPower", upgradesManager.getRefinePowerLevel(),
-            Costs.getRefinePowerCost(upgradesManager.getRefinePowerLevel()),"all",
+            Costs.getRefinePowerCost(upgradesManager.getRefinePowerLevel()),"tritanium",
             gravititeBalance>=Costs.getRefinePowerCost(refinePowerLevel)[0]&&
                 cubaneBalance>=Costs.getRefinePowerCost(refinePowerLevel)[2]);
 

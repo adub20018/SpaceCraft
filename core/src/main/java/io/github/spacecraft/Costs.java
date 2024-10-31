@@ -41,6 +41,7 @@ public class Costs {
         int cost1, cost2;
         cost1 = (int) pow(2,currentTractorQuantityLevel);
         cost2 = (int) pow(2,currentTractorQuantityLevel);
+        if(cost1==0||cost2==0) return new int[] {1,0,1};
         return new int[]{0, cost1, cost2};
     }
     public static int[] getHarvestScannerCost(int currentHarvestScannerLevel){
@@ -54,12 +55,14 @@ public class Costs {
         int cost1, cost2;
         cost1 = (int) pow(3,currentRefineryQualityLevel*2)/90;
         cost2 = (int) pow(2,currentRefineryQualityLevel*3)/180;
+        if(cost1==0||cost2==0) return new int[] {1,0,1};
         return new int[]{cost1,0,cost2};
     }
     public static int[] getRefinePowerCost(int currentRefinePowerLevel){
         int cost1, cost2;
-        cost1 = (int) pow(2,currentRefinePowerLevel*3)/180;
-        cost2 = (int) pow(4,currentRefinePowerLevel*2)/90;
+        cost1 = (int) pow(2,currentRefinePowerLevel*3)/90;
+        cost2 = (int) pow(4,currentRefinePowerLevel*2)/180;
+        if(cost1==0||cost2==0) return new int[] {1,0,1};
         return new int[]{cost1,0,cost2};
     }
 }

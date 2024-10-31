@@ -266,6 +266,7 @@ public class UpgradesManager {
         }
     }
     public void resetStats() {
+        if(spaceship.isHarvesting) return;
         preferences.putInteger("asteroidsBalance", 0);
         preferences.putInteger("tritaniumBalance", 0);
         preferences.putInteger("gravititeBalance", 0);

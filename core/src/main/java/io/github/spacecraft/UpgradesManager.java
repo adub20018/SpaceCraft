@@ -63,6 +63,22 @@ public class UpgradesManager {
         System.out.println("IDLE LEVEL: "+spaceship.tractorIdleLevel);
     }
 
+    public void updateSpaceshipValues() {
+        spaceship.setClickLevel(clickLevel);
+        spaceship.setIdleLevel(idleLevel);
+        spaceship.setNavigatorLevel(navigatorLevel);
+        spaceship.setHarvestTimeLevel(harvestTimeLevel);
+        spaceship.isScanner = isScanner;
+        spaceship.setTractorQuantityLevel(tractorQuantityLevel);
+        spaceship.setHarvestCount(tractorQuantityLevel);
+        spaceship.setRefineQualityLevel(refineQualityLevel);
+        spaceship.setRefinePowerLevel(refinePowerLevel);
+        spaceship.setScannerLevel(scannerLevel);
+        spaceship.setTritaniumBalance(tritaniumBalance);
+        spaceship.setGravititeBalance(gravititeBalance);
+        spaceship.setCubaneBalance(cubaneBalance);
+    }
+
 
     // *******************
     // Upgrades section
@@ -85,6 +101,7 @@ public class UpgradesManager {
             preferences.flush();
             //spaceship.updateValues();
         }
+        updateSpaceshipValues();
     }
 
     public void upgradeIdleCharge() {
@@ -219,7 +236,7 @@ public class UpgradesManager {
             int newRefinePowerLevel = refinePowerLevel += 1;
 
 
-            spaceship.setRefineQualityLevel(newRefinePowerLevel);
+            spaceship.setRefinePowerLevel(newRefinePowerLevel);
             spaceship.setGravititeBalance(newGravititeBalance);
             spaceship.setCubaneBalance(newCubaneBalance);
             preferences.putInteger("refinePowerLevel", newRefinePowerLevel);

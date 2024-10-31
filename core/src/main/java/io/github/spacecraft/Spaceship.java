@@ -229,6 +229,7 @@ public class Spaceship {
             gravititeBalance>=Costs.getRefinePowerCost(refinePowerLevel)[0]&&
                 cubaneBalance>=Costs.getRefinePowerCost(refinePowerLevel)[2]);
 
+        System.out.println(cubaneBalance>=Costs.getRefinePowerCost(refinePowerLevel)[2]);
 
     }
 

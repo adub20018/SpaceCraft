@@ -22,7 +22,7 @@ Research:
   Scanner - Tractor beams can now target the highest rarity asteroid for optimal harvesting.
 
 
-
+## libGDX Generated Content
 
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).

@@ -2,52 +2,52 @@
 
 
 ## Gameplay Instructions
-**Mine asteroids and refine them to upgrade your spaceship, enhancing mining efficiency and refining capabilities.**
+**Click the Spaceship to mine asteroids and refine them to upgrade your spaceship, enhancing mining efficiency and refining capabilities.**
 
 ### Upgrades
 
 1. **Click Power**  
-   Increases the tractor beam charge each time you click on the spaceship.
+   Increase how much the tractor beam charges when you click the spaceship. 
 
 2. **Idle Charge**  
-   Boosts the tractor beam's charge while you’re idle or refining.
+   Increase how much the tractor beam charges while you are idle or refining.
+   
+4. **Navigator**  
+   Navigate towards more dense asteroid field. More asteroids to harvest.
 
-3. **Navigator**  
-   Guides your spaceship toward denser asteroid fields, increasing the number of asteroids available to harvest.
-
-4. **Harvest Time**  
-   Reduces the time required for the tractor to harvest an asteroid.
+5. **Harvest Time**  
+   Decrease how much time the tractor takes to harvest an asteroid.
 
 ---
 
 ### Refinery
 
-Click to refine asteroids into one of three minerals, each essential for different upgrades:
+Click to refine your asteroids into one of 3 minerals crucial for upgrades.
 
 - **Gravitite**  
-  Primarily used for tractor beam upgrades.
+  Mainly used for tractor beam upgrades.
 
 - **Tritanium**  
-  Primarily used for idle and miscellaneous upgrades.
+  Mainly used for idle/other upgrades.
 
 - **Cubane**  
-  Primarily used for Navigation and Refinery enhancements.
+  Mainly used for Navigation and refinery.
 
 ---
 
 ### Research
 
 1. **Tractor Quantity**  
-   Adds an additional tractor beam to charge and deploy.
+   Gives an extra tractor beam to charge up and use.
 
 2. **Extra Refine Quantity**  
-   Refines an extra asteroid per click within the refinery.
+   Refines an extra asteroid per click in refinery.
 
 3. **Refine Quality**  
-   Improves refinery efficiency, yielding more resources from fewer asteroids.
+   Increases the efficiency of the refinery, more resources for less asteroids.
 
 4. **Scanner**  
-   Enables tractor beams to prioritize harvesting the rarest asteroids, optimizing resource collection.
+   Tractor beams now target the highest rarity asteroid for optimal harvesting.
 
 
 Build your spaceship’s capabilities, manage resources strategically, and dominate the asteroid fields!

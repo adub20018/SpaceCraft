@@ -2,6 +2,7 @@ package io.github.spacecraft;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,6 +24,8 @@ public class Main extends ApplicationAdapter {
     private GameHUD gameHUD;
     private GameMenu gameMenu;
     private UpgradesManager upgradesManager;
+
+    private Music spacecraftThemeMusic;
 
     private Stage stage;
 
@@ -59,6 +62,11 @@ public class Main extends ApplicationAdapter {
         asteroidManager = new AsteroidManager();
         spaceship.updateValues();
         deltatest = 0;
+
+        spacecraftThemeMusic = Gdx.audio.newMusic(Gdx.files.internal("spacecraft_theme.wav"));
+        spacecraftThemeMusic.setLooping(true);
+        spacecraftThemeMusic.play();
+
     }
 
     @Override

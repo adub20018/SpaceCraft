@@ -116,7 +116,6 @@ public class Spaceship {
         asteroidCoords.begin();
         asteroidCoords.removeIndex(0);
         asteroidCoords.end();
-
     }
 
     public void harvestAsteroid(AsteroidManager asteroidManager) {
@@ -141,7 +140,6 @@ public class Spaceship {
             } else {
                 // if no asteroid to harvest
                 System.out.println("No asteroid available !!!!!!!!");
-                //isHarvesting = false;
                 return;
             }
         }
@@ -172,10 +170,9 @@ public class Spaceship {
         gameHUD.updateGravititeBalanceLabel(gravititeBalance);
         gameHUD.updateCubaneBalanceLabel(cubaneBalance);
 
-
         // CLICK LEVEL
         gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
-            "Click\nLevel", upgradesManager.getClickLevel(),
+            "Click\nPower", upgradesManager.getClickLevel(),
             Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite",
             upgradesManager.gravititeBalance>=Costs.getClickLevelCost(upgradesManager.getClickLevel())[0]);
 
@@ -199,10 +196,10 @@ public class Spaceship {
             Costs.getHarvestTimeLevelCost(upgradesManager.getHarvestTimeLevel()),"tritanium",
             upgradesManager.tritaniumBalance>=Costs.getHarvestTimeLevelCost(upgradesManager.getHarvestTimeLevel())[1]);
 
+
         /*
         *  LAB SECTION
         */
-
         // TRACTOR QUANTITY
         gameMenu.updateButtonContent(gameMenu.upgradeTractorQuantity,
             "Tractor\nQuantity", upgradesManager.getTractorQuantityLevel(),
@@ -228,9 +225,6 @@ public class Spaceship {
             Costs.getRefinePowerCost(upgradesManager.getRefinePowerLevel()),"tritanium",
             gravititeBalance>=Costs.getRefinePowerCost(refinePowerLevel)[0]&&
                 cubaneBalance>=Costs.getRefinePowerCost(refinePowerLevel)[2]);
-
-        System.out.println(cubaneBalance>=Costs.getRefinePowerCost(refinePowerLevel)[2]);
-
     }
 
     public boolean tractorUpdate(String updateType) {
@@ -247,7 +241,6 @@ public class Spaceship {
                 break;
             }
         }
-        // System.out.println(tractorIdleCharge);
         return tractorIdleCharge <= 0;
     }
 
@@ -326,6 +319,4 @@ public class Spaceship {
     }
 
     private UpgradesManager upgradesManager;
-
-
 }

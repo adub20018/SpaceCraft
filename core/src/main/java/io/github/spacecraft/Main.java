@@ -49,7 +49,6 @@ public class Main extends ApplicationAdapter {
         Gdx.input.setInputProcessor(stage);
         gameHUD = new GameHUD(stage);
 
-
         spaceship = new Spaceship(viewport, gameHUD);
         upgradesManager = new UpgradesManager(spaceship);
 
@@ -85,8 +84,6 @@ public class Main extends ApplicationAdapter {
         if (Gdx.input.justTouched()) {
             System.out.println("Touched");
             System.out.println("IDLE CHARGE: " + spaceship.tractorIdleCharge);
-//            System.out.println(spaceship.tractorClickLevel);
-//            System.out.println(spaceship.getHarvestCount());
 
             if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0&&!upgradesManager.isPoppedUp()) {
                 spaceship.tractorUpdate("click");
@@ -98,19 +95,15 @@ public class Main extends ApplicationAdapter {
                 spaceship.setSize(1.15f, 1.15f);
             }
         } else {
-            // Restore to normal size when touch is released
+            // restore to normal size when touch is released
             spaceship.setSize(1.2f, 1.2f);
         }
     }
 
     private void logic() {
-        //asteroid.updateAsteroidPosition(worldWidth, worldHeight);
         asteroidManager.updateAsteroids(worldWidth, worldHeight, spaceship);
-        //System.out.println(spaceship.getHarvestCount());
         if(spaceship.tractorUpdate("tick")){
-            System.out.println("TICK HARVEST");
             spaceship.harvestAsteroid(asteroidManager);
-
         }
     }
 

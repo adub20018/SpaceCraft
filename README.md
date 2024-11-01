@@ -1,5 +1,30 @@
 # SpaceCraft
 
+
+## Gameplay Instructions
+Mine asteroids and refine them to upgrade your spaceship to mine astroids faster and better
+Upgrades: 
+  Click power - Increase how much the tractor beam charges when you click the spaceship. 
+  idle charge - Increase how much the tractor beam charges while you are idle or refining.
+  navigator - Navigate towards more dense asteroid field. More asteroids to harvest.
+  harvest time - Decrease how much time the tractor takes to harvest an asteroid.
+
+Refinery:
+  Click to refine your asteroids into one of 3 minerals crucial for upgrades.
+  Gravitite - Mainly used for tractor beam upgrades.
+  Tritanium - Mainly used for idle/other upgrades.
+  Cubane - Mainly used for Navigation and refinery.
+
+Research:
+  Tractor Quantity - Gives an extra tractor beam to charge up and use.
+  Extra Refine Quantity - Refines an extra asteroid per click in refinery.
+  Refine Quality - Increases the efficiency of the refinery, more resources for less asteroids.
+  Scanner - Tractor beams can now target the highest rarity asteroid for optimal harvesting.
+
+
+
+
+
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
 This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.

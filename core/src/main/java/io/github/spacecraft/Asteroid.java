@@ -20,7 +20,6 @@ public class Asteroid {
     private float deltatest;
     private int rarity;
 
-
     public Asteroid(float x, float y, int rarity, float radius) {
         texture = new Texture("asteroid.png");
         sprite = new Sprite(texture);
@@ -43,12 +42,8 @@ public class Asteroid {
         if(!harvesting) {
             sprite.translateY(speed * delta);
         } else {
-
             harvestWaitTime -= delta;
-            //System.out.println(harvestWaitTime);
         }
-
-        //System.out.println(harvestWaitTime);
     }
 
     public void draw(SpriteBatch batch) {

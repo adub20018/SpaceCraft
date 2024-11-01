@@ -28,7 +28,9 @@ public class AsteroidManager {
             asteroids.get(i).update(delta); // asteroid flow speed
             if(asteroids.get(i).getHarvestWaitTime() <=0) {
                 spaceship.incrementHarvestCount(asteroids.get(i).getRarity());
+                asteroids.begin();
                 asteroids.removeIndex(i);
+                asteroids.end();
                 if(spaceship.asteroidCoords.size == 0) {
                     spaceship.isHarvesting = false;
                 }
@@ -36,7 +38,9 @@ public class AsteroidManager {
             }
             // remove asteroid once it goes past the bottom of screen
             if (asteroidSprite.getY() < -asteroidSprite.getHeight()) {
+                asteroids.begin();
                 asteroids.removeIndex(i);
+                asteroids.end();
             }
         }
 

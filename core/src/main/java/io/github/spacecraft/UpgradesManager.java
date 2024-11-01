@@ -38,7 +38,6 @@ public class UpgradesManager {
         refineQualityLevel = preferences.getInteger("refineQualityLevel", 1);
         refinePowerLevel = preferences.getInteger("refinePowerLevel", 0);
         scannerLevel = preferences.getInteger("scannerLevel", 0);
-        //preferences.getInteger("harvestCount", 1);
         poppedUp = false;
         this.spaceship = spaceship;
         System.out.println("INTIAL TRITANIUM BALANCE: " + tritaniumBalance);
@@ -93,7 +92,6 @@ public class UpgradesManager {
             int value = clickLevel+=1;
             System.out.println("Click Level: " + value);
             // calculate level increase formula
-            // call spaceship.setClickLevel
             spaceship.setClickLevel(value);
             spaceship.setGravititeBalance(newGravititeBalance);
             System.out.println("Upgrading Click Level !!!!!!!");
@@ -129,7 +127,6 @@ public class UpgradesManager {
             int value = navigatorLevel+=1;
             System.out.println("Navigator Level: " + value);
             // calculate level increase formula
-            // call spaceship.setClickLevel
             spaceship.setNavigatorLevel(value);
             spaceship.setCubaneBalance(newCubaneBalance);
             System.out.println("Upgrading Navigator Level !!!!!!!");
@@ -145,7 +142,6 @@ public class UpgradesManager {
             int value = harvestTimeLevel += 1;
             System.out.println("Harvest Time Level: " + value);
             // calculate level increase formula
-            // call spaceship.setClickLevel
             spaceship.setHarvestTimeLevel(value);
             spaceship.setTritaniumBalance(newTritaniumBalance);
             System.out.println("Upgrading harvest time Level !!!!!!!");
@@ -246,7 +242,6 @@ public class UpgradesManager {
 
     public void doRefine(boolean firstrefine) {
         asteroidsBalance = spaceship.getAsteroidBalance();
-        //System.out.println(asteroidsBalance);
         if(asteroidsBalance>0) {
             int roll = MathUtils.random(0, 100);
             int newAsteroidsBalance = asteroidsBalance -= 1;
@@ -360,9 +355,7 @@ public class UpgradesManager {
         return scannerLevel;
     }
 
-
-
-
+    // check if menu is currently on screen
     public boolean isPoppedUp() {
         return poppedUp;
     }

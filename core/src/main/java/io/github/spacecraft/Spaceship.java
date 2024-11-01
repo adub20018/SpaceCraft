@@ -2,6 +2,7 @@ package io.github.spacecraft;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -39,6 +40,12 @@ public class Spaceship {
     private int scannerLevel;
     private int tritaniumBalance, gravititeBalance, cubaneBalance;
 
+    // sound effects
+    private Sound asteroidDestroyedSound;
+    private Sound tractorBeamSound;
+    private Sound spaceshipClickSound;
+
+
     public Spaceship(Viewport viewport, GameHUD gameHUD) {
         this.viewport = viewport;
         texture = new Texture("spaceship.png");
@@ -66,11 +73,15 @@ public class Spaceship {
         tractorQuantityLevel = 1;
         refineQualityLevel = 1;
         refinePowerLevel = 0;
-//        updateValues();
+
+        // sound effects
+        asteroidDestroyedSound = Gdx.audio.newSound(Gdx.files.internal("asteroid_destroyed.wav"));
+        tractorBeamSound = Gdx.audio.newSound(Gdx.files.internal("tractor_beam.wav"));
+        spaceshipClickSound = Gdx.audio.newSound(Gdx.files.internal("spaceship_click.wav"));
+        //        updateValues();
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
-
         batch.draw(sprite, spaceshipX, spaceshipY,  sprite.getWidth(), sprite.getHeight()); // draw spaceship in center of screen
 
         // store spaceship coords
@@ -93,6 +104,9 @@ public class Spaceship {
     }
 
     public void incrementHarvestCount(int rarity) {
+
+        long id = asteroidDestroyedSound.play();
+        asteroidDestroyedSound.setVolume(id, 0.5f);
         harvestCount++;
         switch(rarity) {
             case(1):  // Common
@@ -117,11 +131,19 @@ public class Spaceship {
         asteroidCoords.removeIndex(0);
         asteroidCoords.end();
 
+        if (asteroidCoords.size == 0) {
+            tractorBeamSound.stop();
+        }
     }
 
     public void harvestAsteroid(AsteroidManager asteroidManager) {
         tractorIdleCharge += 100f;
         if (harvestCount > 0) {
+            if (!isHarvesting) {
+                long id = tractorBeamSound.play();
+                tractorBeamSound.setVolume(id, 0.01f);
+                tractorBeamSound.loop();
+            }
             isHarvesting = true;
             Asteroid harvestedAsteroid;
             if(!isScanner) {
@@ -141,7 +163,6 @@ public class Spaceship {
             } else {
                 // if no asteroid to harvest
                 System.out.println("No asteroid available !!!!!!!!");
-                //isHarvesting = false;
                 return;
             }
         }
@@ -162,6 +183,7 @@ public class Spaceship {
     }
 
     public void dispose() {
+        asteroidDestroyedSound.dispose();
         tractorBeam.dispose(); // dispose of tractor beam when no longer needed
     }
 
@@ -172,10 +194,9 @@ public class Spaceship {
         gameHUD.updateGravititeBalanceLabel(gravititeBalance);
         gameHUD.updateCubaneBalanceLabel(cubaneBalance);
 
-
         // CLICK LEVEL
         gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
-            "Click\nLevel", upgradesManager.getClickLevel(),
+            "Click\nPower", upgradesManager.getClickLevel(),
             Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite",
             upgradesManager.gravititeBalance>=Costs.getClickLevelCost(upgradesManager.getClickLevel())[0]);
 
@@ -199,10 +220,10 @@ public class Spaceship {
             Costs.getHarvestTimeLevelCost(upgradesManager.getHarvestTimeLevel()),"tritanium",
             upgradesManager.tritaniumBalance>=Costs.getHarvestTimeLevelCost(upgradesManager.getHarvestTimeLevel())[1]);
 
+
         /*
         *  LAB SECTION
         */
-
         // TRACTOR QUANTITY
         gameMenu.updateButtonContent(gameMenu.upgradeTractorQuantity,
             "Tractor\nQuantity", upgradesManager.getTractorQuantityLevel(),
@@ -228,9 +249,6 @@ public class Spaceship {
             Costs.getRefinePowerCost(upgradesManager.getRefinePowerLevel()),"tritanium",
             gravititeBalance>=Costs.getRefinePowerCost(refinePowerLevel)[0]&&
                 cubaneBalance>=Costs.getRefinePowerCost(refinePowerLevel)[2]);
-
-        System.out.println(cubaneBalance>=Costs.getRefinePowerCost(refinePowerLevel)[2]);
-
     }
 
     public boolean tractorUpdate(String updateType) {
@@ -242,12 +260,12 @@ public class Spaceship {
                 break;
             }
             case("click"): {
+                spaceshipClickSound.play();
                 tractorIdleCharge -= 10 + (tractorClickLevel * 0.25f);
                 gameHUD.updateProgressBar(tractorIdleCharge);
                 break;
             }
         }
-        // System.out.println(tractorIdleCharge);
         return tractorIdleCharge <= 0;
     }
 
@@ -326,6 +344,4 @@ public class Spaceship {
     }
 
     private UpgradesManager upgradesManager;
-
-
 }

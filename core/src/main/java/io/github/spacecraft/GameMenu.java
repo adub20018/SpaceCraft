@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -48,7 +49,6 @@ public class GameMenu {
         this.upgradesManager = upgradesManager;
         this.gameHUD = gameHUD;
         skin = new Skin(Gdx.files.internal("newUiSkin/uiskin.json"));
-
 
         edgeMargin = 25; // the gap around sides of screen (so nav does not squeeze against edge)
         width = Gdx.graphics.getWidth();
@@ -136,14 +136,17 @@ public class GameMenu {
         popupWindow.setY(buttonHeight + 50);
         popupWindow.setSize(popupWidth, height * 0.3f);
         popupWindow.setX(edgeMargin);
+        popupWindow.setMovable(false);
 
         // make window scrollable
-//        ScrollPane scrollPane = new ScrollPane(contentTable, skin);
-//        scrollPane.setFillParent(true);
-//        scrollPane.setScrollingDisabled(false, false);
+        ScrollPane scrollPane = new ScrollPane(contentTable, skin);
+        scrollPane.setY(0);
+        scrollPane.setScrollingDisabled(true, false); // only vertical scrolling
+        scrollPane.setScrollbarsVisible(true);
+        scrollPane.setFadeScrollBars(false);
 
         // add content table to window
-        popupWindow.add(contentTable).expandX().fill().padTop(outerPadding); // make content fill the popup
+        popupWindow.add(scrollPane).expand().fill().padTop(outerPadding); // make content fill the popup
 
         stage.addActor(popupWindow);
     }
@@ -191,20 +194,18 @@ public class GameMenu {
     }
 
     // method to update button content when an upgrade has been purchased
-
     public void updateButtonContent(TextButton button, String title, int levelGetter) {
         // clear existing and add new button content
         button.clearChildren();
         button.add(createUpgradesButtonContent(title, levelGetter, true)).expand().fill();
     }
 
+
     // *******************
     // Ship Upgrades section
     // *******************
                                 // WITH LEVEL COST
     private Table createUpgradesButtonContent(String title, int levelGetter, boolean available, int[] levelCost, String res) {
-        //int levelCost = levelCost; // set the cost of upgrade to display
-
         Table buttonTable = new Table();
         VerticalGroup clickLevelButtonTitle = new VerticalGroup();
         Label titleLabel = new Label(title, skin);
@@ -222,7 +223,6 @@ public class GameMenu {
         if (levelCost[0] > 0) {
             Label gravititeCostLabel = new Label(String.valueOf(levelCost[0]), skin);
             gravititeCostLabel.setFontScale(2f);
-            //gravititeCostLabel.setAlignment(Align.center);
 
             // gravitite image
             Drawable gravititeDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("gravitite.png"))); // res should be the path to your image file
@@ -246,7 +246,6 @@ public class GameMenu {
         if (levelCost[1] > 0) {
             Label tritaniumCostLabel = new Label(String.valueOf(levelCost[1]), skin);
             tritaniumCostLabel.setFontScale(2f);
-            //tritaniumCostLabel.setAlignment(Align.center);
 
             // cubane image
             Drawable tritaniumDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("tritanium.png"))); // res should be the path to your image file
@@ -269,7 +268,6 @@ public class GameMenu {
         if (levelCost[2] > 0) {
             Label cubaneCostLabel = new Label(String.valueOf(levelCost[2]), skin);
             cubaneCostLabel.setFontScale(2f);
-            //cubaneCostLabel.setAlignment(Align.center);
 
             // cubane image
             Drawable cubaneDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("cubane.png"))); // res should be the path to your image file
@@ -288,13 +286,11 @@ public class GameMenu {
             levelCostTable.add(cubaneCostLabel).padLeft(-75);
         }
 
-
         clickLevelButtonTitle.addActor(titleLabel);
 
         levelAndCostTable.add(currentLevelLabel).padBottom(5).growX();
         levelAndCostTable.row();
         levelAndCostTable.add(levelCostTable);
-
 
         buttonTable.add(clickLevelButtonTitle);
         buttonTable.add().growX();
@@ -343,24 +339,17 @@ public class GameMenu {
 
     private Table createUpgradesContent() {
         Table contentTable = new Table();
-        contentTable.setFillParent(true);
 
         // add specific menu content here
-
         // upgrade click level
         upgradeClickLevel = new TextButton("", skin);
-        //if(upgradesManager.gravititeBalance<Costs.getClickLevelCost(upgradesManager.getClickLevel())) {}
         TextButton.TextButtonStyle unavailableStyle = skin.get("unavailable", TextButton.TextButtonStyle.class);
         upgradeClickLevel.setStyle(unavailableStyle);
         upgradeClickLevel.clearChildren(); // remove empty text so new content be centered
-        upgradeClickLevel.add(createUpgradesButtonContent("Click\nLevel", upgradesManager.getClickLevel(), true, Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite")).expand().fill();
+        upgradeClickLevel.add(createUpgradesButtonContent("Click\nPower", upgradesManager.getClickLevel(), true, Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite")).expand().fill();
 
         // upgrade idle charge
         upgradeIdleCharge = new TextButton("", skin);
-//        if (5 < 10) {
-//            //TextButton.TextButtonStyle unavailableStyle = skin.get("unavailable", TextButton.TextButtonStyle.class);
-//            upgradeIdleCharge.setStyle(unavailableStyle);
-//        }
         upgradeIdleCharge.clearChildren();
         upgradeIdleCharge.add(createUpgradesButtonContent("Idle\nCharge", upgradesManager.getIdleChargeLevel(), false)).expand().fill();
 
@@ -379,10 +368,7 @@ public class GameMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeClickLevel(); // boolean to show if upgrade was paid for
-                //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                //updateButtonContent(upgradeClickLevel, "Click\nLevel", upgradesManager.getClickLevel(), Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite", true);
                 upgradesManager.updateValues();
-                //}
             }
         });
 
@@ -390,10 +376,7 @@ public class GameMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeIdleCharge();
-                //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                //updateButtonContent(upgradeIdleCharge, "Idle\nCharge", upgradesManager.getIdleChargeLevel());
                 upgradesManager.updateValues();
-                //}
             }
         });
 
@@ -401,10 +384,7 @@ public class GameMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeNavigation();
-                //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                //updateButtonContent(upgradeNavigation, "Navigator", upgradesManager.getNavigatorLevel());
                 upgradesManager.updateValues();
-                //}
             }
         });
 
@@ -412,29 +392,28 @@ public class GameMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeHarvestTime();
-                //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                //updateButtonContent(upgradeHarvestTimeButton, "Harvest\nTime", upgradesManager.getHarvestTimeLevel());
                 upgradesManager.updateValues();
-                //}
             }
         });
 
-        contentTable.add(upgradeClickLevel).expandX().fillX().height(buttonHeight).pad(outerPadding, outerPadding, innerPadding, innerPadding);
-        contentTable.add(upgradeIdleCharge).expandX().fillX().height(buttonHeight).pad(outerPadding, innerPadding, innerPadding, outerPadding);
+        contentTable.add(upgradeClickLevel).expandX().fillX().height(buttonHeight).pad(outerPadding, outerPadding, innerPadding, outerPadding);
         contentTable.row();
-        contentTable.add(upgradeNavigation).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, outerPadding, innerPadding);
-        contentTable.add(upgradeHarvestTimeButton).expandX().fillX().height(buttonHeight).pad(innerPadding, innerPadding, outerPadding, outerPadding);
+        contentTable.add(upgradeIdleCharge).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
+        contentTable.row();
+        contentTable.add(upgradeNavigation).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
+        contentTable.row();
+        contentTable.add(upgradeHarvestTimeButton).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
 
         return contentTable;
     }
 
+
     // *******************
     // Refinery section
     // *******************
-
     private Table createRefineryContent() {
         Table contentTable = new Table();
-        contentTable.setFillParent(true);
+        contentTable.setHeight(height);
         contentTable.padTop(outerPadding);
 
         // add specific menu content here
@@ -463,6 +442,8 @@ public class GameMenu {
         contentTable.add(refineAsteroidButton).size(availableWidth, buttonHeight);
         contentTable.row();
         contentTable.add(resourceCounters).left();
+        contentTable.row();
+        contentTable.add().growY().fill(); // empty element to fill space
 
         // add listeners for buttons
         refineAsteroidButton.addListener(new ClickListener() {
@@ -475,15 +456,13 @@ public class GameMenu {
         return contentTable;
     }
 
+
     // *******************
     // Laboratory section
     // *******************
-
     private Table createLaboratoryContent() {
         Table contentTable = new Table();
-        contentTable.setFillParent(true);
 
-        // ******* NEED TO CHANGE BUTTON GETTERS TO GET LAB BUTTON LEVELS - CURRENTLY USING CLICK LEVEL AS DEFAULT WHILE LAB LEVELS ARE IN DEVELOPMENt
         // increase tractor quantity
         upgradeTractorQuantity = new TextButton("", skin);
         upgradeTractorQuantity.clearChildren();
@@ -509,10 +488,7 @@ public class GameMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeTractorQuantity();
-                //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                //updateButtonContent(upgradeTractorQuantity, "Tractor\nQuantity", upgradesManager.getTractorQuantityLevel());
                 upgradesManager.updateValues();
-                //}
             }
         });
 
@@ -520,10 +496,7 @@ public class GameMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeScanner();
-                //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                //updateButtonContent(upgradeScanner, "Harvest\nScanner", upgradesManager.getScannerLevel());
                 upgradesManager.updateValues();
-                //}
             }
         });
 
@@ -531,10 +504,7 @@ public class GameMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeRefineryQuality();
-                //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                //updateButtonContent(upgradeRefineryQuality, "Refinery\nQuality", upgradesManager.getRefineQualityLevel());
                 upgradesManager.updateValues();
-                //}
             }
         });
 
@@ -542,24 +512,22 @@ public class GameMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 upgradesManager.upgradeRefinePower();
-                //if (upgradeSuccessful) { // update button content if upgrade was successfully bought
-                //updateButtonContent(upgradeRefinePower, "Refine\nPower", upgradesManager.getRefinePowerLevel());
                 upgradesManager.updateValues();
-                //}
             }
         });
 
-        contentTable.add(upgradeTractorQuantity).expandX().fillX().height(buttonHeight).pad(outerPadding, outerPadding, innerPadding, innerPadding);
-        contentTable.add(upgradeScanner).expandX().fillX().height(buttonHeight).pad(outerPadding, innerPadding, innerPadding, outerPadding);
+        contentTable.add(upgradeTractorQuantity).expandX().fillX().height(buttonHeight).pad(outerPadding, outerPadding, innerPadding, outerPadding);
         contentTable.row();
-        contentTable.add(upgradeRefineryQuality).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, outerPadding, innerPadding);
-        contentTable.add(upgradeRefinePower).expandX().fillX().height(buttonHeight).pad(innerPadding, innerPadding, outerPadding, outerPadding);
+        contentTable.add(upgradeRefineryQuality).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
+        contentTable.row();
+        contentTable.add(upgradeRefinePower).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
+        contentTable.row();
+        contentTable.add(upgradeScanner).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
 
         return contentTable;
     }
     private Table createShopContent() {
         Table contentTable = new Table();
-        contentTable.setFillParent(true);
 
         // add specific menu content here
         TextButton shopButton = new TextButton("", skin);
@@ -574,22 +542,10 @@ public class GameMenu {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Shop", "Buying something in Shop");
                 upgradesManager.resetStats();
-//                //updateButtonContent(upgradeClickLevel, "Click\nLevel", upgradesManager.getClickLevel());
-//                updateButtonContent(upgradeIdleCharge, "Idle\nCharge", upgradesManager.getIdleChargeLevel());
-//                updateButtonContent(upgradeNavigation, "Navigator", upgradesManager.getNavigatorLevel());
-//                updateButtonContent(upgradeHarvestTimeButton, "Harvest\nTime", upgradesManager.getHarvestTimeLevel());
-//                updateButtonContent(upgradeTractorQuantity, "Tractor\nQuantity", upgradesManager.getTractorQuantityLevel());
-//                updateButtonContent(upgradeScanner, "Harvest\nScanner", upgradesManager.getScannerLevel());
-//                updateButtonContent(upgradeRefineryQuality, "Refinery\nQuality", upgradesManager.getRefineQualityLevel());
-//                updateButtonContent(upgradeRefinePower, "Refine\nPower", upgradesManager.getRefinePowerLevel());
             }
         });
-
-
-
         contentTable.add(shopButton).pad(10).expandX();
 
         return contentTable;
     }
-
 }

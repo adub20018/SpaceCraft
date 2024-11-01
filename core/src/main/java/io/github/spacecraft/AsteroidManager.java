@@ -27,7 +27,7 @@ public class AsteroidManager {
             Sprite asteroidSprite = asteroids.get(i).getSprite();
             asteroids.get(i).update(delta); // asteroid flow speed
             if(asteroids.get(i).getHarvestWaitTime() <=0) {
-                spaceship.incrementHarvestCount();
+                spaceship.incrementHarvestCount(asteroids.get(i).getRarity());
                 asteroids.removeIndex(i);
                 if(spaceship.asteroidCoords.size == 0) {
                     spaceship.isHarvesting = false;

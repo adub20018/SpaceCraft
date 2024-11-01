@@ -54,7 +54,8 @@ public class Main extends ApplicationAdapter {
         upgradesManager = new UpgradesManager(spaceship);
 
         gameMenu = new GameMenu(stage, upgradesManager, gameHUD);
-
+        spaceship.setGameMenu(gameMenu);
+        spaceship.setUpgradesManager(upgradesManager);
 
         asteroidManager = new AsteroidManager();
         spaceship.updateValues();
@@ -90,6 +91,15 @@ public class Main extends ApplicationAdapter {
             if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0&&!upgradesManager.isPoppedUp()) {
                 spaceship.tractorUpdate("click");
             }
+        }
+        // spaceship clicked animation
+        if (Gdx.input.isTouched()) {
+            if (spaceship.spaceRect.contains(touchPos) && spaceship.getHarvestCount() > 0 && !upgradesManager.isPoppedUp()) {
+                spaceship.setSize(1.15f, 1.15f);
+            }
+        } else {
+            // Restore to normal size when touch is released
+            spaceship.setSize(1.2f, 1.2f);
         }
     }
 

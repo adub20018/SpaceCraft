@@ -24,6 +24,7 @@ public class Spaceship {
     private Preferences preferences;
     private int asteroidBalance;
     private GameHUD gameHUD;
+    private GameMenu gameMenu;
     public float spaceshipX, spaceshipY;
     public Rectangle spaceRect;
     public float tractorIdleCharge;
@@ -34,7 +35,7 @@ public class Spaceship {
     public boolean isScanner;
     public int tractorQuantityLevel;
     private int refineQualityLevel;
-    private int autoRefineLevel;
+    private int refinePowerLevel;
     private int scannerLevel;
     private int tritaniumBalance, gravititeBalance, cubaneBalance;
 
@@ -64,8 +65,8 @@ public class Spaceship {
         asteroidCoords = new SnapshotArray<>();
         tractorQuantityLevel = 1;
         refineQualityLevel = 1;
-        autoRefineLevel = 0;
-        updateValues();
+        refinePowerLevel = 0;
+//        updateValues();
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
@@ -76,6 +77,14 @@ public class Spaceship {
         spaceshipCoords = new Vector2(spaceshipX + sprite.getWidth() / 2, spaceshipY + sprite.getHeight() / 2);
     }
 
+    public void setSize(float width, float height) {
+        sprite.setSize(width, height);
+
+        spaceshipX = (viewport.getWorldWidth() - width) / 2;
+        spaceshipY = 3.5f;
+        spaceRect.set(spaceshipX, spaceshipY,  sprite.getWidth(), sprite.getHeight());
+    }
+
     public int getHarvestCount() {
         return harvestCount;
     }
@@ -83,13 +92,31 @@ public class Spaceship {
         this.harvestCount = harvestCount;
     }
 
-    public void incrementHarvestCount() {
+    public void incrementHarvestCount(int rarity) {
         harvestCount++;
-        asteroidBalance++;
+        switch(rarity) {
+            case(1):  // Common
+                asteroidBalance++;
+                break;
+            case(2): // Uncommon
+                asteroidBalance+=5;
+                break;
+            case(3): // Rare
+                asteroidBalance+=25;
+                break;
+            case(4): // Epic
+                asteroidBalance+=125;
+                break;
+            case(5): // Legendary
+                asteroidBalance+=1000;
+                break;
+        }
+        //asteroidBalance++;
         gameHUD.updateAsteroidBalanceLabel(asteroidBalance);
         asteroidCoords.begin();
         asteroidCoords.removeIndex(0);
         asteroidCoords.end();
+
     }
 
     public void harvestAsteroid(AsteroidManager asteroidManager) {
@@ -144,19 +171,79 @@ public class Spaceship {
         gameHUD.updateTritaniumBalanceLabel(tritaniumBalance);
         gameHUD.updateGravititeBalanceLabel(gravititeBalance);
         gameHUD.updateCubaneBalanceLabel(cubaneBalance);
+
+
+        // CLICK LEVEL
+        gameMenu.updateButtonContent(gameMenu.upgradeClickLevel,
+            "Click\nLevel", upgradesManager.getClickLevel(),
+            Costs.getClickLevelCost(upgradesManager.getClickLevel()),"gravitite",
+            upgradesManager.gravititeBalance>=Costs.getClickLevelCost(upgradesManager.getClickLevel())[0]);
+
+
+        // IDLE CHARGE
+        gameMenu.updateButtonContent(gameMenu.upgradeIdleCharge,
+            "Idle\nCharge", upgradesManager.getIdleChargeLevel(),
+            Costs.getIdleLevelCost(upgradesManager.getIdleChargeLevel()),"tritanium",
+            upgradesManager.tritaniumBalance>=Costs.getIdleLevelCost(upgradesManager.getIdleChargeLevel())[1]);
+
+
+        // NAVIGATOR
+        gameMenu.updateButtonContent(gameMenu.upgradeNavigation,
+            "Navigator", upgradesManager.getNavigatorLevel(),
+            Costs.getNavigatorLevelCost(upgradesManager.getNavigatorLevel()),"cubane",
+            upgradesManager.cubaneBalance>=Costs.getNavigatorLevelCost(upgradesManager.getNavigatorLevel())[2]);
+
+        // HARVEST TIME
+        gameMenu.updateButtonContent(gameMenu.upgradeHarvestTimeButton,
+            "Harvest\nTime", upgradesManager.getHarvestTimeLevel(),
+            Costs.getHarvestTimeLevelCost(upgradesManager.getHarvestTimeLevel()),"tritanium",
+            upgradesManager.tritaniumBalance>=Costs.getHarvestTimeLevelCost(upgradesManager.getHarvestTimeLevel())[1]);
+
+        /*
+        *  LAB SECTION
+        */
+
+        // TRACTOR QUANTITY
+        gameMenu.updateButtonContent(gameMenu.upgradeTractorQuantity,
+            "Tractor\nQuantity", upgradesManager.getTractorQuantityLevel(),
+            Costs.getTractorQuantityCost(upgradesManager.getTractorQuantityLevel()),"tritanium",
+            tritaniumBalance>=Costs.getTractorQuantityCost(tractorQuantityLevel)[0]&&
+                cubaneBalance>=Costs.getTractorQuantityCost(tractorQuantityLevel)[2]);
+
+        // SCANNER
+        gameMenu.updateButtonContent(gameMenu.upgradeScanner,"Harvest\nScanner",upgradesManager.getScannerLevel(),
+            Costs.getHarvestScannerCost(upgradesManager.getScannerLevel()),"tritanium",
+            gravititeBalance>=Costs.getHarvestScannerCost(scannerLevel)[0]&&
+                tritaniumBalance>=Costs.getHarvestScannerCost(scannerLevel)[1]&&
+                cubaneBalance>=Costs.getHarvestScannerCost(scannerLevel)[2]&&!isScanner);
+
+        // REFINERY QUALITY
+        gameMenu.updateButtonContent(gameMenu.upgradeRefineryQuality, "Refinery\nQuality", upgradesManager.getRefineQualityLevel(),
+        Costs.getRefineryQualityCost(upgradesManager.getRefineQualityLevel()),"tritanium",
+            gravititeBalance>=Costs.getRefineryQualityCost(refineQualityLevel)[0]&&
+                cubaneBalance>=Costs.getRefineryQualityCost(refineQualityLevel)[2]);
+
+        // REFINE POWER
+        gameMenu.updateButtonContent(gameMenu.upgradeRefinePower,"Refine\nPower", upgradesManager.getRefinePowerLevel(),
+            Costs.getRefinePowerCost(upgradesManager.getRefinePowerLevel()),"tritanium",
+            gravititeBalance>=Costs.getRefinePowerCost(refinePowerLevel)[0]&&
+                cubaneBalance>=Costs.getRefinePowerCost(refinePowerLevel)[2]);
+
+        System.out.println(cubaneBalance>=Costs.getRefinePowerCost(refinePowerLevel)[2]);
+
     }
 
     public boolean tractorUpdate(String updateType) {
         if(harvestCount<=0) return false;
         switch(updateType) {
             case("tick"): {
-                tractorIdleCharge -= Gdx.graphics.getDeltaTime()*(1+(0.05f * tractorIdleLevel));
-                //System.out.println(tractorIdleCharge);
-                //System.out.println(tractorIdleLevel);
+                tractorIdleCharge -= Gdx.graphics.getDeltaTime()*(1+(0.5f * tractorIdleLevel));
+                gameHUD.updateProgressBar(tractorIdleCharge);
                 break;
             }
             case("click"): {
                 tractorIdleCharge -= 10 + (tractorClickLevel * 0.25f);
+                gameHUD.updateProgressBar(tractorIdleCharge);
                 break;
             }
         }
@@ -189,8 +276,8 @@ public class Spaceship {
         refineQualityLevel = currentLevel;
     }
 
-    public void setAutoRefineLevel(int currentLevel) {
-        autoRefineLevel = currentLevel;
+    public void setRefinePowerLevel(int currentLevel) {
+        refinePowerLevel = currentLevel;
     }
 
     public void setScannerLevel(int currentLevel) {
@@ -229,4 +316,16 @@ public class Spaceship {
     public int getAsteroidBalance() {
         return asteroidBalance;
     }
+
+    public void setGameMenu(GameMenu gameMenu) {
+        this.gameMenu = gameMenu;
+    }
+
+    public void setUpgradesManager(UpgradesManager upgradesManager) {
+        this.upgradesManager = upgradesManager;
+    }
+
+    private UpgradesManager upgradesManager;
+
+
 }

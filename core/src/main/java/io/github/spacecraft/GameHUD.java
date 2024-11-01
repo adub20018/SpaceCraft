@@ -3,13 +3,17 @@ package io.github.spacecraft;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 
 public class GameHUD {
@@ -28,6 +32,10 @@ public class GameHUD {
     private Texture cubaneTexture;
     private Label cubaneBalanceLabel;
     private int cubaneBalance;
+
+    // progress bar
+    private ProgressBar harvestProgressBar;
+    private float tractorCharge;
 
     // list to track all instances of resources (for updating in both refinery and hud)
     private Array<Label> asteroidLabelList;
@@ -51,11 +59,61 @@ public class GameHUD {
         HorizontalGroup tritaniumCounterGroup = createTritaniumCounterGroup();
         HorizontalGroup cubaneCounterGroup = createCubaneCounterGroup();
 
+        // initialise the progress bar
+        initProgressBar();
+
         // add groups to stage
         stage.addActor(asteroidCounterGroup);
         stage.addActor(gravititeCounterGroup);
         stage.addActor(tritaniumCounterGroup);
         stage.addActor(cubaneCounterGroup);
+        stage.addActor(harvestProgressBar);
+    }
+
+    private void initProgressBar() {
+        // calculate menu button size, to make progress bar sit above buttons
+        int margin = 10;
+        int totalMargin = margin * 4;
+        int availableWidth = Gdx.graphics.getWidth() - 25 * 2 - totalMargin;
+        int buttonHeight = (availableWidth / 5) + 50;
+
+        int progressBarHeight = Gdx.graphics.getHeight() - (buttonHeight + 25);
+        int progressBarWidth = 60;
+
+        // create progress bar styles
+        ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
+
+        // bar background colour
+        Color backgroundColour = new Color(255 / 255f, 255 / 255f, 255 / 255f, 0.2f); // slightly transparent white
+        Drawable backgroundDrawable = createColoredDrawable(progressBarWidth, progressBarHeight, backgroundColour);
+        progressBarStyle.background = backgroundDrawable;
+
+        // progress colour
+        Color progressColour = new Color(46 / 255f,59 / 255f, 240 / 255f, 0.6f);
+        Drawable knobDrawable = createColoredDrawable(progressBarWidth, progressBarHeight, progressColour);
+        progressBarStyle.knob = null;
+        progressBarStyle.knobBefore = knobDrawable;
+
+        // initialise progress bar
+        harvestProgressBar = new ProgressBar(0, 100, 0.1f, true, progressBarStyle);
+        harvestProgressBar.setValue(100);
+        harvestProgressBar.setPosition(Gdx.graphics.getWidth() - 85, buttonHeight);
+        harvestProgressBar.setSize(progressBarWidth, progressBarHeight);
+    }
+
+    public void updateProgressBar(float tractorCharge) {
+        this.tractorCharge = tractorCharge;
+        harvestProgressBar.setValue(100 - tractorCharge); // reversed so 0 is max value
+    }
+
+    // helper method to create the progress bar colours
+    private Drawable createColoredDrawable(int width, int height, Color color) {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(color);
+        pixmap.fill();
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+        return new TextureRegionDrawable(texture);
     }
 
     public void updateAsteroidBalanceLabel(int newBalance) {

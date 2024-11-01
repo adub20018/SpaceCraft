@@ -160,10 +160,10 @@ public class UpgradesManager {
     public void upgradeTractorQuantity() {
         tritaniumBalance = spaceship.getTritaniumBalance();
         cubaneBalance = spaceship.getCubaneBalance();
-        if(tritaniumBalance>=Costs.getTractorQuantityCost(tractorQuantityLevel)[0]&&
+        if(tritaniumBalance>=Costs.getTractorQuantityCost(tractorQuantityLevel)[1]&&
             cubaneBalance>=Costs.getTractorQuantityCost(tractorQuantityLevel)[2]) {
-            int newTritaniumBalance = tritaniumBalance -= Costs.getHarvestTimeLevelCost(harvestTimeLevel)[1];
-            int newCubaneBalance = cubaneBalance -= Costs.getNavigatorLevelCost(navigatorLevel)[2];
+            int newTritaniumBalance = tritaniumBalance -= Costs.getTractorQuantityCost(tractorQuantityLevel)[1];
+            int newCubaneBalance = cubaneBalance -= Costs.getTractorQuantityCost(tractorQuantityLevel)[2];
             int newTractorQuantityLevel = tractorQuantityLevel+=1;
             spaceship.setTractorQuantityLevel(newTractorQuantityLevel);
             spaceship.setHarvestCount(spaceship.getHarvestCount()+1);

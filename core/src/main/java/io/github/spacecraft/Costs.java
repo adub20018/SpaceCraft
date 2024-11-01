@@ -41,7 +41,7 @@ public class Costs {
         int cost1, cost2;
         cost1 = (int) pow(2,currentTractorQuantityLevel);
         cost2 = (int) pow(2,currentTractorQuantityLevel);
-        if(cost1==0||cost2==0) return new int[] {1,0,1};
+        if(cost1==0||cost2==0) return new int[] {0,1,1};
         return new int[]{0, cost1, cost2};
     }
     public static int[] getHarvestScannerCost(int currentHarvestScannerLevel){

@@ -104,7 +104,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 	default: {
-		background: default-rect
+		background: default-round-large
 		hScroll: default-scroll
 		hScrollKnob: default-round-large
 		vScroll: default-scroll

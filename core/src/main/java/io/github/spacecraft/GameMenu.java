@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -136,14 +137,17 @@ public class GameMenu {
         popupWindow.setY(buttonHeight + 50);
         popupWindow.setSize(popupWidth, height * 0.3f);
         popupWindow.setX(edgeMargin);
+        popupWindow.setMovable(false);
 
         // make window scrollable
-//        ScrollPane scrollPane = new ScrollPane(contentTable, skin);
-//        scrollPane.setFillParent(true);
-//        scrollPane.setScrollingDisabled(false, false);
+        ScrollPane scrollPane = new ScrollPane(contentTable, skin);
+        scrollPane.setY(0);
+        scrollPane.setScrollingDisabled(true, false); // only vertical scrolling
+        scrollPane.setScrollbarsVisible(true);
+        scrollPane.setFadeScrollBars(false);
 
         // add content table to window
-        popupWindow.add(contentTable).expandX().fill().padTop(outerPadding); // make content fill the popup
+        popupWindow.add(scrollPane).expand().fill().padTop(outerPadding); // make content fill the popup
 
         stage.addActor(popupWindow);
     }
@@ -343,7 +347,6 @@ public class GameMenu {
 
     private Table createUpgradesContent() {
         Table contentTable = new Table();
-        contentTable.setFillParent(true);
 
         // add specific menu content here
 
@@ -419,11 +422,13 @@ public class GameMenu {
             }
         });
 
-        contentTable.add(upgradeClickLevel).expandX().fillX().height(buttonHeight).pad(outerPadding, outerPadding, innerPadding, innerPadding);
-        contentTable.add(upgradeIdleCharge).expandX().fillX().height(buttonHeight).pad(outerPadding, innerPadding, innerPadding, outerPadding);
+        contentTable.add(upgradeClickLevel).expandX().fillX().height(buttonHeight).pad(outerPadding, outerPadding, innerPadding, outerPadding);
         contentTable.row();
-        contentTable.add(upgradeNavigation).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, outerPadding, innerPadding);
-        contentTable.add(upgradeHarvestTimeButton).expandX().fillX().height(buttonHeight).pad(innerPadding, innerPadding, outerPadding, outerPadding);
+        contentTable.add(upgradeIdleCharge).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
+        contentTable.row();
+        contentTable.add(upgradeNavigation).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
+        contentTable.row();
+        contentTable.add(upgradeHarvestTimeButton).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
 
         return contentTable;
     }
@@ -434,7 +439,7 @@ public class GameMenu {
 
     private Table createRefineryContent() {
         Table contentTable = new Table();
-        contentTable.setFillParent(true);
+        contentTable.setHeight(height);
         contentTable.padTop(outerPadding);
 
         // add specific menu content here
@@ -463,6 +468,8 @@ public class GameMenu {
         contentTable.add(refineAsteroidButton).size(availableWidth, buttonHeight);
         contentTable.row();
         contentTable.add(resourceCounters).left();
+        contentTable.row();
+        contentTable.add().growY().fill(); // empty element to fill space
 
         // add listeners for buttons
         refineAsteroidButton.addListener(new ClickListener() {
@@ -481,7 +488,6 @@ public class GameMenu {
 
     private Table createLaboratoryContent() {
         Table contentTable = new Table();
-        contentTable.setFillParent(true);
 
         // ******* NEED TO CHANGE BUTTON GETTERS TO GET LAB BUTTON LEVELS - CURRENTLY USING CLICK LEVEL AS DEFAULT WHILE LAB LEVELS ARE IN DEVELOPMENt
         // increase tractor quantity
@@ -549,17 +555,18 @@ public class GameMenu {
             }
         });
 
-        contentTable.add(upgradeTractorQuantity).expandX().fillX().height(buttonHeight).pad(outerPadding, outerPadding, innerPadding, innerPadding);
-        contentTable.add(upgradeScanner).expandX().fillX().height(buttonHeight).pad(outerPadding, innerPadding, innerPadding, outerPadding);
+        contentTable.add(upgradeTractorQuantity).expandX().fillX().height(buttonHeight).pad(outerPadding, outerPadding, innerPadding, outerPadding);
         contentTable.row();
-        contentTable.add(upgradeRefineryQuality).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, outerPadding, innerPadding);
-        contentTable.add(upgradeRefinePower).expandX().fillX().height(buttonHeight).pad(innerPadding, innerPadding, outerPadding, outerPadding);
+        contentTable.add(upgradeRefineryQuality).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
+        contentTable.row();
+        contentTable.add(upgradeRefinePower).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
+        contentTable.row();
+        contentTable.add(upgradeScanner).expandX().fillX().height(buttonHeight).pad(innerPadding, outerPadding, innerPadding, outerPadding);
 
         return contentTable;
     }
     private Table createShopContent() {
         Table contentTable = new Table();
-        contentTable.setFillParent(true);
 
         // add specific menu content here
         TextButton shopButton = new TextButton("", skin);

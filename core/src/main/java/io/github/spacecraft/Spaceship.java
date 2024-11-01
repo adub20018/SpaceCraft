@@ -228,7 +228,7 @@ public class Spaceship {
         gameMenu.updateButtonContent(gameMenu.upgradeTractorQuantity,
             "Tractor\nQuantity", upgradesManager.getTractorQuantityLevel(),
             Costs.getTractorQuantityCost(upgradesManager.getTractorQuantityLevel()),"tritanium",
-            tritaniumBalance>=Costs.getTractorQuantityCost(tractorQuantityLevel)[0]&&
+            tritaniumBalance>=Costs.getTractorQuantityCost(tractorQuantityLevel)[1]&&
                 cubaneBalance>=Costs.getTractorQuantityCost(tractorQuantityLevel)[2]);
 
         // SCANNER

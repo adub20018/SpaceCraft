@@ -25,7 +25,7 @@ public class Main extends ApplicationAdapter {
     private GameMenu gameMenu;
     private UpgradesManager upgradesManager;
 
-    private Music spacecraftThemeMusic;
+    public static Music spacecraftThemeMusic;
 
     private Stage stage;
 
@@ -105,6 +105,15 @@ public class Main extends ApplicationAdapter {
         } else {
             // restore to normal size when touch is released
             spaceship.setSize(1.2f, 1.2f);
+        }
+        // Asteroid clicked
+        if(Gdx.input.justTouched()) {
+            for(Asteroid asteroid : asteroidManager.getAsteroids())  {
+                if(asteroid.getRect().contains(touchPos)&&!asteroid.isHarvesting()) {
+                    spaceship.chipAsteroid(asteroid);
+                }
+            }
+
         }
     }
 

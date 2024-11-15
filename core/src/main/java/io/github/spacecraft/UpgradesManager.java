@@ -325,6 +325,8 @@ public class UpgradesManager {
         spaceship.setGravititeBalance(gravititeBalance);
         spaceship.setCubaneBalance(cubaneBalance);
         spaceship.updateValues();
+        //spaceship.stopMusic();
+        Main.spacecraftThemeMusic.stop();
     }
 
     // upgrades

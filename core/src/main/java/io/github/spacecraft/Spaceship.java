@@ -41,6 +41,9 @@ public class Spaceship {
     private int scannerLevel;
     private int tritaniumBalance, gravititeBalance, cubaneBalance;
 
+
+
+    private Asteroid chippedAsteroid;
     private int hasfailed;
 
     // sound effects
@@ -181,10 +184,12 @@ public class Spaceship {
             tractorBeam.begin(ShapeRenderer.ShapeType.Line);
             tractorBeam.setColor(Color.RED);
             for(Vector2 asteroidCoord : asteroidCoords) {
+                tractorBeam.line(spaceshipCoords.x+0.15f, spaceshipCoords.y, asteroidCoord.x, asteroidCoord.y);
+                tractorBeam.line(spaceshipCoords.x-0.15f, spaceshipCoords.y, asteroidCoord.x, asteroidCoord.y);
                 tractorBeam.line(spaceshipCoords.x, spaceshipCoords.y, asteroidCoord.x, asteroidCoord.y);
             }
 
-            Gdx.gl.glLineWidth(4f); // set the tractor beam width
+            Gdx.gl.glLineWidth(12f); // set the tractor beam width
             tractorBeam.end();
         }
     }
@@ -353,6 +358,7 @@ public class Spaceship {
     private UpgradesManager upgradesManager;
 
     public void chipAsteroid(Asteroid asteroid) {
+        chippedAsteroid = asteroid;
         if (MathUtils.random() > 0.95f||hasfailed>20) {
             hasfailed = 0;
             chipSuccessSound.play(1f);
@@ -379,6 +385,21 @@ public class Spaceship {
             hasfailed++;
             chipFailSound.play(0.5f);
         }
+
     }
 
+    public void drawChipBeam() {
+        if(chippedAsteroid != null) {
+            tractorBeam.setProjectionMatrix(viewport.getCamera().combined);
+            tractorBeam.begin(ShapeRenderer.ShapeType.Line);
+            tractorBeam.setColor(Color.GREEN);
+            tractorBeam.line(spaceshipCoords.x, spaceshipCoords.y,
+                chippedAsteroid.getSprite().getX() + chippedAsteroid.getSprite().getWidth() / 2,
+                chippedAsteroid.getSprite().getY() + chippedAsteroid.getSprite().getHeight() / 2
+            );
+            Gdx.gl.glLineWidth(12f);
+            tractorBeam.end();
+            chippedAsteroid = null;
+        }
+    }
 }

@@ -25,7 +25,7 @@ public class Main extends ApplicationAdapter {
     private GameMenu gameMenu;
     private UpgradesManager upgradesManager;
 
-    private Music spacecraftThemeMusic;
+    public static Music spacecraftThemeMusic;
 
     private Stage stage;
 
@@ -92,7 +92,11 @@ public class Main extends ApplicationAdapter {
         if (Gdx.input.justTouched()) {
             System.out.println("Touched");
             System.out.println("IDLE CHARGE: " + spaceship.tractorIdleCharge);
-
+            for(Asteroid asteroid : asteroidManager.getAsteroids())  {
+                if(asteroid.getRect().contains(touchPos)&&!asteroid.isHarvesting()) {
+                    spaceship.chipAsteroid(asteroid);
+                }
+            }
             if (spaceship.spaceRect.contains(touchPos)&&spaceship.getHarvestCount()>0&&!upgradesManager.isPoppedUp()) {
                 spaceship.tractorUpdate("click");
             }
@@ -102,10 +106,17 @@ public class Main extends ApplicationAdapter {
             if (spaceship.spaceRect.contains(touchPos) && spaceship.getHarvestCount() > 0 && !upgradesManager.isPoppedUp()) {
                 spaceship.setSize(1.15f, 1.15f);
             }
+
         } else {
             // restore to normal size when touch is released
             spaceship.setSize(1.2f, 1.2f);
         }
+
+
+//        // Asteroid clicked
+//        if(Gdx.input.justTouched()) {
+//
+//        }
     }
 
     private void logic() {
@@ -123,6 +134,7 @@ public class Main extends ApplicationAdapter {
         if (spaceship.isHarvesting) {
             spaceship.drawTractorBeam();
         }
+        spaceship.drawChipBeam();
 
         spriteBatch.begin();
 

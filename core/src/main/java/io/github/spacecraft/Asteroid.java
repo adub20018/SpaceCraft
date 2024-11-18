@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+
+import org.w3c.dom.css.Rect;
 
 public class Asteroid {
     private Texture texture;
@@ -76,6 +79,14 @@ public class Asteroid {
 
     public void setRarity(int rarity) {
         this.rarity = rarity;
+    }
+
+    public Rectangle getRect() {
+        Rectangle spaceRect;
+        //Rectangle spaceRect = new Rectangle(sprite.getX(), sprite.getX(),  sprite.getWidth(), sprite.getHeight());
+        spaceRect = sprite.getBoundingRectangle();
+
+        return spaceRect;
     }
 
 }

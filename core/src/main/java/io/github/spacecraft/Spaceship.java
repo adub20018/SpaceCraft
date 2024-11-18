@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -40,10 +41,17 @@ public class Spaceship {
     private int scannerLevel;
     private int tritaniumBalance, gravititeBalance, cubaneBalance;
 
+
+
+    private Asteroid chippedAsteroid;
+    private int hasfailed;
+
     // sound effects
     private Sound asteroidDestroyedSound;
     private Sound tractorBeamSound;
     private Sound spaceshipClickSound;
+    private Sound chipFailSound;
+    private Sound chipSuccessSound;
 
 
     public Spaceship(Viewport viewport, GameHUD gameHUD) {
@@ -78,6 +86,8 @@ public class Spaceship {
         asteroidDestroyedSound = Gdx.audio.newSound(Gdx.files.internal("asteroid_destroyed.wav"));
         tractorBeamSound = Gdx.audio.newSound(Gdx.files.internal("tractor_beam.wav"));
         spaceshipClickSound = Gdx.audio.newSound(Gdx.files.internal("spaceship_click.wav"));
+        chipFailSound = Gdx.audio.newSound(Gdx.files.internal("chip_fail.wav"));
+        chipSuccessSound = Gdx.audio.newSound(Gdx.files.internal("chip_success.wav"));
         //        updateValues();
     }
 
@@ -110,19 +120,19 @@ public class Spaceship {
         harvestCount++;
         switch(rarity) {
             case(1):  // Common
-                asteroidBalance++;
+                asteroidBalance+=10;
                 break;
             case(2): // Uncommon
-                asteroidBalance+=5;
+                asteroidBalance+=50;
                 break;
             case(3): // Rare
-                asteroidBalance+=25;
+                asteroidBalance+=250;
                 break;
             case(4): // Epic
-                asteroidBalance+=125;
+                asteroidBalance+=1250;
                 break;
             case(5): // Legendary
-                asteroidBalance+=1000;
+                asteroidBalance+=10000;
                 break;
         }
         //asteroidBalance++;
@@ -140,7 +150,7 @@ public class Spaceship {
         tractorIdleCharge += 100f;
         if (harvestCount > 0) {
             if (!isHarvesting) {
-                long id = tractorBeamSound.play();
+                long id = tractorBeamSound.play(0.05f);
                 tractorBeamSound.setVolume(id, 0.01f);
                 tractorBeamSound.loop();
             }
@@ -174,10 +184,12 @@ public class Spaceship {
             tractorBeam.begin(ShapeRenderer.ShapeType.Line);
             tractorBeam.setColor(Color.RED);
             for(Vector2 asteroidCoord : asteroidCoords) {
+                tractorBeam.line(spaceshipCoords.x+0.15f, spaceshipCoords.y, asteroidCoord.x, asteroidCoord.y);
+                tractorBeam.line(spaceshipCoords.x-0.15f, spaceshipCoords.y, asteroidCoord.x, asteroidCoord.y);
                 tractorBeam.line(spaceshipCoords.x, spaceshipCoords.y, asteroidCoord.x, asteroidCoord.y);
             }
 
-            Gdx.gl.glLineWidth(4f); // set the tractor beam width
+            Gdx.gl.glLineWidth(12f); // set the tractor beam width
             tractorBeam.end();
         }
     }
@@ -344,4 +356,50 @@ public class Spaceship {
     }
 
     private UpgradesManager upgradesManager;
+
+    public void chipAsteroid(Asteroid asteroid) {
+        chippedAsteroid = asteroid;
+        if (MathUtils.random() > 0.95f||hasfailed>20) {
+            hasfailed = 0;
+            chipSuccessSound.play(1f);
+            switch (asteroid.getRarity()) {
+                case (1):  // Common
+                    asteroidBalance++;
+                    break;
+                case (2): // Uncommon
+                    asteroidBalance += 5;
+                    break;
+                case (3): // Rare
+                    asteroidBalance += 25;
+                    break;
+                case (4): // Epic
+                    asteroidBalance += 125;
+                    break;
+                case (5): // Legendary
+                    asteroidBalance += 1000;
+                    break;
+            }
+            //asteroidBalance++;
+            gameHUD.updateAsteroidBalanceLabel(asteroidBalance);
+        } else {
+            hasfailed++;
+            chipFailSound.play(0.5f);
+        }
+
+    }
+
+    public void drawChipBeam() {
+        if(chippedAsteroid != null) {
+            tractorBeam.setProjectionMatrix(viewport.getCamera().combined);
+            tractorBeam.begin(ShapeRenderer.ShapeType.Line);
+            tractorBeam.setColor(Color.GREEN);
+            tractorBeam.line(spaceshipCoords.x, spaceshipCoords.y,
+                chippedAsteroid.getSprite().getX() + chippedAsteroid.getSprite().getWidth() / 2,
+                chippedAsteroid.getSprite().getY() + chippedAsteroid.getSprite().getHeight() / 2
+            );
+            Gdx.gl.glLineWidth(12f);
+            tractorBeam.end();
+            chippedAsteroid = null;
+        }
+    }
 }

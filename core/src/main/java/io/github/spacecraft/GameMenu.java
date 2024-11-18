@@ -43,13 +43,15 @@ public class GameMenu {
     private TextureRegionDrawable purpleBackground;
     private TextureRegionDrawable blueBackground;
 
+    float fontScale = 1.5f;
+
     private UpgradesManager upgradesManager;
 
     public GameMenu(Stage stage, UpgradesManager upgradesManager, GameHUD gameHUD) {
         this.stage = stage;
         this.upgradesManager = upgradesManager;
         this.gameHUD = gameHUD;
-        skin = new Skin(Gdx.files.internal("newUiSkin/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("commodoreUiSkin/uiskin.json"));
 
         edgeMargin = 25; // the gap around sides of screen (so nav does not squeeze against edge)
         width = Gdx.graphics.getWidth();
@@ -212,20 +214,20 @@ public class GameMenu {
         Table buttonTable = new Table();
         VerticalGroup clickLevelButtonTitle = new VerticalGroup();
         Label titleLabel = new Label(title, skin);
-        titleLabel.setFontScale(2f);
+        titleLabel.setFontScale(fontScale);
         titleLabel.setAlignment(Align.left);
 
         Table levelCostTable = new Table();
-        levelCostTable.setBackground(skin.getDrawable("square-large"));
+        //levelCostTable.setBackground(skin.getDrawable("square-large"));
         Table levelAndCostTable = new Table();
         Label currentLevelLabel = new Label(levelGetter + "/50", skin, "CostLabel");
-        currentLevelLabel.setFontScale(2f);
+        currentLevelLabel.setFontScale(fontScale);
         currentLevelLabel.setAlignment(Align.center);
 
         // gravitite case
         if (levelCost[0] > 0) {
             Label gravititeCostLabel = new Label(String.valueOf(levelCost[0]), skin);
-            gravititeCostLabel.setFontScale(2f);
+            gravititeCostLabel.setFontScale(fontScale);
 
             // gravitite image
             Drawable gravititeDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("gravitite.png"))); // res should be the path to your image file
@@ -238,7 +240,7 @@ public class GameMenu {
                 Label.LabelStyle unavailableLabelStyle = skin.get("unavailable", Label.LabelStyle.class);
                 currentLevelLabel.setStyle(unavailableLabelStyle);
                 //upgradeCostLabel.setStyle(unavailableLabelStyle);
-                levelCostTable.setBackground(skin.getDrawable("unavailable-square-large"));
+                //levelCostTable.setBackground(skin.getDrawable("unavailable-square-large"));
             }
 
             levelCostTable.add(gravititeImage).padLeft(-15).padBottom(4);
@@ -248,7 +250,7 @@ public class GameMenu {
         // tritanium case
         if (levelCost[1] > 0) {
             Label tritaniumCostLabel = new Label(String.valueOf(levelCost[1]), skin);
-            tritaniumCostLabel.setFontScale(2f);
+            tritaniumCostLabel.setFontScale(fontScale);
 
             // cubane image
             Drawable tritaniumDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("tritanium.png"))); // res should be the path to your image file
@@ -260,7 +262,7 @@ public class GameMenu {
             if (!available) {
                 Label.LabelStyle unavailableLabelStyle = skin.get("unavailable", Label.LabelStyle.class);
                 currentLevelLabel.setStyle(unavailableLabelStyle);
-                levelCostTable.setBackground(skin.getDrawable("unavailable-square-large"));
+                //levelCostTable.setBackground(skin.getDrawable("unavailable-square-large"));
             }
 
             levelCostTable.add(tritaniumImage).padLeft(-15).padBottom(4);
@@ -270,7 +272,7 @@ public class GameMenu {
         // cubane case
         if (levelCost[2] > 0) {
             Label cubaneCostLabel = new Label(String.valueOf(levelCost[2]), skin);
-            cubaneCostLabel.setFontScale(2f);
+            cubaneCostLabel.setFontScale(fontScale);
 
             // cubane image
             Drawable cubaneDrawable = new TextureRegionDrawable(new Texture(Gdx.files.internal("cubane.png"))); // res should be the path to your image file
@@ -282,7 +284,7 @@ public class GameMenu {
             if (!available) {
                 Label.LabelStyle unavailableLabelStyle = skin.get("unavailable", Label.LabelStyle.class);
                 currentLevelLabel.setStyle(unavailableLabelStyle);
-                levelCostTable.setBackground(skin.getDrawable("unavailable-square-large"));
+                //levelCostTable.setBackground(skin.getDrawable("unavailable-square-large"));
             }
 
             levelCostTable.add(cubaneImage).padLeft(-15).padBottom(4);
@@ -310,15 +312,15 @@ public class GameMenu {
         Table buttonTable = new Table();
         VerticalGroup clickLevelButtonTitle = new VerticalGroup();
         Label titleLabel = new Label(title, skin);
-        titleLabel.setFontScale(2f);
+        titleLabel.setFontScale(fontScale);
         titleLabel.setAlignment(Align.left);
 
         Table levelAndCostTable = new Table();
         Label currentLevelLabel = new Label(levelGetter + "/50", skin, "CostLabel");
-        currentLevelLabel.setFontScale(2f);
+        currentLevelLabel.setFontScale(fontScale);
         currentLevelLabel.setAlignment(Align.center);
         Label upgradeCostLabel = new Label(String.valueOf(levelCost), skin, "CostLabel");
-        upgradeCostLabel.setFontScale(2f);
+        upgradeCostLabel.setFontScale(fontScale);
         upgradeCostLabel.setAlignment(Align.center);
 
         if (!available) {
@@ -422,7 +424,7 @@ public class GameMenu {
         // add specific menu content here
         TextButton refineAsteroidButton = new TextButton("", skin);
         Label refineLabel = new Label("Refine", skin);
-        refineLabel.setFontScale(2f);
+        refineLabel.setFontScale(fontScale);
 
         refineAsteroidButton.clearChildren();
         refineAsteroidButton.add(refineLabel);
@@ -535,7 +537,7 @@ public class GameMenu {
         // add specific menu content here
         TextButton shopButton = new TextButton("", skin);
         Label resetStatsLabel = new Label("Reset Stats", skin);
-        resetStatsLabel.setFontScale(2f);
+        resetStatsLabel.setFontScale(fontScale);
         shopButton.clearChildren();
         shopButton.add(resetStatsLabel);
 
@@ -569,15 +571,25 @@ public class GameMenu {
         });
 
         // mute sound checkbox
-        CheckBox muteMusicCheckBox = new CheckBox("Mute Music", skin);
+        CheckBox muteMusicCheckBox = new CheckBox("", skin);
+        Label muteMusicLabel = new Label("Mute Music", skin);
+        muteMusicLabel.setFontScale(0.4f);
+        muteMusicCheckBox.add(muteMusicLabel).padLeft(5);
         muteMusicCheckBox.setChecked(false);
+        muteMusicCheckBox.setTransform(true);
+        muteMusicCheckBox.setScale(3f);
 
         // mute sound effects checkbox
-        CheckBox muteSoundEffectsCheckBox = new CheckBox("Mute Sound Effects", skin);
+        CheckBox muteSoundEffectsCheckBox = new CheckBox("", skin);
         muteSoundEffectsCheckBox.setChecked(false);
+        Label muteSoundEffectsLabel = new Label("Mute Sound Effects", skin);
+        muteSoundEffectsLabel.setFontScale(0.4f);
+        muteSoundEffectsCheckBox.add(muteSoundEffectsLabel).padLeft(5);
+        muteSoundEffectsCheckBox.setTransform(true);
+        muteSoundEffectsCheckBox.setScale(3f);
 
         // add the close button to the top-right of the window
-        optionsWindow.getTitleTable().add(closeButton).padLeft(10).padRight(10).expandX().align(Align.right);
+        optionsWindow.getTitleTable().add(closeButton).expandX().align(Align.right);
 
         muteMusicCheckBox.addListener(new ClickListener() {
             @Override
@@ -603,9 +615,9 @@ public class GameMenu {
             }
         });
 
-        optionsWindow.add(muteMusicCheckBox);
+        optionsWindow.add(muteMusicCheckBox).pad(20).align(Align.left).expandX();
         optionsWindow.row();
-        optionsWindow.add(muteSoundEffectsCheckBox);
+        optionsWindow.add(muteSoundEffectsCheckBox).pad(20).align(Align.left).expandX();
         stage.addActor(optionsWindow);
     }
 

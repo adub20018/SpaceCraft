@@ -41,18 +41,8 @@ public class Spaceship {
     private int scannerLevel;
     private int tritaniumBalance, gravititeBalance, cubaneBalance;
 
-
-
     private Asteroid chippedAsteroid;
     private int hasfailed;
-
-    // sound effects
-    private Sound asteroidDestroyedSound;
-    private Sound tractorBeamSound;
-    private Sound spaceshipClickSound;
-    private Sound chipFailSound;
-    private Sound chipSuccessSound;
-
 
     public Spaceship(Viewport viewport, GameHUD gameHUD) {
         this.viewport = viewport;
@@ -82,13 +72,7 @@ public class Spaceship {
         refineQualityLevel = 1;
         refinePowerLevel = 0;
 
-        // sound effects
-        asteroidDestroyedSound = Gdx.audio.newSound(Gdx.files.internal("asteroid_destroyed.wav"));
-        tractorBeamSound = Gdx.audio.newSound(Gdx.files.internal("tractor_beam.wav"));
-        spaceshipClickSound = Gdx.audio.newSound(Gdx.files.internal("spaceship_click.wav"));
-        chipFailSound = Gdx.audio.newSound(Gdx.files.internal("chip_fail.wav"));
-        chipSuccessSound = Gdx.audio.newSound(Gdx.files.internal("chip_success.wav"));
-        //        updateValues();
+        // updateValues();
     }
 
     public void draw(SpriteBatch batch, float worldWidth) {
@@ -114,9 +98,9 @@ public class Spaceship {
     }
 
     public void incrementHarvestCount(int rarity) {
-
-        long id = asteroidDestroyedSound.play();
-        asteroidDestroyedSound.setVolume(id, 0.5f);
+        if (!AudioManager.getInstance().soundEffectsMuted) {
+            AudioManager.getInstance().playAsteroidDestroyedSound();
+        }
         harvestCount++;
         switch(rarity) {
             case(1):  // Common
@@ -142,17 +126,15 @@ public class Spaceship {
         asteroidCoords.end();
 
         if (asteroidCoords.size == 0) {
-            tractorBeamSound.stop();
+            AudioManager.getInstance().stopTractorBeamSound();
         }
     }
 
     public void harvestAsteroid(AsteroidManager asteroidManager) {
         tractorIdleCharge += 100f;
         if (harvestCount > 0) {
-            if (!isHarvesting) {
-                long id = tractorBeamSound.play(0.05f);
-                tractorBeamSound.setVolume(id, 0.01f);
-                tractorBeamSound.loop();
+            if (!isHarvesting && !AudioManager.getInstance().soundEffectsMuted) {
+                AudioManager.getInstance().playTractorBeamSound();
             }
             isHarvesting = true;
             Asteroid harvestedAsteroid;
@@ -195,7 +177,6 @@ public class Spaceship {
     }
 
     public void dispose() {
-        asteroidDestroyedSound.dispose();
         tractorBeam.dispose(); // dispose of tractor beam when no longer needed
     }
 
@@ -272,7 +253,9 @@ public class Spaceship {
                 break;
             }
             case("click"): {
-                spaceshipClickSound.play();
+                if (!AudioManager.getInstance().soundEffectsMuted) {
+                    AudioManager.getInstance().playSpaceshipClickSound();
+                }
                 tractorIdleCharge -= 10 + (tractorClickLevel * 0.25f);
                 gameHUD.updateProgressBar(tractorIdleCharge);
                 break;
@@ -361,7 +344,9 @@ public class Spaceship {
         chippedAsteroid = asteroid;
         if (MathUtils.random() > 0.95f||hasfailed>20) {
             hasfailed = 0;
-            chipSuccessSound.play(1f);
+            if (!AudioManager.getInstance().soundEffectsMuted) {
+                AudioManager.getInstance().playChipSuccessSound();
+            }
             switch (asteroid.getRarity()) {
                 case (1):  // Common
                     asteroidBalance++;
@@ -383,7 +368,9 @@ public class Spaceship {
             gameHUD.updateAsteroidBalanceLabel(asteroidBalance);
         } else {
             hasfailed++;
-            chipFailSound.play(0.5f);
+            if (!AudioManager.getInstance().soundEffectsMuted) {
+                AudioManager.getInstance().playChipFailSound();
+            }
         }
 
     }

@@ -25,8 +25,6 @@ public class Main extends ApplicationAdapter {
     private GameMenu gameMenu;
     private UpgradesManager upgradesManager;
 
-    public static Music spacecraftThemeMusic;
-
     private Stage stage;
 
     private float worldWidth;
@@ -63,9 +61,7 @@ public class Main extends ApplicationAdapter {
         spaceship.updateValues();
         deltatest = 0;
 
-        spacecraftThemeMusic = Gdx.audio.newMusic(Gdx.files.internal("spacecraft_theme.wav"));
-        spacecraftThemeMusic.setLooping(true);
-        spacecraftThemeMusic.play();
+        AudioManager.getInstance().playThemeMusic();
 
     }
 

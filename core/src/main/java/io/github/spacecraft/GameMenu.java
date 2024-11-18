@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -108,6 +109,8 @@ public class GameMenu {
 
         // add table to stage
         stage.addActor(buttonTable);
+
+        addOptionsButton();
 
         // add listeners to buttons
         upgradesButton.addListener(createButtonListener("Upgrades", buttonHeight, createUpgradesContent()));
@@ -548,4 +551,81 @@ public class GameMenu {
 
         return contentTable;
     }
+
+    // options popup modal for configuring game settings
+    public void createOptionsModal() {
+        Window optionsWindow = new Window("Options", skin);
+        optionsWindow.setSize(width * 0.8f, height * 0.5f);
+        optionsWindow.setPosition((width - optionsWindow.getWidth()) / 2, (height - optionsWindow.getHeight()) / 2);
+        optionsWindow.setMovable(false);
+
+        // close options modal button
+        TextButton closeButton = new TextButton("X", skin);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                optionsWindow.remove();
+            }
+        });
+
+        // mute sound checkbox
+        CheckBox muteMusicCheckBox = new CheckBox("Mute Music", skin);
+        muteMusicCheckBox.setChecked(false);
+
+        // mute sound effects checkbox
+        CheckBox muteSoundEffectsCheckBox = new CheckBox("Mute Sound Effects", skin);
+        muteSoundEffectsCheckBox.setChecked(false);
+
+        // add the close button to the top-right of the window
+        optionsWindow.getTitleTable().add(closeButton).padLeft(10).padRight(10).expandX().align(Align.right);
+
+        muteMusicCheckBox.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                boolean isMuted = muteMusicCheckBox.isChecked();
+                if (isMuted) {
+                    AudioManager.getInstance().muteMusic();
+                } else {
+                    AudioManager.getInstance().playThemeMusic();
+                }
+            }
+        });
+
+        muteSoundEffectsCheckBox.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                boolean isMuted = muteSoundEffectsCheckBox.isChecked();
+                if (isMuted) {
+                    AudioManager.getInstance().muteSoundEffects();
+                } else {
+                    AudioManager.getInstance().unmuteSoundEffects();
+                }
+            }
+        });
+
+        optionsWindow.add(muteMusicCheckBox);
+        optionsWindow.row();
+        optionsWindow.add(muteSoundEffectsCheckBox);
+        stage.addActor(optionsWindow);
+    }
+
+    private void addOptionsButton() {
+        // Create the button
+        TextButton optionsButton = new TextButton("Options", skin);
+
+        // Set its position to the top-right corner
+        optionsButton.setPosition(width - optionsButton.getWidth() - edgeMargin, height - optionsButton.getHeight() - edgeMargin);
+
+        // Add a listener to open the options modal
+        optionsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                createOptionsModal(); // Show the modal
+            }
+        });
+
+        // Add the button to the stage
+        stage.addActor(optionsButton);
+    }
+
 }

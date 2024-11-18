@@ -32,6 +32,7 @@ public class GameMenu {
     private float width;
     private float height;
     private float edgeMargin;
+    private boolean optionsModalOpened;
     GameHUD gameHUD;
     public TextButton upgradeClickLevel, upgradeIdleCharge, upgradeNavigation, upgradeHarvestTimeButton, upgradeTractorQuantity, upgradeScanner, upgradeRefineryQuality, upgradeRefinePower;
     float outerPadding = 15;     // dynamically calculate the size of buttons within table
@@ -567,6 +568,7 @@ public class GameMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 optionsWindow.remove();
+                optionsModalOpened = false;
             }
         });
 
@@ -632,7 +634,10 @@ public class GameMenu {
         optionsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                createOptionsModal(); // Show the modal
+                if (!optionsModalOpened) {
+                    createOptionsModal(); // Show the modal
+                    optionsModalOpened = true;
+                }
             }
         });
 
